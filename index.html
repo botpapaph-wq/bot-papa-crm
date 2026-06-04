@@ -34,6 +34,7 @@
       flex-wrap: wrap;
       gap: 0.5rem;
       padding: 0.5rem 1.5rem;
+      align-items: center;
     }
     nav a {
       color: #fff;
@@ -160,7 +161,7 @@
     </section>
 
     <section class="card">
-      <h2>Übersicht (Platzhalter)</h2>
+      <h2>Übersicht</h2>
       <div class="stats">
         <div class="stat-box">
           <h3>Offene Rechnungen</h3>
@@ -175,7 +176,7 @@
           <p id="totalClients">0</p>
         </div>
       </div>
-      <p style="margin-top:1rem;">Diese Werte werden später dynamisch aus Supabase geladen.</p>
+      <p style="margin-top:1rem; font-size: 0.85rem; color: #666;" id="dbStatus">Demo-Modus: Keine Verbindung zu Datentabellen.</p>
     </section>
   </main>
 
@@ -186,44 +187,72 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // Deine Projekt-URL ist hier fest integriert
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // DOM Elemente direkt greifen
     const yearEl = document.getElementById('year');
-    yearEl.textContent = new Date().getFullYear();
-
     const userInfo = document.getElementById('userInfo');
     const authHint = document.getElementById('authHint');
     const loginLink = document.getElementById('loginLink');
     const logoutBtn = document.getElementById('logoutBtn');
+    const dbStatus = document.getElementById('dbStatus');
+
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
     async function refreshSession() {
       const { data, error } = await supabase.auth.getSession();
 
-      if (error || !data.session) {
+      if (error || !data || !data.session) {
         userInfo.innerHTML = 'Status: <span>Gast</span> <span class="badge badge-guest">nicht eingeloggt</span>';
         authHint.textContent = 'Um alle Funktionen zu nutzen, bitte zuerst einloggen.';
-        loginLink.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
+        if (loginLink) loginLink.style.display = 'inline-block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
         return;
       }
 
+      // Eingeloggt!
       const email = data.session.user.email || 'Unbekannt';
       userInfo.innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
       authHint.textContent = 'Du bist eingeloggt. Nutze die Navigation, um Kunden, Projekte und Rechnungen zu verwalten.';
-      loginLink.style.display = 'none';
-      logoutBtn.style.display = 'inline-block';
+      if (loginLink) loginLink.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+
+      // Wenn eingeloggt, versuche die echten Daten zu laden
+      loadDashboardData();
     }
 
-    logoutBtn.addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      await refreshSession();
-    });
+    // Funktion holt die Daten, fängt Fehler ab falls Tabellen noch fehlen
+    async function loadDashboardData() {
+      try {
+        // Hier fragen wir später deine echten Tabellen ab. 
+        // Beispiel für Rechnungen: const { count } = await supabase.from('invoices').select('*', { count: 'exact', head: true });
+        
+        // Aktuell fangen wir den Fehler ab, da die Tabellen noch nicht existieren
+        dbStatus.textContent = "Verbunden mit Supabase Auth. Datentabellen werden eingerichtet...";
+      } catch (err) {
+        console.log("Tabellen noch nicht vorhanden, zeige Demo-Werte.");
+      }
+    }
 
-    // Bei Seitenaufruf Session prüfen
+    // Event-Listener direkt im Modul binden
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await supabase.auth.signOut();
+        // Nach dem Abmelden sofort hart zur Login-Seite schicken
+        window.location.href = "login.html";
+      });
+    }
+
+    // Initialer Check beim Laden der Seite
+    document.addEventListener("DOMContentLoaded", () => {
+      refreshSession();
+    });
+    
+    // Falls DOMContentLoaded schon gefeuert hat (Sicherheitsanker für Cloudflare Workers)
     refreshSession();
   </script>
 </body>
