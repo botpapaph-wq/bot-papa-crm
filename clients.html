@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kunden – Bot Papa Freelancer CRM</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
@@ -65,11 +69,14 @@
       margin-bottom: 0.5rem;
       line-height: 1.4;
     }
+
+    /* Formularlayout: einheitliches Grid wie bei Projekten/Rechnungen */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
       margin-top: 1rem;
+      align-items: start;
     }
     .form-group {
       display: flex;
@@ -80,30 +87,22 @@
       font-size: 0.85rem;
       color: #555;
     }
-    .form-row-inline {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .form-row-inline .form-group {
-      flex: 1;
-    }
     .form-group input,
+    .form-group select,
     .form-group textarea {
       padding: 0.6rem 0.7rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.95rem;
       font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
     }
     .form-group textarea {
       min-height: 80px;
       resize: vertical;
     }
-    .form-group input[readonly] {
-      background: #f0f0f0;
-      color: #555;
-      cursor: not-allowed;
-    }
+
     .btn {
       display: inline-block;
       padding: 0.7rem 1.2rem;
@@ -134,6 +133,7 @@
     .msg-error {
       color: #c62828;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -161,13 +161,25 @@
       color: #777;
       font-size: 0.85rem;
     }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 0 0.5rem 1.5rem;
+      }
+      .card {
+        padding: 1.0rem;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Kunden</h1>
     <div>
-      <span style="font-size:0.9rem;color:#ddd;">Kundenverwaltung (Demo, Kundennummer auto-generiert)</span>
+      <span style="font-size:0.9rem;color:#ddd;">Kundenverwaltung (Demo, noch ohne DB)</span>
     </div>
   </header>
 
@@ -184,50 +196,38 @@
   <main>
     <section class="card">
       <h2>Neuen Kunden anlegen</h2>
-      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Die Kundennummer wird automatisch generiert.</p>
+      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Später hängt hier Supabase dran.</p>
 
       <form id="clientForm">
         <div class="form-grid">
           <div class="form-group">
-            <label for="clientNumber">Kundennummer (automatisch)</label>
-            <input type="text" id="clientNumber" name="clientNumber" readonly />
+            <label for="clientNumber">Kundennummer</label>
+            <input type="text" id="clientNumber" name="clientNumber" placeholder="z.B. C-2026-0001" />
           </div>
           <div class="form-group">
-            <label for="clientName">Name *</label>
-            <input type="text" id="clientName" name="clientName" required />
+            <label for="companyName">Firma / Name *</label>
+            <input type="text" id="companyName" name="companyName" required />
           </div>
           <div class="form-group">
-            <label for="clientCompany">Firma</label>
-            <input type="text" id="clientCompany" name="clientCompany" />
+            <label for="contactName">Ansprechpartner</label>
+            <input type="text" id="contactName" name="contactName" />
           </div>
-
-          <div class="form-row-inline">
-            <div class="form-group">
-              <label for="phoneCountry">Landesvorwahl</label>
-              <input type="text" id="phoneCountry" name="phoneCountry" placeholder="+49" />
-            </div>
-            <div class="form-group">
-              <label for="clientPhone">Telefon</label>
-              <input type="tel" id="clientPhone" name="clientPhone" placeholder="1512345678" />
-            </div>
+          <div class="form-group">
+            <label for="email">E-Mail *</label>
+            <input type="email" id="email" name="email" required />
           </div>
 
           <div class="form-group">
-            <label for="clientEmail">E-Mail</label>
-            <input type="email" id="clientEmail" name="clientEmail" />
+            <label for="phone">Telefon</label>
+            <input type="tel" id="phone" name="phone" placeholder="+49 ..." />
           </div>
-
           <div class="form-group">
-            <label for="street">Straße</label>
+            <label for="street">Straße / Nr.</label>
             <input type="text" id="street" name="street" />
           </div>
           <div class="form-group">
-            <label for="houseNumber">Hausnummer</label>
-            <input type="text" id="houseNumber" name="houseNumber" />
-          </div>
-          <div class="form-group">
-            <label for="postalCode">PLZ</label>
-            <input type="text" id="postalCode" name="postalCode" />
+            <label for="zip">PLZ</label>
+            <input type="text" id="zip" name="zip" />
           </div>
           <div class="form-group">
             <label for="city">Ort</label>
@@ -240,10 +240,10 @@
 
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="clientNotes">Notizen</label>
-            <textarea id="clientNotes" name="clientNotes"></textarea>
+            <textarea id="clientNotes" name="clientNotes" placeholder="z.B. besondere Konditionen, Zahlungsziele, interne Hinweise"></textarea>
           </div>
         </div>
-        <button type="submit" class="btn">Kunden hinzufügen (Demo)</button>
+        <button type="submit" class="btn">Kunde hinzufügen (Demo)</button>
         <button type="button" id="clearListBtn" class="btn btn-secondary">Liste leeren</button>
         <div id="formMsg" class="msg"></div>
       </form>
@@ -256,17 +256,15 @@
       <table>
         <thead>
           <tr>
-            <th>Kundennr.</th>
-            <th>Name / Firma</th>
+            <th>Kunde</th>
             <th>Kontakt</th>
             <th>Adresse</th>
-            <th>Notizen</th>
+            <th>Sonstiges</th>
           </tr>
         </thead>
         <tbody id="clientsTableBody">
-          <!-- Platzhalterzeile -->
           <tr id="clientsPlaceholderRow">
-            <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
+            <td colspan="4" style="text-align:center;color:#999;font-size:0.9rem;">
               Noch keine Kunden angelegt (Demo). Bitte Formular oben verwenden.
             </td>
           </tr>
@@ -288,103 +286,82 @@
     const clientsTableBody = document.getElementById('clientsTableBody');
     const placeholderRow = document.getElementById('clientsPlaceholderRow');
     const clearListBtn = document.getElementById('clearListBtn');
-    const clientNumberInput = document.getElementById('clientNumber');
 
     const clients = [];
-    let clientCounter = 1;
-
-    function generateCustomerNumber() {
-      const year = new Date().getFullYear();
-      const padded = String(clientCounter).padStart(4, '0');
-      return `C-${year}-${padded}`;
-    }
-
-    function setNextCustomerNumber() {
-      clientNumberInput.value = generateCustomerNumber();
-    }
 
     clientForm.addEventListener('submit', (e) => {
       e.preventDefault();
       formMsg.textContent = '';
       formMsg.className = 'msg';
 
-      const number = clientNumberInput.value.trim();
-      const name = document.getElementById('clientName').value.trim();
-      const company = document.getElementById('clientCompany').value.trim();
-      const phoneCountry = document.getElementById('phoneCountry').value.trim();
-      const phone = document.getElementById('clientPhone').value.trim();
-      const email = document.getElementById('clientEmail').value.trim();
+      const clientNumber = document.getElementById('clientNumber').value.trim();
+      const companyName = document.getElementById('companyName').value.trim();
+      const contactName = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
       const street = document.getElementById('street').value.trim();
-      const houseNumber = document.getElementById('houseNumber').value.trim();
-      const postalCode = document.getElementById('postalCode').value.trim();
+      const zip = document.getElementById('zip').value.trim();
       const city = document.getElementById('city').value.trim();
       const country = document.getElementById('country').value.trim();
-      const notes = document.getElementById('clientNotes').value.trim();
+      const clientNotes = document.getElementById('clientNotes').value.trim();
 
-      if (!number || !name) {
-        formMsg.textContent = 'Automatische Kundennummer fehlt oder Name ist leer. Bitte Seite neu laden.';
+      if (!companyName || !email) {
+        formMsg.textContent = 'Bitte mindestens Firma/Name und E-Mail angeben.';
         formMsg.classList.add('msg-error');
         return;
       }
 
-      const fullPhone = (phoneCountry || phone) ? `${phoneCountry || ''} ${phone || ''}`.trim() : '';
-      const fullAddress = [
-        [street, houseNumber].filter(Boolean).join(' '),
-        [postalCode, city].filter(Boolean).join(' '),
-        country
-      ].filter(Boolean).join(', ');
-
-      const client = {
-        number,
-        name,
-        company,
+      const c = {
+        clientNumber,
+        companyName,
+        contactName,
         email,
-        phone: fullPhone,
+        phone,
         street,
-        houseNumber,
-        postalCode,
+        zip,
         city,
         country,
-        address: fullAddress,
-        notes
+        clientNotes
       };
 
-      clients.push(client);
-      addClientRow(client);
-
-      clientCounter++;
-      setNextCustomerNumber();
+      clients.push(c);
+      addClientRow(c);
 
       clientForm.reset();
-      // Kundennummer nach reset neu setzen
-      setNextCustomerNumber();
-
       formMsg.textContent = 'Kunde (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
       formMsg.classList.add('msg-success');
     });
 
-    function addClientRow(client) {
+    function addClientRow(c) {
       if (placeholderRow) {
         placeholderRow.remove();
       }
 
       const tr = document.createElement('tr');
 
-      const nameCompany = client.company
-        ? `${escapeHtml(client.name)} (${escapeHtml(client.company)})`
-        : escapeHtml(client.name);
+      const clientLabel = c.clientNumber
+        ? `${escapeHtml(c.clientNumber)} – ${escapeHtml(c.companyName)}`
+        : escapeHtml(c.companyName);
 
-      const contact = [
-        client.email ? `E-Mail: ${escapeHtml(client.email)}` : '',
-        client.phone ? `Tel: ${escapeHtml(client.phone)}` : ''
+      const contactInfo = [
+        c.contactName ? escapeHtml(c.contactName) : '',
+        c.email ? escapeHtml(c.email) : '',
+        c.phone ? escapeHtml(c.phone) : ''
       ].filter(Boolean).join('<br>');
 
+      const address = [
+        c.street ? escapeHtml(c.street) : '',
+        [c.zip, c.city].filter(Boolean).map(escapeHtml).join(' '),
+        c.country ? escapeHtml(c.country) : ''
+      ].filter(Boolean).join('<br>');
+
+      const other = c.clientNotes ? escapeHtml(c.clientNotes) : '';
+
       tr.innerHTML = `
-        <td>${escapeHtml(client.number)}</td>
-        <td>${nameCompany}</td>
-        <td>${contact || ''}</td>
-        <td>${escapeHtml(client.address || '')}</td>
-        <td>${escapeHtml(client.notes || '')}</td>
+        <td>${clientLabel}</td>
+        <td>${contactInfo}</td>
+        <td>${address}</td>
+        <td>${other}</td>
       `;
 
       clientsTableBody.appendChild(tr);
@@ -407,19 +384,14 @@
       const row = document.createElement('tr');
       row.id = 'clientsPlaceholderRow';
       row.innerHTML = `
-        <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
+        <td colspan="4" style="text-align:center;color:#999;font-size:0.9rem;">
           Noch keine Kunden angelegt (Demo). Bitte Formular oben verwenden.
         </td>
       `;
       clientsTableBody.appendChild(row);
       formMsg.textContent = 'Kundenliste geleert (nur lokal im Browser).';
       formMsg.className = 'msg msg-success';
-      clientCounter = 1;
-      setNextCustomerNumber();
     });
-
-    // Beim Laden direkt erste Kundennummer setzen
-    setNextCustomerNumber();
   </script>
 </body>
 </html>
