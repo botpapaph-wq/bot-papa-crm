@@ -103,16 +103,17 @@
   <header>
     <h1>Bot Papa Freelancer CRM – Login</h1>
     <div>
-      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth (E-Mail & Passwort)</span>
+      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth – sicher ohne URL-Parameter</span>
     </div>
   </header>
 
   <main>
     <section class="card">
       <h2>Anmelden</h2>
-      <p>Mit deiner Supabase-E-Mail und deinem Passwort einloggen.</p>
+      <p>Mit deiner E-Mail-Adresse und deinem Passwort einloggen.</p>
 
-      <form id="loginForm">
+      <!-- WICHTIG: method="post" und KEIN action -->
+      <form id="loginForm" method="post">
         <div class="form-group">
           <label for="email">E-Mail</label>
           <input type="email" id="email" name="email" required autocomplete="username" />
@@ -137,17 +138,17 @@
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
 
-    // WICHTIG: Trage hier deine Daten ein
-    const SUPABASE_URL = 'https://DEINPROJECT.supabase.co';
-    const SUPABASE_ANON_KEY = 'DEIN_PUBLIC_ANON_KEY';
+    // HIER deine Supabase-Daten einsetzen
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // [web:192][web:189]
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // [web:212][web:214]
 
     const loginForm = document.getElementById('loginForm');
     const formMsg = document.getElementById('formMsg');
 
     loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      e.preventDefault();                 // Verhindert, dass der Browser eine URL mit Query-String baut
       formMsg.textContent = '';
       formMsg.className = 'msg';
 
@@ -167,7 +168,7 @@
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
-        }); // [web:183][web:187]
+        }); // [web:183]
 
         if (error) {
           console.error('Supabase-Fehler:', error);
@@ -177,7 +178,7 @@
         }
 
         if (!data || !data.user) {
-          formMsg.textContent = 'Login fehlgeschlagen. Keine Benutzer-Daten erhalten.';
+          formMsg.textContent = 'Login fehlgeschlagen. Keine Benutzerdaten erhalten.';
           formMsg.className = 'msg msg-error';
           return;
         }
