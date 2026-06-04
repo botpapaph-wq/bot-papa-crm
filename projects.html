@@ -23,9 +23,8 @@
     .card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
     .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
     
-    .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
-    @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
 
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #333; }
@@ -133,34 +132,51 @@
 
     async function populateClientDropdown() {
       const select = document.getElementById('projectClient');
-      const { data: clients } = await supabase.from('clients').select('id, name').order('name', { ascending: true });
-      if (!clients || clients.length === 0) { select.innerHTML = '<option disabled>Keine Kunden da.</option>'; return; }
+      const { data: clients, error } = await supabase.from('clients').select('id, name').order('name', { ascending: true });
+      
+      if (error || !clients || clients.length === 0) { 
+        select.innerHTML = '<option disabled>Keine Kunden da.</option>'; 
+        return; 
+      }
+      
       select.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
       clients.forEach(c => {
-        const o = document.createElement('option'); o.value = c.id; o.textContent = c.name; select.appendChild(o);
+        const o = document.createElement('option'); 
+        o.value = c.id; 
+        o.textContent = c.name; 
+        select.appendChild(o);
       });
     }
 
     async function fetchProjects() {
       const tableBody = document.getElementById('projectTableBody');
       
-      // 1. Live-Projekte aus Supabase holen
-      const { data: projects, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-      if (error) { tableBody.innerHTML = '<tr><td colspan="3">Fehler: ' + error.message + '</td></tr>'; return; }
-      if (!projects || projects.length === 0) { tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #777;">Keine Projekte vorhanden.</td></tr>'; return; }
-      
-      // 2. Kundenliste holen, um IDs in Namen zu übersetzen
-      const { data: clients } = await supabase.from('clients').select('id, name');
+      // Holt parallel Projekte und Kunden flach ab
+      const [projectsRes, clientsRes] = await Promise.all([
+        supabase.from('projects').select('*').order('created_at', { ascending: false }),
+        supabase.from('clients').select('id, name')
+      ]);
 
+      if (projectsRes.error) { 
+        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #c62828;">Fehler: ' + projectsRes.error.message + '</td></tr>'; 
+        return; 
+      }
+      
+      const projects = projectsRes.data;
+      const clients = clientsRes.data || [];
+
+      if (!projects || projects.length === 0) { 
+        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #777;">Keine Projekte vorhanden.</td></tr>'; 
+        return; 
+      }
+      
       tableBody.innerHTML = '';
       projects.forEach(p => {
         const tr = document.createElement('tr');
         
-        // Passenden Kundennamen heraussuchen
-        const client = clients ? clients.find(c => c.id === p.client_id) : null;
+        const client = clients.find(c => c.id === p.client_id);
         const clientName = client ? client.name : 'Unbekannter Kunde';
 
-        // Status-Badge stylen
         const bClass = p.status === 'aktiv' ? 'status-active' : 'status-ended';
         const bText = p.status === 'aktiv' ? 'Aktiv' : 'Beendet';
 
@@ -183,8 +199,9 @@
       };
       
       const { error } = await supabase.from('projects').insert([newProj]);
-      if (error) alert('Fehler: ' + error.message);
-      else {
+      if (error) {
+        alert('Fehler beim Speichern: ' + error.message);
+      } else {
         document.getElementById('projectForm').reset();
         fetchProjects();
       }
