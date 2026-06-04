@@ -8,14 +8,12 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
     
-    /* Schmaler Header nach Vorgabe */
     header {
       background: #222; color: #fff; padding: 0.5rem 2rem;
       display: flex; align-items: center; justify-content: space-between;
     }
     header h1 { font-size: 1.1rem; }
     
-    /* Navigation ohne Logout-Button hier */
     nav { background: #333; padding: 0.5rem 1.5rem; }
     nav ul { list-style: none; display: flex; gap: 0.5rem; align-items: center; }
     nav a { color: #fff; text-decoration: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.95rem; }
@@ -30,7 +28,7 @@
 
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #333; }
-    .form-group input, .form-group select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background: #fff; }
+    .form-group input, .form-group select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background: #fff; width: 100%; }
     
     .btn-primary { background: #222; color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
     .btn-primary:hover { background: #444; }
@@ -51,7 +49,7 @@
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Projekte</h1>
-    <div class="status-text" id="userInfo">Status: Login wird geprüft...</div>
+    <div class="status-text" id="userInfo">Status: Prüfe Login...</div>
   </header>
 
   <nav>
@@ -75,7 +73,7 @@
           <div class="form-group">
             <label for="projectClient">Zugehöriger Kunde *</label>
             <select id="projectClient" required>
-              <option value="" disabled selected>Lade Kunden aus Datenbank...</option>
+              <option value="" disabled selected>Lade Kunden...</option>
             </select>
           </div>
           <div class="form-group">
@@ -102,7 +100,7 @@
             </tr>
           </thead>
           <tbody id="projectTableBody">
-            <tr><td colspan="3" style="text-align: center; color: #777;">Lade Daten aus Supabase...</td></tr>
+            <tr><td colspan="3" style="text-align: center; color: #777;">Lade Projekte...</td></tr>
           </tbody>
         </table>
       </div>
@@ -120,129 +118,102 @@
     
     let currentUserId = null;
 
-    // Zentrale Steuerungsfunktion
-    async function startApp() {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error || !data?.session) {
-          window.location.href = "login.html";
-          return;
-        }
-        
-        currentUserId = data.session.user.id;
-        document.getElementById('userInfo').textContent = 'Status: ' + data.session.user.email;
-        
-        // Erst das Dropdown befüllen, danach die Tabelle laden
-        await loadDropdownKunden();
-        await loadProjekteTabelle();
-      } catch (err) {
-        console.error("Fehler beim Start der Maske:", err);
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data?.session) {
+        window.location.href = "login.html";
+        return;
       }
-    }
-
-    // Holt alle Kunden für das Auswahlfeld
-    async function loadDropdownKunden() {
-      const selectField = document.getElementById('projectClient');
-      try {
-        const { data: clients, error } = await supabase
-          .from('clients')
-          .select('id, name')
-          .order('name', { ascending: true });
-          
-        if (error) throw error;
-
-        if (!clients || clients.length === 0) {
-          selectField.innerHTML = '<option disabled>Keine Kunden in der Datenbank vorhanden</option>';
-          return;
-        }
-
-        selectField.innerHTML = '<option value="" disabled selected>Bitte auswählen...</option>';
-        clients.forEach(kunde => {
-          const opt = document.createElement('option');
-          opt.value = kunde.id;
-          opt.textContent = kunde.name;
-          selectField.appendChild(opt);
-        });
-      } catch (err) {
-        console.error("Dropdown-Ladefehler:", err);
-        selectField.innerHTML = '<option disabled>Fehler beim Abrufen der Kunden</option>';
-      }
-    }
-
-    // Lädt die Tabelle komplett asynchron-sicher
-    async function loadProjekteTabelle() {
-      const tableBody = document.getElementById('projectTableBody');
-      try {
-        // Holen der Daten getrennt, um Verschachtelungen zu vermeiden
-        const projekteAnfrage = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-        const kundenAnfrage = await supabase.from('clients').select('id, name');
-
-        if (projekteAnfrage.error) throw projekteAnfrage.error;
-
-        const dbProjekte = projekteAnfrage.data || [];
-        const dbKunden = kundenAnfrage.data || [];
-
-        if (dbProjekte.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #777;">Noch keine Projekte angelegt.</td></tr>';
-          return;
-        }
-
-        tableBody.innerHTML = '';
-        dbProjekte.forEach(projekt => {
-          const tr = document.createElement('tr');
-          
-          // Sicheres Suchen des Kundennamens
-          const passenderKunde = dbKunden.find(k => k.id === projekt.client_id);
-          const nameDesKunden = passenderKunde ? passenderKunde.name : 'Unbekannter Kunde (ID nicht gefunden)';
-
-          // Status-Klassen definieren
-          const statusKlasse = projekt.status === 'aktiv' ? 'status-active' : 'status-ended';
-          const statusText = projekt.status === 'aktiv' ? 'Aktiv' : 'Beendet';
-
-          tr.innerHTML = `
-            <td><strong>${projekt.title || 'Ohne Titel'}</strong></td>
-            <td>${nameDesKunden}</td>
-            <td><span class="status-badge ${statusKlasse}">${statusText}</span></td>
-          `;
-          tableBody.appendChild(tr);
-        });
-      } catch (err) {
-        console.error("Tabellen-Ladefehler:", err);
-        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #c62828;">Fehler beim Laden der Projektdaten aus Supabase.</td></tr>';
-      }
-    }
-
-    // Formular-Submit abfangen
-    document.getElementById('projectForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+      currentUserId = data.session.user.id;
+      document.getElementById('userInfo').textContent = 'Status: ' + data.session.user.email;
       
-      const gewaehlterKunde = document.getElementById('projectClient').value;
-      if (!gewaehlterKunde) {
-        alert('Bitte wähle zuerst einen Kunden aus.');
+      await loadKundenDropdown();
+      await loadProjekte();
+    }
+
+    async function loadKundenDropdown() {
+      const select = document.getElementById('projectClient');
+      const { data: clients, error } = await supabase.from('clients').select('id, name').order('name', { ascending: true });
+      
+      if (error) {
+        select.innerHTML = '<option disabled>Fehler beim Laden der Kunden</option>';
+        return;
+      }
+      
+      if (!clients || clients.length === 0) {
+        select.innerHTML = '<option disabled>Keine Kunden vorhanden</option>';
+        return;
+      }
+      
+      select.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
+      clients.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.id;
+        o.textContent = c.name;
+        select.appendChild(o);
+      });
+    }
+
+    async function loadProjekte() {
+      const tbody = document.getElementById('projectTableBody');
+      
+      const { data: projects, error: pError } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+      const { data: clients, error: cError } = await supabase.from('clients').select('id, name');
+      
+      if (pError) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #c62828;">Fehler beim Laden der Projekte</td></tr>';
         return;
       }
 
-      const neuesProjekt = {
+      if (!projects || projects.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #777;">Keine Projekte vorhanden.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      projects.forEach(p => {
+        const tr = document.createElement('tr');
+        const client = clients ? clients.find(c => c.id === p.client_id) : null;
+        const clientName = client ? client.name : 'Unbekannter Kunde';
+        const bClass = p.status === 'aktiv' ? 'status-active' : 'status-ended';
+        const bText = p.status === 'aktiv' ? 'Aktiv' : 'Beendet';
+
+        tr.innerHTML = `
+          <td><strong>${p.title || 'Ohne Titel'}</strong></td>
+          <td>${clientName}</td>
+          <td><span class="status-badge ${bClass}">${bText}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('projectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('projectTitle').value.trim();
+      const clientId = document.getElementById('projectClient').value;
+      const status = document.getElementById('projectStatus').value;
+
+      if (!clientId) {
+        alert('Bitte wähle einen Kunden aus.');
+        return;
+      }
+
+      const { error } = await supabase.from('projects').insert([{
         user_id: currentUserId,
-        title: document.getElementById('projectTitle').value.trim(),
-        client_id: gewaehlterKunde,
-        status: document.getElementById('projectStatus').value
-      };
+        title: title,
+        client_id: clientId,
+        status: status
+      }]);
 
-      try {
-        const { error } = await supabase.from('projects').insert([neuesProjekt]);
-        if (error) throw error;
-
+      if (error) {
+        alert('Fehler beim Speichern: ' + error.message);
+      } else {
         document.getElementById('projectForm').reset();
-        // Tabelle direkt neu laden
-        await loadProjekteTabelle();
-      } catch (err) {
-        alert('Fehler beim Speichern in Supabase: ' + err.message);
+        loadProjekte();
       }
     });
 
-    // Skript ausführen
-    startApp();
+    checkAuthAndLoad();
   </script>
 </body>
 </html>
