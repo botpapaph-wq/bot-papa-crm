@@ -128,7 +128,7 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUserId = null;
 
@@ -155,27 +155,40 @@
     async function fetchInvoices() {
       const tableBody = document.getElementById('invoiceTableBody');
       
-      // 1. Rechnungen flach holen (kein API-Key-Error Risiko)
-      const { data: invoices, error } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
-      if (error) { tableBody.innerHTML = '<tr><td colspan="5">Fehler: ' + error.message + '</td></tr>'; return; }
-      if (!invoices || invoices.length === 0) { tableBody.innerHTML = '<tr><td colspan="5">Keine Rechnungen.</td></tr>'; return; }
+      // 1. Alle benötigten Daten parallel abholen (verhindert asynchrone Lücken)
+      const [invoicesRes, projectsRes, clientsRes] = await Promise.all([
+        supabase.from('invoices').select('*').order('created_at', { ascending: false }),
+        supabase.from('projects').select('id, title, client_id'),
+        supabase.from('clients').select('id, name')
+      ]);
 
-      // 2. Hilfsdaten (Projekte & Kunden) holen, um IDs in echte Namen zu übersetzen
-      const { data: projects } = await supabase.from('projects').select('id, title, client_id');
-      const { data: clients } = await supabase.from('clients').select('id, name');
+      if (invoicesRes.error) { 
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler: ' + invoicesRes.error.message + '</td></tr>'; 
+        return; 
+      }
+      
+      const invoices = invoicesRes.data;
+      const projects = projectsRes.data || [];
+      const clients = clientsRes.data || [];
+
+      if (!invoices || invoices.length === 0) { 
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #777;">Keine Rechnungen hinterlegt.</td></tr>'; 
+        return; 
+      }
 
       tableBody.innerHTML = '';
       invoices.forEach(inv => {
         const tr = document.createElement('tr');
         const date = new Date(inv.created_at).toLocaleDateString('de-DE');
         const fmtAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(inv.amount);
+        
         const bClass = inv.status === 'offen' ? 'status-open' : 'status-paid';
         const bText = inv.status === 'offen' ? 'Offen' : 'Bezahlt';
 
-        // Projektnamen und Kundennamen zuordnen
-        const proj = projects ? projects.find(p => p.id === inv.project_id) : null;
+        // IDs sauber zuordnen
+        const proj = projects.find(p => p.id === inv.project_id);
         const projTitle = proj ? proj.title : 'Unbekanntes Projekt';
-        const client = proj && clients ? clients.find(c => c.id === proj.client_id) : null;
+        const client = proj ? clients.find(c => c.id === proj.client_id) : null;
         const clientName = client ? client.name : 'Unbekannter Kunde';
 
         tr.innerHTML = `
@@ -198,9 +211,13 @@
         amount: parseFloat(document.getElementById('invoiceAmount').value),
         status: document.getElementById('invoiceStatus').value
       };
-      await supabase.from('invoices').insert([newInv]);
-      document.getElementById('invoiceForm').reset();
-      fetchInvoices();
+      
+      const { error } = await supabase.from('invoices').insert([newInv]);
+      if (error) alert('Fehler: ' + error.message);
+      else {
+        document.getElementById('invoiceForm').reset();
+        fetchInvoices();
+      }
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
