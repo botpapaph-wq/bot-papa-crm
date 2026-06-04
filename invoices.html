@@ -18,17 +18,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
     }
     header h1 { font-size: 1.3rem; }
-    nav { background: #333; color: #fff; }
+    nav { 
+      background: #333; 
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     nav ul {
       list-style: none;
       display: flex;
-      flex-wrap: wrap;
       gap: 0.5rem;
-      padding: 0.5rem 1.5rem;
       align-items: center;
     }
     nav a {
@@ -54,15 +56,18 @@
     }
     .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
     
-    /* Formular Grid */
+    /* Das exakte 4-Spalten-Grid aus dem Original */
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 1rem;
     }
+    @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
     .form-group { display: flex; flex-direction: column; }
-    .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #555; }
+    .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #333; }
     .form-group input, .form-group select {
       padding: 0.5rem;
       border: 1px solid #ccc;
@@ -72,7 +77,6 @@
     }
     
     /* Buttons */
-    .btn-container { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
     .btn {
       padding: 0.5rem 1rem;
       border: none;
@@ -83,9 +87,7 @@
     }
     .btn-primary { background: #222; color: #fff; }
     .btn-primary:hover { background: #444; }
-    .btn-logout {
-      background: #c62828; color: #fff; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
-    }
+    .btn-logout { background: #c62828; color: #fff; font-size: 0.85rem; padding: 0.35rem 0.75rem; }
     .btn-logout:hover { background: #b71c1c; }
     
     /* Tabelle */
@@ -94,28 +96,27 @@
     th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
     th { background: #fafafa; color: #666; font-weight: bold; }
     
-    /* Status Badges */
+    /* Korrigierte Status Badges für die Rechnungsliste */
     .status-badge {
-      display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold;
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
     }
     .status-open { background: #fff3e0; color: #e65100; }
     .status-paid { background: #e8f5e9; color: #2e7d32; }
     
-    .user-info { font-size: 0.9rem; color: #ddd; }
-    .badge {
-      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem;
-    }
-    .badge-auth { background: #2e7d32; color: #fff; }
-    
+    .status-text { font-size: 0.9rem; color: #ddd; }
+    .status-text span { font-weight: bold; }
+    .badge-auth { background: #2e7d32; color: #fff; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem; }
     footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Rechnungen</h1>
-    <div class="user-info" id="userInfo">
-      Status: <span>Prüfe Login...</span>
-    </div>
+    <div class="status-text" id="userInfo">Status: <span>Prüfe Login...</span></div>
   </header>
 
   <nav>
@@ -124,8 +125,8 @@
       <li><a href="clients.html">Kunden</a></li>
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
-      <li><button id="logoutBtn" class="btn-logout" style="display:none;">Logout</button></li>
     </ul>
+    <button id="logoutBtn" class="btn btn-logout" style="display:none;">Logout</button>
   </nav>
 
   <main>
@@ -155,9 +156,7 @@
             </select>
           </div>
         </div>
-        <div class="btn-container">
-          <button type="submit" class="btn btn-primary">Rechnung speichern</button>
-        </div>
+        <button type="submit" class="btn btn-primary">Rechnung speichern</button>
       </form>
     </section>
 
@@ -185,37 +184,27 @@
   </main>
 
   <footer>
-    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
+    &copy; 2026 Bot Papa – Freelancer CRM
   </footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUserId = null;
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById('year').textContent = new Date().getFullYear();
-      checkAuthAndLoad();
-    });
-
     async function checkAuthAndLoad() {
       const { data, error } = await supabase.auth.getSession();
-
       if (error || !data || !data.session) {
         window.location.href = "login.html";
         return;
       }
-
       currentUserId = data.session.user.id;
-      const email = data.session.user.email || 'Unbekannt';
-      document.getElementById('userInfo').innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
-      
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+      document.getElementById('userInfo').innerHTML = 'Status: <span>' + data.session.user.email + '</span> <span class="badge badge-auth">eingeloggt</span>';
+      document.getElementById('logoutBtn').style.display = 'block';
 
       await populateProjectDropdown();
       fetchInvoices();
@@ -223,22 +212,18 @@
 
     async function populateProjectDropdown() {
       const projectSelect = document.getElementById('invoiceProject');
-      const { data: projects, error } = await supabase
-        .from('projects')
-        .select('id, title')
-        .order('title', { ascending: true });
+      const { data: projects, error } = await supabase.from('projects').select('id, title').order('title', { ascending: true });
 
       if (error || !projects || projects.length === 0) {
-        projectSelect.innerHTML = '<option value="" disabled>Keine aktiven Projekte gefunden.</option>';
+        projectSelect.innerHTML = '<option value="" disabled>Keine Projekte vorhanden.</option>';
         return;
       }
-
       projectSelect.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
-      projects.forEach(project => {
-        const option = document.createElement('option');
-        option.value = project.id;
-        option.textContent = project.title;
-        projectSelect.appendChild(option);
+      projects.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.title;
+        projectSelect.appendChild(opt);
       });
     }
 
@@ -246,76 +231,68 @@
       const tableBody = document.getElementById('invoiceTableBody');
       const { data: invoices, error } = await supabase
         .from('invoices')
-        .select(`
-          id, invoice_number, amount, status, created_at,
-          projects ( title, clients ( name ) )
-        `)
+        .select('id, invoice_number, amount, status, created_at, projects(title, clients(name))')
         .order('created_at', { ascending: false });
 
       if (error) {
         tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler: ' + error.message + '</td></tr>';
         return;
       }
-
       if (!invoices || invoices.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #777;">Noch keine Rechnungen hinterlegt.</td></tr>';
         return;
       }
 
       tableBody.innerHTML = '';
-      invoices.forEach(invoice => {
+      invoices.forEach(inv => {
         const tr = document.createElement('tr');
-        const date = new Date(invoice.created_at).toLocaleDateString('de-DE');
-        const statusClass = invoice.status === 'offen' ? 'status-open' : 'status-paid';
-        const statusText = invoice.status === 'offen' ? 'Offen' : 'Bezahlt';
-        const formattedAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(invoice.amount);
+        const date = new Date(inv.created_at).toLocaleDateString('de-DE');
+        const formattedAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(inv.amount);
+        
+        // Status Badges dynmisch stylen
+        const badgeClass = inv.status === 'offen' ? 'status-open' : 'status-paid';
+        const badgeText = inv.status === 'offen' ? 'Offen' : 'Bezahlt';
 
-        const projTitle = invoice.projects ? invoice.projects.title : 'Unbekannt';
-        const clientName = (invoice.projects && invoice.projects.clients) ? invoice.projects.clients.name : 'Unbekannt';
+        const projTitle = inv.projects ? inv.projects.title : 'Unbekannt';
+        const clientName = (inv.projects && inv.projects.clients) ? inv.projects.clients.name : 'Unbekannt';
 
         tr.innerHTML = `
-          <td><strong>${invoice.invoice_number}</strong></td>
+          <td><strong>${inv.invoice_number}</strong></td>
           <td>${projTitle}<br><small style="color:#777">${clientName}</small></td>
           <td>${formattedAmount}</td>
-          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
           <td>${date}</td>
         `;
         tableBody.appendChild(tr);
       });
     }
 
-    const invoiceForm = document.getElementById('invoiceForm');
-    if (invoiceForm) {
-      invoiceForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUserId) return;
+    document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentUserId) return;
 
-        const newInvoice = {
-          user_id: currentUserId,
-          invoice_number: document.getElementById('invoiceNumber').value.trim(),
-          project_id: document.getElementById('invoiceProject').value,
-          amount: parseFloat(document.getElementById('invoiceAmount').value),
-          status: document.getElementById('invoiceStatus').value
-        };
+      const newInvoice = {
+        user_id: currentUserId,
+        invoice_number: document.getElementById('invoiceNumber').value.trim(),
+        project_id: document.getElementById('invoiceProject').value,
+        amount: parseFloat(document.getElementById('invoiceAmount').value),
+        status: document.getElementById('invoiceStatus').value
+      };
 
-        const { error } = await supabase.from('invoices').insert([newInvoice]);
-        if (error) {
-          alert('Fehler: ' + error.message);
-        } else {
-          invoiceForm.reset();
-          fetchInvoices();
-        }
-      });
-    }
+      const { error } = await supabase.from('invoices').insert([newInvoice]);
+      if (error) alert('Fehler: ' + error.message);
+      else {
+        document.getElementById('invoiceForm').reset();
+        fetchInvoices();
+      }
+    });
 
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        await supabase.auth.signOut();
-        window.location.href = "login.html";
-      });
-    }
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    checkAuthAndLoad();
   </script>
 </body>
 </html>
