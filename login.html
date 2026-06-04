@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – Bot Papa Freelancer CRM</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
@@ -28,9 +24,7 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    header h1 {
-      font-size: 1.3rem;
-    }
+    header h1 { font-size: 1.3rem; }
     main {
       flex: 1;
       display: flex;
@@ -89,26 +83,14 @@
       cursor: pointer;
       margin-top: 1.2rem;
     }
-    .btn:hover {
-      background: #333;
-    }
+    .btn:hover { background: #333; }
     .msg {
       margin-top: 0.75rem;
       font-size: 0.85rem;
       text-align: center;
     }
-    .msg-success {
-      color: #2e7d32;
-    }
-    .msg-error {
-      color: #c62828;
-    }
-    .small-info {
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      color: #888;
-      text-align: center;
-    }
+    .msg-success { color: #2e7d32; }
+    .msg-error { color: #c62828; }
     footer {
       text-align: center;
       padding: 1.5rem;
@@ -121,14 +103,14 @@
   <header>
     <h1>Bot Papa Freelancer CRM – Login</h1>
     <div>
-      <span style="font-size:0.9rem;color:#ddd;">Nur für dich – Supabase Auth</span>
+      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth (E-Mail & Passwort)</span>
     </div>
   </header>
 
   <main>
     <section class="card">
       <h2>Anmelden</h2>
-      <p>Bitte melde dich mit deiner E-Mail-Adresse und deinem Passwort an.</p>
+      <p>Mit deiner Supabase-E-Mail und deinem Passwort einloggen.</p>
 
       <form id="loginForm">
         <div class="form-group">
@@ -142,10 +124,6 @@
         <button type="submit" class="btn">Login</button>
         <div id="formMsg" class="msg"></div>
       </form>
-
-      <p class="small-info">
-        Nach erfolgreichem Login wirst du automatisch auf das Dashboard weitergeleitet.
-      </p>
     </section>
   </main>
 
@@ -153,32 +131,20 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <!-- Supabase JS (CDN, falls du kein Bundling nutzt) -->
+  <!-- Supabase JS (CDN) -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
 
-    // TODO: Hier deine echten Supabase-Daten eintragen
-    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+    // WICHTIG: Trage hier deine Daten ein
+    const SUPABASE_URL = 'https://DEINPROJECT.supabase.co';
+    const SUPABASE_ANON_KEY = 'DEIN_PUBLIC_ANON_KEY';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // [web:192][web:189]
 
     const loginForm = document.getElementById('loginForm');
     const formMsg = document.getElementById('formMsg');
-
-    // Wenn bereits eingeloggt, direkt aufs Dashboard schicken
-    (async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser();
-        if (!error && data && data.user) {
-          window.location.href = 'index.html';
-        }
-      } catch (e) {
-        console.warn('Fehler bei getUser (kann ignoriert werden, wenn nicht eingeloggt):', e);
-      }
-    })();
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -190,12 +156,12 @@
 
       if (!email || !password) {
         formMsg.textContent = 'Bitte E-Mail und Passwort eingeben.';
-        formMsg.classList.add('msg-error');
+        formMsg.className = 'msg msg-error';
         return;
       }
 
       formMsg.textContent = 'Anmeldung läuft …';
-      formMsg.classList.add('msg-success');
+      formMsg.className = 'msg msg-success';
 
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -204,26 +170,27 @@
         }); // [web:183][web:187]
 
         if (error) {
-          console.error(error);
-          formMsg.textContent = 'Login fehlgeschlagen: ' + (error.message || 'Bitte Daten prüfen.');
+          console.error('Supabase-Fehler:', error);
+          formMsg.textContent = error.message || 'Login fehlgeschlagen. Zugangsdaten prüfen.';
           formMsg.className = 'msg msg-error';
           return;
         }
 
-        if (data && data.user) {
-          formMsg.textContent = 'Login erfolgreich. Weiterleitung zum Dashboard …';
-          formMsg.className = 'msg msg-success';
-          // kurze Verzögerung für Feedback, dann redirect
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 600);
-        } else {
-          formMsg.textContent = 'Login fehlgeschlagen: Keine Benutzerdaten erhalten.';
+        if (!data || !data.user) {
+          formMsg.textContent = 'Login fehlgeschlagen. Keine Benutzer-Daten erhalten.';
           formMsg.className = 'msg msg-error';
+          return;
         }
+
+        formMsg.textContent = 'Login erfolgreich. Weiterleitung …';
+        formMsg.className = 'msg msg-success';
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 800);
       } catch (err) {
-        console.error(err);
-        formMsg.textContent = 'Unerwarteter Fehler beim Login.';
+        console.error('Unerwarteter Fehler:', err);
+        formMsg.textContent = 'Unerwarteter Fehler beim Login (siehe Konsole).';
         formMsg.className = 'msg msg-error';
       }
     });
