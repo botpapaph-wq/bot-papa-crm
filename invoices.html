@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rechnungen – Bot Papa Freelancer CRM</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
@@ -65,11 +69,14 @@
       margin-bottom: 0.5rem;
       line-height: 1.4;
     }
+
+    /* Formularlayout: nur Grid, keine verschachtelten Flex-Container */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
       margin-top: 1rem;
+      align-items: start;
     }
     .form-group {
       display: flex;
@@ -80,13 +87,6 @@
       font-size: 0.85rem;
       color: #555;
     }
-    .form-row-inline {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .form-row-inline .form-group {
-      flex: 1;
-    }
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -95,6 +95,8 @@
       border-radius: 4px;
       font-size: 0.95rem;
       font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
     }
     .form-group textarea {
       min-height: 80px;
@@ -105,6 +107,7 @@
       color: #555;
       cursor: not-allowed;
     }
+
     .btn {
       display: inline-block;
       padding: 0.7rem 1.2rem;
@@ -135,6 +138,7 @@
     .msg-error {
       color: #c62828;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -173,6 +177,18 @@
     .status-paid { background: #2e7d32; }
     .status-overdue { background: #c62828; }
     .status-cancelled { background: #616161; }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 0 0.5rem 1.5rem;
+      }
+      .card {
+        padding: 1.0rem;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -213,30 +229,26 @@
             <input type="text" id="projectNumber" name="projectNumber" placeholder="optional" />
           </div>
 
-          <div class="form-row-inline">
-            <div class="form-group">
-              <label for="invoiceDate">Rechnungsdatum *</label>
-              <input type="date" id="invoiceDate" name="invoiceDate" required />
-            </div>
-            <div class="form-group">
-              <label for="dueDate">Fällig am</label>
-              <input type="date" id="dueDate" name="dueDate" />
-            </div>
+          <div class="form-group">
+            <label for="invoiceDate">Rechnungsdatum *</label>
+            <input type="date" id="invoiceDate" name="invoiceDate" required />
+          </div>
+          <div class="form-group">
+            <label for="dueDate">Fällig am</label>
+            <input type="date" id="dueDate" name="dueDate" />
           </div>
 
-          <div class="form-row-inline">
-            <div class="form-group">
-              <label for="netAmount">Betrag netto (EUR) *</label>
-              <input type="number" step="0.01" id="netAmount" name="netAmount" required />
-            </div>
-            <div class="form-group">
-              <label for="vatRate">MwSt.-Satz (%)</label>
-              <input type="number" step="0.1" id="vatRate" name="vatRate" value="19" />
-            </div>
-            <div class="form-group">
-              <label for="grossAmount">Betrag brutto (EUR)</label>
-              <input type="number" step="0.01" id="grossAmount" name="grossAmount" readonly />
-            </div>
+          <div class="form-group">
+            <label for="netAmount">Betrag netto (EUR) *</label>
+            <input type="number" step="0.01" id="netAmount" name="netAmount" required />
+          </div>
+          <div class="form-group">
+            <label for="vatRate">MwSt.-Satz (%)</label>
+            <input type="number" step="0.1" id="vatRate" name="vatRate" value="19" />
+          </div>
+          <div class="form-group">
+            <label for="grossAmount">Betrag brutto (EUR)</label>
+            <input type="number" step="0.01" id="grossAmount" name="grossAmount" readonly />
           </div>
 
           <div class="form-group">
@@ -287,7 +299,6 @@
           </tr>
         </thead>
         <tbody id="invoicesTableBody">
-          <!-- Platzhalterzeile -->
           <tr id="invoicesPlaceholderRow">
             <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
               Noch keine Rechnungen angelegt (Demo). Bitte Formular oben verwenden.
@@ -319,8 +330,8 @@
     const invoices = [];
 
     function recalcGross() {
-      const net = parseFloat(netAmountInput.value.replace(',', '.')) || 0;
-      const vat = parseFloat(vatRateInput.value.replace(',', '.')) || 0;
+      const net = parseFloat(String(netAmountInput.value).replace(',', '.')) || 0;
+      const vat = parseFloat(String(vatRateInput.value).replace(',', '.')) || 0;
       const gross = net * (1 + vat / 100);
       if (!Number.isNaN(gross)) {
         grossAmountInput.value = gross.toFixed(2);
