@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bot Papa Freelancer CRM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+    header { background: #222; color: #fff; padding: 1rem 2rem; }
+    header h1 { font-size: 1.4rem; }
+    main { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .card h2 { margin-bottom: 0.75rem; font-size: 1.2rem; }
+    .card p { margin-bottom: 0.5rem; line-height: 1.4; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .stat-box {
+      background: #fafafa;
+      border-radius: 6px;
+      padding: 1rem;
+      border: 1px solid #e0e0e0;
+      text-align: center;
+    }
+    .stat-box h3 { font-size: 0.9rem; color: #777; margin-bottom: 0.25rem; }
+    .stat-box p { font-size: 1.6rem; font-weight: bold; }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #777;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bot Papa Freelancer CRM – Startseite</h1>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Willkommen</h2>
+      <p>Dies ist die Startseite deines neuen Freelancer CRM unter <strong>crm.bot-papa.online</strong>.</p>
+      <p>In den nächsten Schritten kommen Login, Kundenverwaltung, Projekte und Rechnungen dazu.</p>
+    </section>
+
+    <section class="card">
+      <h2>Übersicht (Platzhalter)</h2>
+      <div class="stats">
+        <div class="stat-box">
+          <h3>Offene Rechnungen</h3>
+          <p>0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Aktive Projekte</h3>
+          <p>0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Kunden</h3>
+          <p>0</p>
+        </div>
+      </div>
+      <p style="margin-top:1rem;">Diese Werte werden später dynamisch aus Supabase geladen.</p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
