@@ -83,6 +83,10 @@
     }
     .btn-primary { background: #222; color: #fff; }
     .btn-primary:hover { background: #444; }
+    .btn-logout {
+      background: #c62828; color: #fff; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+    }
+    .btn-logout:hover { background: #b71c1c; }
     
     /* Tabelle */
     .table-container { overflow-x: auto; margin-top: 1rem; }
@@ -90,13 +94,9 @@
     th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
     th { background: #fafafa; color: #666; font-weight: bold; }
     
-    /* Status Badges für Rechnungen */
+    /* Status Badges */
     .status-badge {
-      display: inline-block;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: bold;
+      display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold;
     }
     .status-open { background: #fff3e0; color: #e65100; }
     .status-paid { background: #e8f5e9; color: #2e7d32; }
@@ -124,6 +124,7 @@
       <li><a href="clients.html">Kunden</a></li>
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
+      <li><button id="logoutBtn" class="btn-logout" style="display:none;">Logout</button></li>
     </ul>
   </nav>
 
@@ -213,23 +214,22 @@
       const email = data.session.user.email || 'Unbekannt';
       document.getElementById('userInfo').innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
       
-      // 1. Dropdown mit Projekten befüllen
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+
       await populateProjectDropdown();
-      // 2. Rechnungsliste laden
       fetchInvoices();
     }
 
-    // Holt alle Projekte für das Dropdown
     async function populateProjectDropdown() {
       const projectSelect = document.getElementById('invoiceProject');
-      
       const { data: projects, error } = await supabase
         .from('projects')
         .select('id, title')
         .order('title', { ascending: true });
 
       if (error || !projects || projects.length === 0) {
-        projectSelect.innerHTML = '<option value="" disabled>Keine Projekte gefunden. Bitte zuerst ein Projekt anlegen!</option>';
+        projectSelect.innerHTML = '<option value="" disabled>Keine aktiven Projekte gefunden.</option>';
         return;
       }
 
@@ -242,28 +242,18 @@
       });
     }
 
-    // Holt alle Rechnungen sowie verschachtelt das Projekt und dessen Kunden
     async function fetchInvoices() {
       const tableBody = document.getElementById('invoiceTableBody');
-      
-      // Super-Join über 3 Ebenen: Rechnungen -> Projekte -> Clients (Name)
       const { data: invoices, error } = await supabase
         .from('invoices')
         .select(`
-          id,
-          invoice_number,
-          amount,
-          status,
-          created_at,
-          projects (
-            title,
-            clients ( name )
-          )
+          id, invoice_number, amount, status, created_at,
+          projects ( title, clients ( name ) )
         `)
         .order('created_at', { ascending: false });
 
       if (error) {
-        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler beim Laden: ' + error.message + '</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler: ' + error.message + '</td></tr>';
         return;
       }
 
@@ -275,18 +265,13 @@
       tableBody.innerHTML = '';
       invoices.forEach(invoice => {
         const tr = document.createElement('tr');
-        
         const date = new Date(invoice.created_at).toLocaleDateString('de-DE');
-        
         const statusClass = invoice.status === 'offen' ? 'status-open' : 'status-paid';
         const statusText = invoice.status === 'offen' ? 'Offen' : 'Bezahlt';
-        
-        // Formatiere Betrag zu Euro (z.B. 1.250,00 €)
         const formattedAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(invoice.amount);
 
-        // Tief verschachtelte Relationen sicher auslesen
-        const projTitle = invoice.projects ? invoice.projects.title : 'Unbekanntes Projekt';
-        const clientName = (invoice.projects && invoice.projects.clients) ? invoice.projects.clients.name : 'Unbekannter Kunde';
+        const projTitle = invoice.projects ? invoice.projects.title : 'Unbekannt';
+        const clientName = (invoice.projects && invoice.projects.clients) ? invoice.projects.clients.name : 'Unbekannt';
 
         tr.innerHTML = `
           <td><strong>${invoice.invoice_number}</strong></td>
@@ -299,12 +284,10 @@
       });
     }
 
-    // Formular abschicken
     const invoiceForm = document.getElementById('invoiceForm');
     if (invoiceForm) {
       invoiceForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         if (!currentUserId) return;
 
         const newInvoice = {
@@ -315,16 +298,22 @@
           status: document.getElementById('invoiceStatus').value
         };
 
-        const { error } = await supabase
-          .from('invoices')
-          .insert([newInvoice]);
-
+        const { error } = await supabase.from('invoices').insert([newInvoice]);
         if (error) {
-          alert('Fehler beim Erstellen der Rechnung: ' + error.message);
+          alert('Fehler: ' + error.message);
         } else {
           invoiceForm.reset();
-          fetchInvoices(); // Liste neu laden
+          fetchInvoices();
         }
+      });
+    }
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await supabase.auth.signOut();
+        window.location.href = "login.html";
       });
     }
   </script>
