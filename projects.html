@@ -3,196 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projekte – Bot Papa Freelancer CRM</title>
+  <title>Bot Papa Freelancer CRM – Projekte</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+    
+    /* Schmalerer Header per Vorgabe */
     header {
-      background: #222;
-      color: #fff;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      background: #222; color: #fff; padding: 0.5rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    header h1 {
-      font-size: 1.3rem;
-    }
-    nav {
-      background: #333;
-      color: #fff;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding: 0.5rem 1.5rem;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.95rem;
-    }
-    nav a:hover {
-      background: #444;
-    }
-    main {
-      max-width: 1200px;
-      margin: 1.5rem auto;
-      padding: 0 1rem 2rem;
-    }
-    .card {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-    }
-    .card h2 {
-      margin-bottom: 0.75rem;
-      font-size: 1.2rem;
-    }
-    .card p {
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
-    }
+    header h1 { font-size: 1.1rem; }
+    nav { background: #333; padding: 0.5rem 1.5rem; }
+    nav ul { list-style: none; display: flex; gap: 0.5rem; align-items: center; }
+    nav a { color: #fff; text-decoration: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.95rem; }
+    nav a:hover { background: #444; }
+    
+    main { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem 2rem; }
+    .card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+    .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+    
+    .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
 
-    /* Formularlayout: einheitlich mit Grid */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-      align-items: start;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    .form-group label {
-      font-size: 0.85rem;
-      color: #555;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 0.6rem 0.7rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .form-group textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #333; }
+    .form-group input, .form-group select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background: #fff; }
+    
+    .btn-primary { background: #222; color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+    .btn-primary:hover { background: #444; }
+    
+    .table-container { overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #fafafa; color: #666; font-weight: bold; }
+    
+    .status-badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .status-active { background: #e8f5e9; color: #2e7d32; }
+    .status-ended { background: #eceff1; color: #455a64; }
 
-    .btn {
-      display: inline-block;
-      padding: 0.7rem 1.2rem;
-      border: none;
-      border-radius: 4px;
-      background: #222;
-      color: #fff;
-      font-size: 0.95rem;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    .btn:hover {
-      background: #333;
-    }
-    .btn-secondary {
-      background: #555;
-    }
-    .btn-secondary:hover {
-      background: #666;
-    }
-    .msg {
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
-    }
-    .msg-success {
-      color: #2e7d32;
-    }
-    .msg-error {
-      color: #c62828;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-    th, td {
-      padding: 0.6rem 0.4rem;
-      border-bottom: 1px solid #e0e0e0;
-      text-align: left;
-      vertical-align: top;
-    }
-    th {
-      background: #fafafa;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #555;
-    }
-    tr:nth-child(even) td {
-      background: #fcfcfc;
-    }
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      color: #777;
-      font-size: 0.85rem;
-    }
-    .badge-status {
-      display: inline-block;
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      color: #fff;
-    }
-    .status-planned { background: #546e7a; }
-    .status-active { background: #2e7d32; }
-    .status-paused { background: #f9a825; }
-    .status-done { background: #424242; }
-    .status-cancelled { background: #c62828; }
-
-    @media (max-width: 600px) {
-      main {
-        padding: 0 0.5rem 1.5rem;
-      }
-      .card {
-        padding: 1.0rem;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    .status-text { font-size: 0.85rem; color: #ddd; }
+    .badge-auth { background: #2e7d32; color: #fff; padding: 0.15rem 0.4rem; border-radius: 999px; font-size: 0.7rem; margin-left: 0.5rem; }
+    footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Projekte</h1>
-    <div>
-      <span style="font-size:0.9rem;color:#ddd;">Projektverwaltung (Demo, noch ohne DB)</span>
-    </div>
+    <div class="status-text" id="userInfo">Status: <span>Prüfe Login...</span></div>
   </header>
 
   <nav>
@@ -201,280 +60,137 @@
       <li><a href="clients.html">Kunden</a></li>
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
-      <li><a href="login.html">Login</a></li>
     </ul>
   </nav>
 
   <main>
     <section class="card">
       <h2>Neues Projekt anlegen</h2>
-      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Später hängt hier Supabase dran.</p>
-
       <form id="projectForm">
         <div class="form-grid">
           <div class="form-group">
-            <label for="projectNumber">Projektnummer (z.B. P-2026-0001)</label>
-            <input type="text" id="projectNumber" name="projectNumber" placeholder="P-2026-0001" />
+            <label for="projectTitle">Projektname *</label>
+            <input type="text" id="projectTitle" required />
           </div>
           <div class="form-group">
-            <label for="clientNumber">Kundennummer *</label>
-            <input type="text" id="clientNumber" name="clientNumber" required placeholder="z.B. C-2026-0001" />
-          </div>
-          <div class="form-group">
-            <label for="projectTitle">Projekttitel *</label>
-            <input type="text" id="projectTitle" name="projectTitle" required />
+            <label for="projectClient">Zugehöriger Kunde *</label>
+            <select id="projectClient" required>
+              <option value="" disabled selected>Lade Kunden...</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="projectStatus">Status</label>
-            <select id="projectStatus" name="projectStatus">
-              <option value="planned">Geplant</option>
-              <option value="active" selected>Aktiv</option>
-              <option value="paused">Pausiert</option>
-              <option value="done">Abgeschlossen</option>
-              <option value="cancelled">Abgebrochen</option>
+            <select id="projectStatus">
+              <option value="aktiv" selected>Aktiv</option>
+              <option value="beendet">Beendet</option>
             </select>
-          </div>
-
-          <div class="form-group">
-            <label for="startDate">Startdatum</label>
-            <input type="date" id="startDate" name="startDate" />
-          </div>
-          <div class="form-group">
-            <label for="endDate">Enddatum (geplant)</label>
-            <input type="date" id="endDate" name="endDate" />
-          </div>
-
-          <div class="form-group">
-            <label for="billingType">Abrechnungstyp</label>
-            <select id="billingType" name="billingType">
-              <option value="hourly" selected>Stundenbasiert</option>
-              <option value="fixed">Pauschal</option>
-              <option value="retainer">Retainer</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="hourlyRate">Stundensatz (EUR)</label>
-            <input type="number" step="0.01" id="hourlyRate" name="hourlyRate" placeholder="z.B. 95,00" />
-          </div>
-          <div class="form-group">
-            <label for="estimatedHours">Geplante Stunden</label>
-            <input type="number" step="0.1" id="estimatedHours" name="estimatedHours" placeholder="z.B. 20" />
-          </div>
-
-          <div class="form-group">
-            <label for="fixedPrice">Pauschalpreis (EUR, falls Pauschal)</label>
-            <input type="number" step="0.01" id="fixedPrice" name="fixedPrice" placeholder="z.B. 2500,00" />
-          </div>
-
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="projectNotes">Notizen / Scope</label>
-            <textarea id="projectNotes" name="projectNotes"></textarea>
           </div>
         </div>
-        <button type="submit" class="btn">Projekt hinzufügen (Demo)</button>
-        <button type="button" id="clearListBtn" class="btn btn-secondary">Liste leeren</button>
-        <div id="formMsg" class="msg"></div>
+        <button type="submit" class="btn-primary">Projekt hinzufügen</button>
       </form>
     </section>
 
     <section class="card">
-      <h2>Projektliste (Browser-Demo)</h2>
-      <p>Diese Liste ist nur im Browser-Speicher (Session). Beim Neuladen ist alles weg – später speichern wir das in Supabase.</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Projekt</th>
-            <th>Kundennr.</th>
-            <th>Status & Zeitraum</th>
-            <th>Abrechnung</th>
-            <th>Notizen</th>
-          </tr>
-        </thead>
-        <tbody id="projectsTableBody">
-          <tr id="projectsPlaceholderRow">
-            <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
-              Noch keine Projekte angelegt (Demo). Bitte Formular oben verwenden.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>Projektliste</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Projekt</th>
+              <th>Kunde</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="projectTableBody">
+            <tr><td colspan="3" style="text-align: center; color: #777;">Lade Projekte...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
-  </footer>
+  <footer>&copy; 2026 Bot Papa – Freelancer CRM</footer>
 
-  <script>
-    const yearEl = document.getElementById('year');
-    yearEl.textContent = new Date().getFullYear();
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
 
-    const projectForm = document.getElementById('projectForm');
-    const formMsg = document.getElementById('formMsg');
-    const projectsTableBody = document.getElementById('projectsTableBody');
-    const placeholderRow = document.getElementById('projectsPlaceholderRow');
-    const clearListBtn = document.getElementById('clearListBtn');
-
-    const projects = [];
-
-    projectForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      formMsg.textContent = '';
-      formMsg.className = 'msg';
-
-      const projectNumber = document.getElementById('projectNumber').value.trim();
-      const clientNumber = document.getElementById('clientNumber').value.trim();
-      const projectTitle = document.getElementById('projectTitle').value.trim();
-      const projectStatus = document.getElementById('projectStatus').value;
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-      const billingType = document.getElementById('billingType').value;
-      const hourlyRate = document.getElementById('hourlyRate').value.trim();
-      const estimatedHours = document.getElementById('estimatedHours').value.trim();
-      const fixedPrice = document.getElementById('fixedPrice').value.trim();
-      const projectNotes = document.getElementById('projectNotes').value.trim();
-
-      if (!clientNumber || !projectTitle) {
-        formMsg.textContent = 'Bitte mindestens Kundennummer und Projekttitel angeben.';
-        formMsg.classList.add('msg-error');
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data || !data.session) {
+        window.location.href = "login.html";
         return;
       }
+      currentUserId = data.session.user.id;
+      document.getElementById('userInfo').innerHTML = 'Status: <span>' + data.session.user.email + '</span> <span class="badge badge-auth">eingeloggt</span>';
+      
+      await populateClientDropdown();
+      fetchProjects();
+    }
 
-      const p = {
-        projectNumber,
-        clientNumber,
-        projectTitle,
-        projectStatus,
-        startDate,
-        endDate,
-        billingType,
-        hourlyRate,
-        estimatedHours,
-        fixedPrice,
-        projectNotes
+    async function populateClientDropdown() {
+      const select = document.getElementById('projectClient');
+      const { data: clients } = await supabase.from('clients').select('id, name').order('name', { ascending: true });
+      if (!clients || clients.length === 0) { select.innerHTML = '<option disabled>Keine Kunden da.</option>'; return; }
+      select.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
+      clients.forEach(c => {
+        const o = document.createElement('option'); o.value = c.id; o.textContent = c.name; select.appendChild(o);
+      });
+    }
+
+    async function fetchProjects() {
+      const tableBody = document.getElementById('projectTableBody');
+      
+      // 1. Live-Projekte aus Supabase holen
+      const { data: projects, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+      if (error) { tableBody.innerHTML = '<tr><td colspan="3">Fehler: ' + error.message + '</td></tr>'; return; }
+      if (!projects || projects.length === 0) { tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #777;">Keine Projekte vorhanden.</td></tr>'; return; }
+      
+      // 2. Kundenliste holen, um IDs in Namen zu übersetzen
+      const { data: clients } = await supabase.from('clients').select('id, name');
+
+      tableBody.innerHTML = '';
+      projects.forEach(p => {
+        const tr = document.createElement('tr');
+        
+        // Passenden Kundennamen heraussuchen
+        const client = clients ? clients.find(c => c.id === p.client_id) : null;
+        const clientName = client ? client.name : 'Unbekannter Kunde';
+
+        // Status-Badge stylen
+        const bClass = p.status === 'aktiv' ? 'status-active' : 'status-ended';
+        const bText = p.status === 'aktiv' ? 'Aktiv' : 'Beendet';
+
+        tr.innerHTML = `
+          <td><strong>${p.title}</strong></td>
+          <td>${clientName}</td>
+          <td><span class="status-badge ${bClass}">${bText}</span></td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('projectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newProj = {
+        user_id: currentUserId,
+        title: document.getElementById('projectTitle').value.trim(),
+        client_id: document.getElementById('projectClient').value,
+        status: document.getElementById('projectStatus').value
       };
-
-      projects.push(p);
-      addProjectRow(p);
-
-      projectForm.reset();
-      formMsg.textContent = 'Projekt (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
-      formMsg.classList.add('msg-success');
+      
+      const { error } = await supabase.from('projects').insert([newProj]);
+      if (error) alert('Fehler: ' + error.message);
+      else {
+        document.getElementById('projectForm').reset();
+        fetchProjects();
+      }
     });
 
-    function addProjectRow(p) {
-      if (placeholderRow) {
-        placeholderRow.remove();
-      }
-
-      const tr = document.createElement('tr');
-
-      const projLabel = p.projectNumber
-        ? `${escapeHtml(p.projectNumber)} – ${escapeHtml(p.projectTitle)}`
-        : escapeHtml(p.projectTitle);
-
-      const statusLabel = getStatusLabel(p.projectStatus);
-
-      const period = [
-        p.startDate ? `Start: ${formatDate(p.startDate)}` : '',
-        p.endDate ? `Ende: ${formatDate(p.endDate)}` : ''
-      ].filter(Boolean).join('<br>');
-
-      const billing = buildBillingInfo(p);
-
-      tr.innerHTML = `
-        <td>${projLabel}</td>
-        <td>${escapeHtml(p.clientNumber)}</td>
-        <td>${statusLabel}<br>${period}</td>
-        <td>${billing}</td>
-        <td>${escapeHtml(p.projectNotes || '')}</td>
-      `;
-
-      projectsTableBody.appendChild(tr);
-    }
-
-    function getStatusLabel(status) {
-      let label = 'Unbekannt';
-      let cls = 'status-planned';
-
-      if (status === 'planned') { label = 'Geplant'; cls = 'status-planned'; }
-      else if (status === 'active') { label = 'Aktiv'; cls = 'status-active'; }
-      else if (status === 'paused') { label = 'Pausiert'; cls = 'status-paused'; }
-      else if (status === 'done') { label = 'Abgeschlossen'; cls = 'status-done'; }
-      else if (status === 'cancelled') { label = 'Abgebrochen'; cls = 'status-cancelled'; }
-
-      return `<span class="badge-status ${cls}">${label}</span>`;
-    }
-
-    function buildBillingInfo(p) {
-      const parts = [];
-
-      if (p.billingType === 'hourly') {
-        if (p.hourlyRate) {
-          parts.push(`Stundensatz: ${escapeHtml(p.hourlyRate)} €`);
-        }
-        if (p.estimatedHours) {
-          parts.push(`Geplante Stunden: ${escapeHtml(p.estimatedHours)}`);
-        }
-      } else if (p.billingType === 'fixed') {
-        parts.push('Pauschal');
-        if (p.fixedPrice) {
-          parts.push(`Preis: ${escapeHtml(p.fixedPrice)} €`);
-        }
-      } else if (p.billingType === 'retainer') {
-        parts.push('Retainer');
-        if (p.hourlyRate) {
-          parts.push(`Stundensatz: ${escapeHtml(p.hourlyRate)} €`);
-        }
-      }
-
-      if (parts.length === 0) {
-        return '';
-      }
-
-      return parts.map(line => escapeHtml(line)).join('<br>');
-    }
-
-    function formatDate(value) {
-      if (!value) return '';
-      try {
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return value;
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        return `${day}.${month}.${year}`;
-      } catch {
-        return value;
-      }
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;/')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    clearListBtn.addEventListener('click', () => {
-      projects.length = 0;
-      while (projectsTableBody.firstChild) {
-        projectsTableBody.removeChild(projectsTableBody.firstChild);
-      }
-      const row = document.createElement('tr');
-      row.id = 'projectsPlaceholderRow';
-      row.innerHTML = `
-        <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
-          Noch keine Projekte angelegt (Demo). Bitte Formular oben verwenden.
-        </td>
-      `;
-      projectsTableBody.appendChild(row);
-      formMsg.textContent = 'Projektliste geleert (nur lokal im Browser).';
-      formMsg.className = 'msg msg-success';
-    });
+    checkAuthAndLoad();
   </script>
 </body>
 </html>
