@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard – Bot Papa Freelancer CRM</title>
+  <title>Login – Bot Papa Freelancer CRM</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     header {
       background: #222;
@@ -18,69 +21,79 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
     }
     header h1 { font-size: 1.3rem; }
-    header .status {
-      font-size: 0.9rem;
-      color: #ddd;
+    
+    main {
+      flex: 1;
       display: flex;
+      justify-content: center;
       align-items: center;
+      padding: 2rem 1rem;
     }
-    nav {
-      background: #333;
-      color: #fff;
+    .login-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
     }
-    nav ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding: 0.5rem 1.5rem;
+    .login-card h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      text-align: center;
     }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      padding: 0.35rem 0.75rem;
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
       border-radius: 4px;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
-    nav a:hover {
+    .form-group input:focus {
+      outline: none;
+      border-color: #333;
+    }
+    .login-btn {
+      width: 100%;
+      background: #222;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    .login-btn:hover {
       background: #444;
     }
-    main {
-      max-width: 1200px;
-      margin: 1.5rem auto;
-      padding: 0 1rem 2rem;
-      display: none; /* Versteckt das Dashboard, bis der Login-Check durch ist */
+    .error-message {
+      color: #e63946;
+      background: #ffe3e5;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+      text-align: center;
     }
-    .card {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-    }
-    .card h2 { margin-bottom: 0.75rem; font-size: 1.2rem; }
-    .card p { margin-bottom: 0.5rem; line-height: 1.4; }
     footer {
       text-align: center;
       padding: 1.5rem;
       color: #777;
       font-size: 0.85rem;
-    }
-    .logout-btn {
-      background: #e63946;
-      color: white;
-      border: none;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .logout-btn:hover {
-      background: #cb2431;
     }
   </style>
 
@@ -88,29 +101,27 @@
 </head>
 <body>
   <header>
-    <h1>Bot Papa Freelancer CRM – Dashboard</h1>
-    <div class="status">
-      <span id="statusText">Prüfe Login...</span>
-      <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
-    </div>
+    <h1>Bot Papa Freelancer CRM</h1>
   </header>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Dashboard</a></li>
-      <li><a href="clients.html">Kunden</a></li>
-      <li><a href="projects.html">Projekte</a></li>
-      <li><a href="invoices.html">Rechnungen</a></li>
-      <li><a href="login.html" id="navLogin">Login</a></li>
-    </ul>
-  </nav>
+  <main>
+    <div class="login-card">
+      <h2>Mitarbeiter Login</h2>
+      
+      <div id="errorBox" class="error-message"></div>
 
-  <main id="mainContent">
-    <section class="card">
-      <h2>Übersicht</h2>
-      <p>Hier kommt deine Dashboard-Übersicht hin (offene Projekte, Rechnungen etc.).</p>
-      <p>Willkommen zurück, <strong id="userEmail"></strong>!</p>
-    </section>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">E-Mail-Adresse</label>
+          <input type="email" id="email" required placeholder="name@beispiel.de" />
+        </div>
+        <div class="form-group">
+          <label for="password">Passwort</label>
+          <input type="password" id="password" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="login-btn">Einloggen</button>
+      </form>
+    </div>
   </main>
 
   <footer>
@@ -119,9 +130,143 @@
 
   <script>
     // =========================================================================
-    // HIER DEINE SUPABASE CONFIG EINTRAGEN
+    // HIER DIE GLEICHEN SUPABASE DATEN WIE IM DASHBOARD EINTRAGEN
     // =========================================================================
-    const SUPABASE_URL = "https://javbfzuekkmewbzowchj.supabase.co"; 
+    const SUPABASE_URL = "<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Bot Papa Freelancer CRM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 1.3rem; }
+    
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+    .login-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-card h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #333;
+    }
+    .login-btn {
+      width: 100%;
+      background: #222;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    .login-btn:hover {
+      background: #444;
+    }
+    .error-message {
+      color: #e63946;
+      background: #ffe3e5;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #777;
+      font-size: 0.85rem;
+    }
+  </style>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <h1>Bot Papa Freelancer CRM</h1>
+  </header>
+
+  <main>
+    <div class="login-card">
+      <h2>Mitarbeiter Login</h2>
+      
+      <div id="errorBox" class="error-message"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">E-Mail-Adresse</label>
+          <input type="email" id="email" required placeholder="name@beispiel.de" />
+        </div>
+        <div class="form-group">
+          <label for="password">Passwort</label>
+          <input type="password" id="password" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="login-btn">Einloggen</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
+  </footer>
+
+  <script>
+    // =========================================================================
+    // HIER DIE GLEICHEN SUPABASE DATEN WIE IM DASHBOARD EINTRAGEN
+    // =========================================================================
+    const SUPABASE_URL = "https://xyz123abc.supabase.co"; 
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY";
     // =========================================================================
 
@@ -132,34 +277,87 @@
       // Aktuelles Jahr im Footer setzen
       document.getElementById('year').textContent = new Date().getFullYear();
 
-      const statusEl = document.getElementById('statusText');
-      const mainContent = document.getElementById('mainContent');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const userEmailEl = document.getElementById('userEmail');
-      const navLogin = document.getElementById('navLogin');
+      const loginForm = document.getElementById('loginForm');
+      const errorBox = document.getElementById('errorBox');
 
-      // Aktuelle Session von Supabase abfragen
-      const { data: { session }, error } = await supabase.auth.getSession();
-
-      if (error || !session) {
-        // Nicht eingeloggt -> Weiterleitung zur Login-Seite
-        statusEl.textContent = "Status: Nicht eingeloggt";
-        window.location.href = "login.html"; 
-      } else {
-        // Eingeloggt!
-        statusEl.textContent = "Status: Eingeloggt";
-        userEmailEl.textContent = session.user.email;
-        
-        // Dashboard anzeigen, Login-Nav-Link ausblenden, Logout-Button einblenden
-        mainContent.style.display = "block";
-        logoutBtn.style.display = "inline-block";
-        if (navLogin) navLogin.style.display = "none"; 
+      // Falls der User bereits eingeloggt ist, direkt zum Dashboard schicken
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = "index.html";
       }
 
-      // Logout Logik
-      logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        window.location.href = "login.html";
+      // Login abschicken
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Verhindert das Neuladen der Seite
+        
+        errorBox.style.display = "none"; // Vorherige Fehler ausblenden
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Supabase Login-Anfrage
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          // Fehler anzeigen (z.B. falsches Passwort oder User existiert nicht)
+          errorBox.textContent = "Fehler: " + error.message;
+          errorBox.style.display = "block";
+        } else {
+          // Erfolg! Token wird von Supabase automatisch im Speicher abgelegt.
+          // Weiterleitung zum Dashboard.
+          window.location.href = "index.html";
+        }
+      });
+    });
+  </script>
+</body>
+</html>"; 
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+    // =========================================================================
+
+    // Supabase Client initialisieren
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", async function() {
+      // Aktuelles Jahr im Footer setzen
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      const loginForm = document.getElementById('loginForm');
+      const errorBox = document.getElementById('errorBox');
+
+      // Falls der User bereits eingeloggt ist, direkt zum Dashboard schicken
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = "index.html";
+      }
+
+      // Login abschicken
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Verhindert das Neuladen der Seite
+        
+        errorBox.style.display = "none"; // Vorherige Fehler ausblenden
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Supabase Login-Anfrage
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          // Fehler anzeigen (z.B. falsches Passwort oder User existiert nicht)
+          errorBox.textContent = "Fehler: " + error.message;
+          errorBox.style.display = "block";
+        } else {
+          // Erfolg! Token wird von Supabase automatisch im Speicher abgelegt.
+          // Weiterleitung zum Dashboard.
+          window.location.href = "index.html";
+        }
       });
     });
   </script>
