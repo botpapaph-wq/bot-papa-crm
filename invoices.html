@@ -56,7 +56,6 @@
     }
     .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
     
-    /* Das exakte 4-Spalten-Grid aus dem Original */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -76,7 +75,6 @@
       background: #fff;
     }
     
-    /* Buttons */
     .btn {
       padding: 0.5rem 1rem;
       border: none;
@@ -90,13 +88,11 @@
     .btn-logout { background: #c62828; color: #fff; font-size: 0.85rem; padding: 0.35rem 0.75rem; }
     .btn-logout:hover { background: #b71c1c; }
     
-    /* Tabelle */
     .table-container { overflow-x: auto; margin-top: 1rem; }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
     th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
     th { background: #fafafa; color: #666; font-weight: bold; }
     
-    /* Korrigierte Status Badges für die Rechnungsliste */
     .status-badge {
       display: inline-block;
       padding: 0.2rem 0.5rem;
@@ -156,7 +152,7 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Rechnung speichern</button>
+        <button type="submit" class="btn btn-primary">Rechnung保存 speichern</button>
       </form>
     </section>
 
@@ -167,7 +163,7 @@
           <thead>
             <tr>
               <th>Rechnungsnummer</th>
-              <th>Projekt / Kunde</th>
+              <th>Projekt-ID</th>
               <th>Betrag</th>
               <th>Status</th>
               <th>Erstellt am</th>
@@ -229,9 +225,11 @@
 
     async function fetchInvoices() {
       const tableBody = document.getElementById('invoiceTableBody');
+      
+      // Saubere, flache Abfrage ohne riskante Tabellen-Joins
       const { data: invoices, error } = await supabase
         .from('invoices')
-        .select('id, invoice_number, amount, status, created_at, projects(title, clients(name))')
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -249,16 +247,12 @@
         const date = new Date(inv.created_at).toLocaleDateString('de-DE');
         const formattedAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(inv.amount);
         
-        // Status Badges dynmisch stylen
         const badgeClass = inv.status === 'offen' ? 'status-open' : 'status-paid';
         const badgeText = inv.status === 'offen' ? 'Offen' : 'Bezahlt';
 
-        const projTitle = inv.projects ? inv.projects.title : 'Unbekannt';
-        const clientName = (inv.projects && inv.projects.clients) ? inv.projects.clients.name : 'Unbekannt';
-
         tr.innerHTML = `
           <td><strong>${inv.invoice_number}</strong></td>
-          <td>${projTitle}<br><small style="color:#777">${clientName}</small></td>
+          <td><small style="color:#777">ID: ${inv.project_id}</small></td>
           <td>${formattedAmount}</td>
           <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
           <td>${date}</td>
