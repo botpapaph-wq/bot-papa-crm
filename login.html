@@ -100,6 +100,7 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
   <header>
     <h1>Bot Papa Freelancer CRM</h1>
   </header>
@@ -130,148 +131,14 @@
 
   <script>
     // =========================================================================
-    // HIER DIE GLEICHEN SUPABASE DATEN WIE IM DASHBOARD EINTRAGEN
+    // HIER DIE SUPABASE CONFIG EINTRAGEN
     // =========================================================================
-    const SUPABASE_URL = "<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Bot Papa Freelancer CRM</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background: #222;
-      color: #fff;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header h1 { font-size: 1.3rem; }
-    
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    .login-card {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-    .login-card h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.4rem;
-      text-align: center;
-    }
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      font-weight: bold;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #333;
-    }
-    .login-btn {
-      width: 100%;
-      background: #222;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 0.5rem;
-    }
-    .login-btn:hover {
-      background: #444;
-    }
-    .error-message {
-      color: #e63946;
-      background: #ffe3e5;
-      padding: 0.5rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-      display: none;
-      text-align: center;
-    }
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      color: #777;
-      font-size: 0.85rem;
-    }
-  </style>
-
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-</head>
-<body>
-  <header>
-    <h1>Bot Papa Freelancer CRM</h1>
-  </header>
-
-  <main>
-    <div class="login-card">
-      <h2>Mitarbeiter Login</h2>
-      
-      <div id="errorBox" class="error-message"></div>
-
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="email">E-Mail-Adresse</label>
-          <input type="email" id="email" required placeholder="name@beispiel.de" />
-        </div>
-        <div class="form-group">
-          <label for="password">Passwort</label>
-          <input type="password" id="password" required placeholder="••••••••" />
-        </div>
-        <button type="submit" class="login-btn">Einloggen</button>
-      </form>
-    </div>
-  </main>
-
-  <footer>
-    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
-  </footer>
-
-  <script>
-    // =========================================================================
-    // HIER DIE GLEICHEN SUPABASE DATEN WIE IM DASHBOARD EINTRAGEN
-    // =========================================================================
-    const SUPABASE_URL = "https://xyz123abc.supabase.co"; 
+    const SUPABASE_URL = "https://javbfzuekkmewbzowchj.supabase.co"; 
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY";
     // =========================================================================
 
-    // Supabase Client initialisieren
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Variable umbenannt in "supabaseClient", um den Namenskonflikt mit der Library zu lösen
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.addEventListener("DOMContentLoaded", async function() {
       // Aktuelles Jahr im Footer setzen
@@ -281,84 +148,46 @@
       const errorBox = document.getElementById('errorBox');
 
       // Falls der User bereits eingeloggt ist, direkt zum Dashboard schicken
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        window.location.href = "index.html";
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) {
+          window.location.href = "index.html";
+          return;
+        }
+      } catch (e) {
+        console.error("Session-Check fehlgeschlagen:", e);
       }
 
       // Login abschicken
-      loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Verhindert das Neuladen der Seite
-        
-        errorBox.style.display = "none"; // Vorherige Fehler ausblenden
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault(); // Verhindert das Neuladen der Seite zuverlässig
+          
+          errorBox.style.display = "none"; // Vorherige Fehler ausblenden
+          
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
 
-        // Supabase Login-Anfrage
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
+          try {
+            // Supabase Login-Anfrage über den umbenannten Client
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+              email: email,
+              password: password,
+            });
+
+            if (error) {
+              errorBox.textContent = "Fehler: " + error.message;
+              errorBox.style.display = "block";
+            } else if (data && data.session) {
+              // Erfolg! Weiterleitung zum Dashboard.
+              window.location.href = "index.html";
+            }
+          } catch (err) {
+            errorBox.textContent = "Netzwerkfehler: " + err.message;
+            errorBox.style.display = "block";
+          }
         });
-
-        if (error) {
-          // Fehler anzeigen (z.B. falsches Passwort oder User existiert nicht)
-          errorBox.textContent = "Fehler: " + error.message;
-          errorBox.style.display = "block";
-        } else {
-          // Erfolg! Token wird von Supabase automatisch im Speicher abgelegt.
-          // Weiterleitung zum Dashboard.
-          window.location.href = "index.html";
-        }
-      });
-    });
-  </script>
-</body>
-</html>"; 
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-    // =========================================================================
-
-    // Supabase Client initialisieren
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    document.addEventListener("DOMContentLoaded", async function() {
-      // Aktuelles Jahr im Footer setzen
-      document.getElementById('year').textContent = new Date().getFullYear();
-
-      const loginForm = document.getElementById('loginForm');
-      const errorBox = document.getElementById('errorBox');
-
-      // Falls der User bereits eingeloggt ist, direkt zum Dashboard schicken
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        window.location.href = "index.html";
       }
-
-      // Login abschicken
-      loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Verhindert das Neuladen der Seite
-        
-        errorBox.style.display = "none"; // Vorherige Fehler ausblenden
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        // Supabase Login-Anfrage
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
-
-        if (error) {
-          // Fehler anzeigen (z.B. falsches Passwort oder User existiert nicht)
-          errorBox.textContent = "Fehler: " + error.message;
-          errorBox.style.display = "block";
-        } else {
-          // Erfolg! Token wird von Supabase automatisch im Speicher abgelegt.
-          // Weiterleitung zum Dashboard.
-          window.location.href = "index.html";
-        }
-      });
     });
   </script>
 </body>
