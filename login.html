@@ -5,171 +5,226 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – Bot Papa Freelancer CRM</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #333;
-      display: flex;
       min-height: 100vh;
+      display: flex;
       flex-direction: column;
-      justify-content: center;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
       align-items: center;
-      padding: 1rem;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
-    .login-card {
-      background: #fff;
-      padding: 2rem 2rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 360px;
-    }
-    .login-card h1 {
+    header h1 {
       font-size: 1.3rem;
-      margin-bottom: 1rem;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+    .card h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
       text-align: center;
     }
+    .card p {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
     .form-group {
-      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-top: 1rem;
     }
     .form-group label {
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 0.35rem;
+      font-size: 0.85rem;
+      color: #555;
     }
     .form-group input {
-      width: 100%;
       padding: 0.6rem 0.7rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.95rem;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #222;
+      font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
     }
     .btn {
+      display: inline-block;
       width: 100%;
-      padding: 0.7rem;
+      padding: 0.7rem 1.2rem;
       border: none;
       border-radius: 4px;
       background: #222;
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
+      margin-top: 1.2rem;
     }
     .btn:hover {
       background: #333;
     }
-    .back-link {
+    .msg {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
       text-align: center;
+    }
+    .msg-success {
+      color: #2e7d32;
+    }
+    .msg-error {
+      color: #c62828;
+    }
+    .small-info {
       margin-top: 1rem;
-      font-size: 0.85rem;
-    }
-    .back-link a {
-      color: #444;
-      text-decoration: none;
-    }
-    .back-link a:hover {
-      text-decoration: underline;
-    }
-    .error-msg {
-      color: #b00020;
-      font-size: 0.85rem;
-      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      color: #888;
       text-align: center;
-      display: none;
     }
-    .info-msg {
-      color: #007b3a;
-      font-size: 0.85rem;
-      margin-bottom: 0.75rem;
+    footer {
       text-align: center;
-      display: none;
+      padding: 1.5rem;
+      color: #777;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
-  <div class="login-card">
-    <h1>Login – Bot Papa Freelancer CRM</h1>
-    <div class="error-msg" id="errorMsg"></div>
-    <div class="info-msg" id="infoMsg"></div>
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">E-Mail</label>
-        <input type="email" id="email" name="email" required autocomplete="email" />
-      </div>
-      <div class="form-group">
-        <label for="password">Passwort</label>
-        <input type="password" id="password" name="password" required autocomplete="current-password" />
-      </div>
-      <button type="submit" class="btn">Einloggen</button>
-    </form>
-    <div class="back-link">
-      <a href="../index.html">Zurück zur Startseite</a>
+  <header>
+    <h1>Bot Papa Freelancer CRM – Login</h1>
+    <div>
+      <span style="font-size:0.9rem;color:#ddd;">Nur für dich – Supabase Auth</span>
     </div>
-  </div>
+  </header>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  <main>
+    <section class="card">
+      <h2>Anmelden</h2>
+      <p>Bitte melde dich mit deiner E-Mail-Adresse und deinem Passwort an.</p>
 
-    // >>> HIER DEINE SUPABASE-DATEN EINTRAGEN <<<
-    // Project URL aus Supabase: Settings -> API -> Project URL
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" name="email" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="password">Passwort</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <div id="formMsg" class="msg"></div>
+      </form>
+
+      <p class="small-info">
+        Nach erfolgreichem Login wirst du automatisch auf das Dashboard weitergeleitet.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
+  </footer>
+
+  <!-- Supabase JS (CDN, falls du kein Bundling nutzt) -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    // TODO: Hier deine echten Supabase-Daten eintragen
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-
-    // anon public key aus Supabase: Settings -> API -> anon public
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const loginForm = document.getElementById('loginForm');
-    const errorMsg = document.getElementById('errorMsg');
-    const infoMsg = document.getElementById('infoMsg');
+    const formMsg = document.getElementById('formMsg');
+
+    // Wenn bereits eingeloggt, direkt aufs Dashboard schicken
+    (async () => {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (!error && data && data.user) {
+          window.location.href = 'index.html';
+        }
+      } catch (e) {
+        console.warn('Fehler bei getUser (kann ignoriert werden, wenn nicht eingeloggt):', e);
+      }
+    })();
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      errorMsg.style.display = 'none';
-      errorMsg.textContent = '';
-      infoMsg.style.display = 'none';
-      infoMsg.textContent = '';
+      formMsg.textContent = '';
+      formMsg.className = 'msg';
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
       if (!email || !password) {
-        errorMsg.textContent = 'Bitte E-Mail und Passwort angeben.';
-        errorMsg.style.display = 'block';
+        formMsg.textContent = 'Bitte E-Mail und Passwort eingeben.';
+        formMsg.classList.add('msg-error');
         return;
       }
 
-      infoMsg.textContent = 'Anmeldung läuft...';
-      infoMsg.style.display = 'block';
+      formMsg.textContent = 'Anmeldung läuft …';
+      formMsg.classList.add('msg-success');
 
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
-        });
+        }); // [web:183][web:187]
 
         if (error) {
           console.error(error);
-          infoMsg.style.display = 'none';
-          errorMsg.textContent = 'Login fehlgeschlagen: ' + (error.message || 'Unbekannter Fehler.');
-          errorMsg.style.display = 'block';
+          formMsg.textContent = 'Login fehlgeschlagen: ' + (error.message || 'Bitte Daten prüfen.');
+          formMsg.className = 'msg msg-error';
           return;
         }
 
-        infoMsg.textContent = 'Login erfolgreich. Weiterleitung...';
-        setTimeout(() => {
-          window.location.href = '../index.html';
-        }, 800);
-
+        if (data && data.user) {
+          formMsg.textContent = 'Login erfolgreich. Weiterleitung zum Dashboard …';
+          formMsg.className = 'msg msg-success';
+          // kurze Verzögerung für Feedback, dann redirect
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 600);
+        } else {
+          formMsg.textContent = 'Login fehlgeschlagen: Keine Benutzerdaten erhalten.';
+          formMsg.className = 'msg msg-error';
+        }
       } catch (err) {
         console.error(err);
-        infoMsg.style.display = 'none';
-        errorMsg.textContent = 'Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.';
-        errorMsg.style.display = 'block';
+        formMsg.textContent = 'Unerwarteter Fehler beim Login.';
+        formMsg.className = 'msg msg-error';
       }
     });
   </script>
