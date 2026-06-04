@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bot Papa Freelancer CRM – Kunden</title>
+  <title>Bot Papa Freelancer CRM – Projekte</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -62,15 +62,14 @@
       margin-bottom: 1rem;
     }
     .form-group { display: flex; flex-direction: column; }
-    .form-group-full { grid-column: 1 / -1; display: flex; flex-direction: column; }
     .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #555; }
-    .form-group input, .form-group textarea {
+    .form-group input, .form-group select {
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.95rem;
+      background: #fff;
     }
-    .form-group textarea { resize: vertical; height: 80px; }
     
     /* Buttons */
     .btn-container { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
@@ -91,22 +90,31 @@
     th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
     th { background: #fafafa; color: #666; font-weight: bold; }
     
+    /* Status Badges für Projekte */
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .status-active { background: #e8f5e9; color: #2e7d32; }
+    .status-finished { background: #eceff1; color: #455a64; }
+    
     .user-info { font-size: 0.9rem; color: #ddd; }
     .badge {
       display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem;
     }
     .badge-auth { background: #2e7d32; color: #fff; }
-    .badge-guest { background: #616161; color: #fff; }
     
     footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Bot Papa Freelancer CRM – Kunden</h1>
+    <h1>Bot Papa Freelancer CRM – Projekte</h1>
     <div class="user-info" id="userInfo">
-      Status: <span>Gast</span>
-      <span class="badge badge-guest">nicht eingeloggt</span>
+      Status: <span>Prüfe Login...</span>
     </div>
   </header>
 
@@ -121,71 +129,48 @@
 
   <main>
     <section class="card">
-      <h2>Neuen Kunden anlegen</h2>
-      <form id="clientForm">
+      <h2>Neues Projekt anlegen</h2>
+      <form id="projectForm">
         <div class="form-grid">
           <div class="form-group">
-            <label for="customerNumber">Kundennummer</label>
-            <input type="text" id="customerNumber" placeholder="z.B. C-2026-0001" />
+            <label for="projectTitle">Projektname / Titel *</label>
+            <input type="text" id="projectTitle" required placeholder="z.B. Website-Entwicklung" />
           </div>
           <div class="form-group">
-            <label for="clientName">Firma / Name *</label>
-            <input type="text" id="clientName" required placeholder="Muster GmbH" />
+            <label for="projectClient">Zugehöriger Kunde *</label>
+            <select id="projectClient" required>
+              <option value="" disabled selected>Lade Kunden...</option>
+            </select>
           </div>
           <div class="form-group">
-            <label for="contactPerson">Ansprechpartner</label>
-            <input type="text" id="contactPerson" placeholder="Max Mustermann" />
-          </div>
-          <div class="form-group">
-            <label for="clientEmail">E-Mail *</label>
-            <input type="email" id="clientEmail" required placeholder="info@firma.de" />
-          </div>
-          <div class="form-group">
-            <label for="phone">Telefon</label>
-            <input type="text" id="phone" placeholder="+49 ..." />
-          </div>
-          <div class="form-group">
-            <label for="street">Straße / Nr.</label>
-            <input type="text" id="street" />
-          </div>
-          <div class="form-group">
-            <label for="zipCode">PLZ</label>
-            <input type="text" id="zipCode" />
-          </div>
-          <div class="form-group">
-            <label for="city">Ort</label>
-            <input type="text" id="city" />
-          </div>
-          <div class="form-group">
-            <label for="country">Land</label>
-            <input type="text" id="country" value="Deutschland" />
-          </div>
-          <div class="form-group-full">
-            <label for="notes">Notizen</label>
-            <textarea id="notes" placeholder="Besondere Konditionen, Zahlungsziele..."></textarea>
+            <label for="projectStatus">Status</label>
+            <select id="projectStatus">
+              <option value="aktiv" selected>Aktiv</option>
+              <option value="beendet">Beendet</option>
+            </select>
           </div>
         </div>
         <div class="btn-container">
-          <button type="submit" class="btn btn-primary">Kunde hinzufügen</button>
+          <button type="submit" class="btn btn-primary">Projekt hinzufügen</button>
         </div>
       </form>
     </section>
 
     <section class="card">
-      <h2>Kundenliste</h2>
+      <h2>Projektübersicht</h2>
       <div class="table-container">
         <table>
           <thead>
             <tr>
+              <th>Projekt</th>
               <th>Kunde</th>
-              <th>Kontakt</th>
-              <th>Adresse</th>
-              <th>Sonstiges</th>
+              <th>Status</th>
+              <th>Erstellt am</th>
             </tr>
           </thead>
-          <tbody id="clientTableBody">
+          <tbody id="projectTableBody">
             <tr>
-              <td colspan="4" style="text-align: center; color: #777;">Lade Kunden aus Datenbank...</td>
+              <td colspan="4" style="text-align: center; color: #777;">Lade Projekte...</td>
             </tr>
           </tbody>
         </table>
@@ -201,7 +186,7 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'HIER_DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUserId = null;
@@ -215,27 +200,57 @@
       const { data, error } = await supabase.auth.getSession();
 
       if (error || !data || !data.session) {
-        // Nicht eingeloggt -> Rauswurf zur Login-Seite
         window.location.href = "login.html";
         return;
       }
 
       currentUserId = data.session.user.id;
       const email = data.session.user.email || 'Unbekannt';
-      
       document.getElementById('userInfo').innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
       
-      // Kunden laden
-      fetchClients();
+      // 1. Erst Dropdown mit Kunden befüllen
+      await populateClientDropdown();
+      // 2. Dann Projektliste laden
+      fetchProjects();
     }
 
-    // Kunden aus Supabase holen und rendern
-    async function fetchClients() {
-      const tableBody = document.getElementById('clientTableBody');
+    // Holt alle Kunden aus der DB, um das Dropdown zu füllen
+    async function populateClientDropdown() {
+      const clientSelect = document.getElementById('projectClient');
       
       const { data: clients, error } = await supabase
         .from('clients')
-        .select('*')
+        .select('id, name')
+        .order('name', { ascending: true });
+
+      if (error || !clients || clients.length === 0) {
+        clientSelect.innerHTML = '<option value="" disabled>Keine Kunden gefunden. Bitte zuerst Kunden anlegen!</option>';
+        return;
+      }
+
+      clientSelect.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
+      clients.forEach(client => {
+        const option = document.createElement('option');
+        option.value = client.id;
+        option.textContent = client.name;
+        clientSelect.appendChild(option);
+      });
+    }
+
+    // Holt die Projekte und verknüpft sie direkt mit dem Kundennamen
+    async function fetchProjects() {
+      const tableBody = document.getElementById('projectTableBody');
+      
+      // Nutzt das relationale Feature von Supabase: Holt Projektdaten + den zugehörigen Namen aus der Clients-Tabelle
+      const { data: projects, error } = await supabase
+        .from('projects')
+        .select(`
+          id,
+          title,
+          status,
+          created_at,
+          clients ( name )
+        `)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -243,73 +258,59 @@
         return;
       }
 
-      if (!clients || clients.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #777;">Noch keine Kunden in der Datenbank angelegt.</td></tr>';
+      if (!projects || projects.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #777;">Noch keine Projekte angelegt.</td></tr>';
         return;
       }
 
       tableBody.innerHTML = '';
-      clients.forEach(client => {
+      projects.forEach(project => {
         const tr = document.createElement('tr');
         
-        // Spalte 1: Kunde & Nr
-        const tdKunde = document.createElement('td');
-        tdKunde.innerHTML = `<strong>${client.name}</strong><br><small style="color:#777">${client.customer_number || '-'}</small>`;
+        // Formatiere Datum
+        const date = new Date(project.created_at).toLocaleDateString('de-DE');
         
-        // Spalte 2: Kontakt
-        const tdKontakt = document.createElement('td');
-        tdKontakt.innerHTML = `${client.email}<br><small style="color:#777">${client.phone || ''}</small>`;
+        // Status Styling
+        const statusClass = project.status === 'aktiv' ? 'status-active' : 'status-finished';
+        const statusText = project.status === 'aktiv' ? 'Aktiv' : 'Beendet';
         
-        // Spalte 3: Adresse
-        const tdAdresse = document.createElement('td');
-        const strasse = client.street || '';
-        const ortsDaten = `${client.zip_code || ''} ${client.city || ''}`.trim();
-        tdAdresse.innerHTML = `${strasse}<br>${ortsDaten} ${client.country ? '('+client.country+')' : ''}`;
-        
-        // Spalte 4: Sonstiges (Notizen & Ansprechpartner)
-        const tdSonstiges = document.createElement('td');
-        tdSonstiges.innerHTML = `<small>Ansprechp.: ${client.contact_person || '-'}</small><br><small style="color:#555; display:block; max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${client.notes || ''}">${client.notes || '-'}</small>`;
-        
-        tr.appendChild(tdKunde);
-        tr.appendChild(tdKontakt);
-        tr.appendChild(tdAdresse);
-        tr.appendChild(tdSonstiges);
+        // Kundenname aus dem gejointen Objekt holen
+        const kundenName = project.clients ? project.clients.name : 'Unbekannter Kunde';
+
+        tr.innerHTML = `
+          <td><strong>${project.title}</strong></td>
+          <td>${kundenName}</td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td>${date}</td>
+        `;
         tableBody.appendChild(tr);
       });
     }
 
-    // Formular abschicken -> In Supabase speichern
-    const clientForm = document.getElementById('clientForm');
-    if (clientForm) {
-      clientForm.addEventListener('submit', async (e) => {
+    // Formular abschicken
+    const projectForm = document.getElementById('projectForm');
+    if (projectForm) {
+      projectForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         if (!currentUserId) return;
 
-        const newClient = {
-          user_id: currentUserId, // Zwingend erforderlich für RLS
-          customer_number: document.getElementById('customerNumber').value.trim(),
-          name: document.getElementById('clientName').value.trim(),
-          contact_person: document.getElementById('contactPerson').value.trim(),
-          email: document.getElementById('clientEmail').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
-          street: document.getElementById('street').value.trim(),
-          zip_code: document.getElementById('zipCode').value.trim(),
-          city: document.getElementById('city').value.trim(),
-          country: document.getElementById('country').value.trim(),
-          notes: document.getElementById('notes').value.trim()
+        const newProject = {
+          user_id: currentUserId,
+          title: document.getElementById('projectTitle').value.trim(),
+          client_id: document.getElementById('projectClient').value,
+          status: document.getElementById('projectStatus').value
         };
 
         const { error } = await supabase
-          .from('clients')
-          .insert([newClient]);
+          .from('projects')
+          .insert([newProject]);
 
         if (error) {
-          alert('Fehler beim Speichern: ' + error.message);
+          alert('Fehler beim Speichern des Projekts: ' + error.message);
         } else {
-          clientForm.reset();
-          document.getElementById('country').value = "Deutschland"; // Standard zurücksetzen
-          fetchClients(); // Liste aktualisieren
+          projectForm.reset();
+          fetchProjects(); // Liste neu laden
         }
       });
     }
