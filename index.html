@@ -3,13 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bot Papa Freelancer CRM</title>
+  <title>Bot Papa Freelancer CRM – Dashboard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
-    header { background: #222; color: #fff; padding: 1rem 2rem; }
-    header h1 { font-size: 1.4rem; }
-    main { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    header h1 {
+      font-size: 1.3rem;
+    }
+    nav {
+      background: #333;
+      color: #fff;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    nav a:hover {
+      background: #444;
+    }
+    main {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem 2rem;
+    }
     .card {
       background: #fff;
       padding: 1.5rem;
@@ -17,8 +57,14 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin-bottom: 1.5rem;
     }
-    .card h2 { margin-bottom: 0.75rem; font-size: 1.2rem; }
-    .card p { margin-bottom: 0.5rem; line-height: 1.4; }
+    .card h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -32,26 +78,85 @@
       border: 1px solid #e0e0e0;
       text-align: center;
     }
-    .stat-box h3 { font-size: 0.9rem; color: #777; margin-bottom: 0.25rem; }
-    .stat-box p { font-size: 1.6rem; font-weight: bold; }
+    .stat-box h3 {
+      font-size: 0.9rem;
+      color: #777;
+      margin-bottom: 0.25rem;
+    }
+    .stat-box p {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .user-info {
+      font-size: 0.9rem;
+      color: #ddd;
+    }
+    .user-info span {
+      font-weight: bold;
+    }
+    .btn-logout {
+      background: #c62828;
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .btn-logout:hover {
+      background: #b71c1c;
+    }
     footer {
       text-align: center;
       padding: 1.5rem;
       color: #777;
       font-size: 0.85rem;
     }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #eee;
+      color: #555;
+      margin-left: 0.5rem;
+    }
+    .badge-auth {
+      background: #2e7d32;
+      color: #fff;
+    }
+    .badge-guest {
+      background: #616161;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Bot Papa Freelancer CRM – Startseite</h1>
+    <h1>Bot Papa Freelancer CRM – Dashboard</h1>
+    <div class="user-info" id="userInfo">
+      Status: <span>Gast</span>
+      <span class="badge badge-guest">nicht eingeloggt</span>
+    </div>
   </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+      <li><a href="login.html" id="loginLink">Login</a></li>
+      <li><button id="logoutBtn" class="btn-logout" style="display:none;">Logout</button></li>
+    </ul>
+  </nav>
 
   <main>
     <section class="card">
       <h2>Willkommen</h2>
-      <p>Dies ist die Startseite deines neuen Freelancer CRM unter <strong>crm.bot-papa.online</strong>.</p>
-      <p>In den nächsten Schritten kommen Login, Kundenverwaltung, Projekte und Rechnungen dazu.</p>
+      <p>Dies ist das Dashboard deines Freelancer CRM. Hier siehst du später deine offenen Rechnungen, aktiven Projekte und Kunden.</p>
+      <p id="authHint">Um alle Funktionen zu nutzen, bitte zuerst einloggen.</p>
     </section>
 
     <section class="card">
@@ -59,15 +164,15 @@
       <div class="stats">
         <div class="stat-box">
           <h3>Offene Rechnungen</h3>
-          <p>0</p>
+          <p id="openInvoices">0</p>
         </div>
         <div class="stat-box">
           <h3>Aktive Projekte</h3>
-          <p>0</p>
+          <p id="activeProjects">0</p>
         </div>
         <div class="stat-box">
           <h3>Kunden</h3>
-          <p>0</p>
+          <p id="totalClients">0</p>
         </div>
       </div>
       <p style="margin-top:1rem;">Diese Werte werden später dynamisch aus Supabase geladen.</p>
@@ -78,8 +183,48 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // Gleiche Werte wie in login.html eintragen
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const userInfo = document.getElementById('userInfo');
+    const authHint = document.getElementById('authHint');
+    const loginLink = document.getElementById('loginLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    async function refreshSession() {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error || !data.session) {
+        userInfo.innerHTML = 'Status: <span>Gast</span> <span class="badge badge-guest">nicht eingeloggt</span>';
+        authHint.textContent = 'Um alle Funktionen zu nutzen, bitte zuerst einloggen.';
+        loginLink.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        return;
+      }
+
+      const email = data.session.user.email || 'Unbekannt';
+      userInfo.innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
+      authHint.textContent = 'Du bist eingeloggt. Nutze die Navigation, um Kunden, Projekte und Rechnungen zu verwalten.';
+      loginLink.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+    }
+
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      await refreshSession();
+    });
+
+    // Bei Seitenaufruf Session prüfen
+    refreshSession();
   </script>
 </body>
 </html>
