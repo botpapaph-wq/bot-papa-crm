@@ -74,12 +74,13 @@
       font-size: 0.85rem;
     }
   </style>
+  <script src="auth-guard.js" defer></script>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Dashboard</h1>
     <div class="status">
-      <span id="statusText">Status: Gast – nicht eingeloggt</span>
+      <span id="statusText">Lade Status...</span>
     </div>
   </header>
 
@@ -104,21 +105,22 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <!-- Auth-Guard + Status-Update -->
-  <script src="auth-guard.js"></script>
   <script>
-    const yearEl = document.getElementById('year');
-    yearEl.textContent = new Date().getFullYear();
+    // Alles sauber in einem DOMContentLoaded-Event gekapselt
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. Jahr im Footer setzen
+      const yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    (function () {
+      // 2. Login-Status prüfen und anzeigen
       const statusEl = document.getElementById('statusText');
-      if (!statusEl) return;
-
-      const loggedIn = localStorage.getItem('bp_crm_logged_in') === '1';
-      statusEl.textContent = loggedIn
-        ? 'Status: Eingeloggt'
-        : 'Status: Gast – nicht eingeloggt';
-    })();
+      if (statusEl) {
+        const loggedIn = localStorage.getItem('bp_crm_logged_in') === '1';
+        statusEl.textContent = loggedIn 
+          ? 'Status: Eingeloggt' 
+          : 'Status: Gast – nicht eingeloggt';
+      }
+    });
   </script>
 </body>
 </html>
