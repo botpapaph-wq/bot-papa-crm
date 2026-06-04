@@ -1,1 +1,469 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projekte – Bot Papa Freelancer CRM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    header h1 {
+      font-size: 1.3rem;
+    }
+    nav {
+      background: #333;
+      color: #fff;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    nav a:hover {
+      background: #444;
+    }
+    main {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .form-group label {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .form-row-inline {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .form-row-inline .form-group {
+      flex: 1;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.6rem 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      background: #222;
+      color: #fff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background: #333;
+    }
+    .btn-secondary {
+      background: #555;
+    }
+    .btn-secondary:hover {
+      background: #666;
+    }
+    .msg {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+    }
+    .msg-success {
+      color: #2e7d32;
+    }
+    .msg-error {
+      color: #c62828;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.6rem 0.4rem;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #fafafa;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #555;
+    }
+    tr:nth-child(even) td {
+      background: #fcfcfc;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #777;
+      font-size: 0.85rem;
+    }
+    .badge-status {
+      display: inline-block;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: #fff;
+    }
+    .status-planned { background: #546e7a; }
+    .status-active { background: #2e7d32; }
+    .status-paused { background: #f9a825; }
+    .status-done { background: #424242; }
+    .status-cancelled { background: #c62828; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bot Papa Freelancer CRM – Projekte</h1>
+    <div>
+      <span style="font-size:0.9rem;color:#ddd;">Projektverwaltung (Demo, noch ohne DB)</span>
+    </div>
+  </header>
 
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="card">
+      <h2>Neues Projekt anlegen</h2>
+      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Später hängt hier Supabase dran.</p>
+
+      <form id="projectForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="projectNumber">Projektnummer (z.B. P-2026-0001)</label>
+            <input type="text" id="projectNumber" name="projectNumber" placeholder="P-2026-0001" />
+          </div>
+          <div class="form-group">
+            <label for="clientNumber">Kundennummer *</label>
+            <input type="text" id="clientNumber" name="clientNumber" required placeholder="z.B. C-2026-0001" />
+          </div>
+          <div class="form-group">
+            <label for="projectTitle">Projekttitel *</label>
+            <input type="text" id="projectTitle" name="projectTitle" required />
+          </div>
+          <div class="form-group">
+            <label for="projectStatus">Status</label>
+            <select id="projectStatus" name="projectStatus">
+              <option value="planned">Geplant</option>
+              <option value="active" selected>Aktiv</option>
+              <option value="paused">Pausiert</option>
+              <option value="done">Abgeschlossen</option>
+              <option value="cancelled">Abgebrochen</option>
+            </select>
+          </div>
+
+          <div class="form-row-inline">
+            <div class="form-group">
+              <label for="startDate">Startdatum</label>
+              <input type="date" id="startDate" name="startDate" />
+            </div>
+            <div class="form-group">
+              <label for="endDate">Enddatum (geplant)</label>
+              <input type="date" id="endDate" name="endDate" />
+            </div>
+          </div>
+
+          <div class="form-row-inline">
+            <div class="form-group">
+              <label for="billingType">Abrechnungstyp</label>
+              <select id="billingType" name="billingType">
+                <option value="hourly" selected>Stundenbasiert</option>
+                <option value="fixed">Pauschal</option>
+                <option value="retainer">Retainer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="hourlyRate">Stundensatz (EUR)</label>
+              <input type="number" step="0.01" id="hourlyRate" name="hourlyRate" placeholder="z.B. 95,00" />
+            </div>
+            <div class="form-group">
+              <label for="estimatedHours">Geplante Stunden</label>
+              <input type="number" step="0.1" id="estimatedHours" name="estimatedHours" placeholder="z.B. 20" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fixedPrice">Pauschalpreis (EUR, falls Pauschal)</label>
+            <input type="number" step="0.01" id="fixedPrice" name="fixedPrice" placeholder="z.B. 2500,00" />
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="projectNotes">Notizen / Scope</label>
+            <textarea id="projectNotes" name="projectNotes"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn">Projekt hinzufügen (Demo)</button>
+        <button type="button" id="clearListBtn" class="btn btn-secondary">Liste leeren</button>
+        <div id="formMsg" class="msg"></div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Projektliste (Browser-Demo)</h2>
+      <p>Diese Liste ist nur im Browser-Speicher (Session). Beim Neuladen ist alles weg – später speichern wir das in Supabase.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Projekt</th>
+            <th>Kundennr.</th>
+            <th>Status & Zeitraum</th>
+            <th>Abrechnung</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody id="projectsTableBody">
+          <!-- Platzhalterzeile -->
+          <tr id="projectsPlaceholderRow">
+            <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
+              Noch keine Projekte angelegt (Demo). Bitte Formular oben verwenden.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
+  </footer>
+
+  <script>
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const projectForm = document.getElementById('projectForm');
+    const formMsg = document.getElementById('formMsg');
+    const projectsTableBody = document.getElementById('projectsTableBody');
+    const placeholderRow = document.getElementById('projectsPlaceholderRow');
+    const clearListBtn = document.getElementById('clearListBtn');
+
+    const projects = [];
+
+    projectForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      formMsg.textContent = '';
+      formMsg.className = 'msg';
+
+      const projectNumber = document.getElementById('projectNumber').value.trim();
+      const clientNumber = document.getElementById('clientNumber').value.trim();
+      const projectTitle = document.getElementById('projectTitle').value.trim();
+      const projectStatus = document.getElementById('projectStatus').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const billingType = document.getElementById('billingType').value;
+      const hourlyRate = document.getElementById('hourlyRate').value.trim();
+      const estimatedHours = document.getElementById('estimatedHours').value.trim();
+      const fixedPrice = document.getElementById('fixedPrice').value.trim();
+      const projectNotes = document.getElementById('projectNotes').value.trim();
+
+      if (!clientNumber || !projectTitle) {
+        formMsg.textContent = 'Bitte mindestens Kundennummer und Projekttitel angeben.';
+        formMsg.classList.add('msg-error');
+        return;
+      }
+
+      const p = {
+        projectNumber,
+        clientNumber,
+        projectTitle,
+        projectStatus,
+        startDate,
+        endDate,
+        billingType,
+        hourlyRate,
+        estimatedHours,
+        fixedPrice,
+        projectNotes
+      };
+
+      projects.push(p);
+      addProjectRow(p);
+
+      projectForm.reset();
+      formMsg.textContent = 'Projekt (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
+      formMsg.classList.add('msg-success');
+    });
+
+    function addProjectRow(p) {
+      if (placeholderRow) {
+        placeholderRow.remove();
+      }
+
+      const tr = document.createElement('tr');
+
+      const projLabel = p.projectNumber
+        ? `${escapeHtml(p.projectNumber)} – ${escapeHtml(p.projectTitle)}`
+        : escapeHtml(p.projectTitle);
+
+      const statusLabel = getStatusLabel(p.projectStatus);
+
+      const period = [
+        p.startDate ? `Start: ${formatDate(p.startDate)}` : '',
+        p.endDate ? `Ende: ${formatDate(p.endDate)}` : ''
+      ].filter(Boolean).join('<br>');
+
+      const billing = buildBillingInfo(p);
+
+      tr.innerHTML = `
+        <td>${projLabel}</td>
+        <td>${escapeHtml(p.clientNumber)}</td>
+        <td>${statusLabel}<br>${period}</td>
+        <td>${billing}</td>
+        <td>${escapeHtml(p.projectNotes || '')}</td>
+      `;
+
+      projectsTableBody.appendChild(tr);
+    }
+
+    function getStatusLabel(status) {
+      let label = 'Unbekannt';
+      let cls = 'status-planned';
+
+      if (status === 'planned') { label = 'Geplant'; cls = 'status-planned'; }
+      else if (status === 'active') { label = 'Aktiv'; cls = 'status-active'; }
+      else if (status === 'paused') { label = 'Pausiert'; cls = 'status-paused'; }
+      else if (status === 'done') { label = 'Abgeschlossen'; cls = 'status-done'; }
+      else if (status === 'cancelled') { label = 'Abgebrochen'; cls = 'status-cancelled'; }
+
+      return `<span class="badge-status ${cls}">${label}</span>`;
+    }
+
+    function buildBillingInfo(p) {
+      const parts = [];
+
+      if (p.billingType === 'hourly') {
+        if (p.hourlyRate) {
+          parts.push(`Stundensatz: ${escapeHtml(p.hourlyRate)} €`);
+        }
+        if (p.estimatedHours) {
+          parts.push(`Geplante Stunden: ${escapeHtml(p.estimatedHours)}`);
+        }
+      } else if (p.billingType === 'fixed') {
+        parts.push('Pauschal');
+        if (p.fixedPrice) {
+          parts.push(`Preis: ${escapeHtml(p.fixedPrice)} €`);
+        }
+      } else if (p.billingType === 'retainer') {
+        parts.push('Retainer');
+        if (p.hourlyRate) {
+          parts.push(`Stundensatz: ${escapeHtml(p.hourlyRate)} €`);
+        }
+      }
+
+      if (parts.length === 0) {
+        return '';
+      }
+
+      return parts.map(line => escapeHtml(line)).join('<br>');
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      try {
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return value;
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}.${month}.${year}`;
+      } catch {
+        return value;
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    clearListBtn.addEventListener('click', () => {
+      projects.length = 0;
+      while (projectsTableBody.firstChild) {
+        projectsTableBody.removeChild(projectsTableBody.firstChild);
+      }
+      const row = document.createElement('tr');
+      row.id = 'projectsPlaceholderRow';
+      row.innerHTML = `
+        <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
+          Noch keine Projekte angelegt (Demo). Bitte Formular oben verwenden.
+        </td>
+      `;
+      projectsTableBody.appendChild(row);
+      formMsg.textContent = 'Projektliste geleert (nur lokal im Browser).';
+      formMsg.className = 'msg msg-success';
+    });
+  </script>
+</body>
+</html>
