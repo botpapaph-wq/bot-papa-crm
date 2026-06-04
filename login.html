@@ -81,12 +81,20 @@
       text-align: center;
       display: none;
     }
+    .info-msg {
+      color: #007b3a;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      text-align: center;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="login-card">
     <h1>Login – Bot Papa Freelancer CRM</h1>
     <div class="error-msg" id="errorMsg"></div>
+    <div class="info-msg" id="infoMsg"></div>
     <form id="loginForm">
       <div class="form-group">
         <label for="email">E-Mail</label>
@@ -103,14 +111,28 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // >>> HIER DEINE SUPABASE-DATEN EINTRAGEN <<<
+    // Project URL aus Supabase: Settings -> API -> Project URL
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+
+    // anon public key aus Supabase: Settings -> API -> anon public
+    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const loginForm = document.getElementById('loginForm');
     const errorMsg = document.getElementById('errorMsg');
+    const infoMsg = document.getElementById('infoMsg');
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       errorMsg.style.display = 'none';
       errorMsg.textContent = '';
+      infoMsg.style.display = 'none';
+      infoMsg.textContent = '';
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -121,12 +143,34 @@
         return;
       }
 
-      // Noch ohne Supabase: nur Platzhalter-Aktion
-      alert('Login-Formular wurde abgeschickt (Simulation).\nE-Mail: ' + email);
+      infoMsg.textContent = 'Anmeldung läuft...';
+      infoMsg.style.display = 'block';
 
-      // Später hier Supabase Auth einbinden:
-      // await supabase.auth.signInWithPassword({ email, password });
-      // window.location.href = '../index.html';
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          console.error(error);
+          infoMsg.style.display = 'none';
+          errorMsg.textContent = 'Login fehlgeschlagen: ' + (error.message || 'Unbekannter Fehler.');
+          errorMsg.style.display = 'block';
+          return;
+        }
+
+        infoMsg.textContent = 'Login erfolgreich. Weiterleitung...';
+        setTimeout(() => {
+          window.location.href = '../index.html';
+        }, 800);
+
+      } catch (err) {
+        console.error(err);
+        infoMsg.style.display = 'none';
+        errorMsg.textContent = 'Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.';
+        errorMsg.style.display = 'block';
+      }
     });
   </script>
 </body>
