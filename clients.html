@@ -1,4 +1,282 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bot Papa Freelancer CRM – Kunden</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 1.3rem; }
+    nav { 
+      background: #333; 
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    nav a:hover { background: #444; }
+    
+    main {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .card h2 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+    .card .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; }
+    .form-group-full { grid-column: 1 / -1; display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.85rem; margin-bottom: 0.25rem; color: #333; }
+    .form-group input, .form-group textarea {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    .form-group textarea { resize: vertical; height: 80px; }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+    .btn-primary { background: #222; color: #fff; }
+    .btn-primary:hover { background: #444; }
+    .btn-logout { background: #c62828; color: #fff; font-size: 0.85rem; padding: 0.35rem 0.75rem; }
+    .btn-logout:hover { background: #b71c1c; }
+    
+    .table-container { overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #fafafa; color: #666; font-weight: bold; }
+    
+    .status-text { font-size: 0.9rem; color: #ddd; }
+    .status-text span { font-weight: bold; }
+    .badge-auth { background: #2e7d32; color: #fff; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem; }
+    footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bot Papa Freelancer CRM – Kunden</h1>
+    <div class="status-text" id="userInfo">Status: <span>Prüfe Login...</span></div>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+    </ul>
+    <button id="logoutBtn" class="btn btn-logout" style="display:none;">Logout</button>
+  </nav>
+
+  <main>
+    <section class="card">
+      <h2>Neuen Kunden anlegen</h2>
+      <p class="subtitle">Dieses Formular speichert Daten live in deiner Supabase Datenbank.</p>
+      <form id="clientForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="customerNumber">Kundennummer</label>
+            <input type="text" id="customerNumber" placeholder="z.B. C-2026-0001" />
+          </div>
+          <div class="form-group">
+            <label for="clientName">Firma / Name *</label>
+            <input type="text" id="clientName" required />
+          </div>
+          <div class="form-group">
+            <label for="contactPerson">Ansprechpartner</label>
+            <input type="text" id="contactPerson" />
+          </div>
+          <div class="form-group">
+            <label for="clientEmail">E-Mail *</label>
+            <input type="email" id="clientEmail" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <input type="text" id="phone" placeholder="+49 ..." />
+          </div>
+          <div class="form-group">
+            <label for="street">Straße / Nr.</label>
+            <input type="text" id="street" />
+          </div>
+          <div class="form-group">
+            <label for="zipCode">PLZ</label>
+            <input type="text" id="zipCode" />
+          </div>
+          <div class="form-group">
+            <label for="city">Ort</label>
+            <input type="text" id="city" />
+          </div>
+          <div class="form-group">
+            <label for="country">Land</label>
+            <input type="text" id="country" value="Deutschland" />
+          </div>
+          <div class="form-group-full">
+            <label for="notes">Notizen</label>
+            <textarea id="notes" placeholder="z.B. besondere Konditionen, Zahlungsziele, interne Hinweise"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Kunde hinzufügen</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Kundenliste</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Kunde</th>
+              <th>Kontakt</th>
+              <th>Adresse</th>
+              <th>Sonstiges</th>
+            </tr>
+          </thead>
+          <tbody id="clientTableBody">
+            <tr>
+              <td colspan="4" style="text-align: center; color: #777;">Lade Kunden...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2026 Bot Papa – Freelancer CRM
+  </footer>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
+
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data || !data.session) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUserId = data.session.user.id;
+      document.getElementById('userInfo').innerHTML = 'Status: <span>' + data.session.user.email + '</span> <span class="badge badge-auth">eingeloggt</span>';
+      document.getElementById('logoutBtn').style.display = 'block';
+      fetchClients();
+    }
+
+    async function fetchClients() {
+      const tableBody = document.getElementById('clientTableBody');
+      const { data: clients, error } = await supabase.from('clients').select('*').order('created_at', { ascending: false });
+
+      if (error) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #c62828;">Fehler: ' + error.message + '</td></tr>';
+        return;
+      }
+      if (!clients || clients.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #777;">Noch keine Kunden angelegt.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = '';
+      clients.forEach(client => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${client.name}</strong><br><small style="color:#777">${client.customer_number || '-'}</small></td>
+          <td>${client.email}<br><small style="color:#777">${client.phone || ''}</small></td>
+          <td>${client.street || ''}<br>${client.zip_code || ''} ${client.city || ''} ${client.country ? '('+client.country+')' : ''}</td>
+          <td><small>Ansprechp.: ${client.contact_person || '-'}</small><br><small style="color:#777">${client.notes || '-'}</small></td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentUserId) return;
+
+      const newClient = {
+        user_id: currentUserId,
+        customer_number: document.getElementById('customerNumber').value.trim(),
+        name: document.getElementById('clientName').value.trim(),
+        contact_person: document.getElementById('contactPerson').value.trim(),
+        email: document.getElementById('clientEmail').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        street: document.getElementById('street').value.trim(),
+        zip_code: document.getElementById('zipCode').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        country: document.getElementById('country').value.trim(),
+        notes: document.getElementById('notes').value.trim()
+      };
+
+      const { error } = await supabase.from('clients').insert([newClient]);
+      if (error) alert('Fehler: ' + error.message);
+      else {
+        document.getElementById('clientForm').reset();
+        document.getElementById('country').value = "Deutschland";
+        fetchClients();
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    checkAuthAndLoad();
+  </script>
+</body>
+</html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
