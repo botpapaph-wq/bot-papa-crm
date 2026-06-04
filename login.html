@@ -103,7 +103,7 @@
   <header>
     <h1>Bot Papa Freelancer CRM – Login</h1>
     <div>
-      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth – sicher ohne URL-Parameter</span>
+      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth – reines Frontend, kein POST an /login</span>
     </div>
   </header>
 
@@ -112,8 +112,8 @@
       <h2>Anmelden</h2>
       <p>Mit deiner E-Mail-Adresse und deinem Passwort einloggen.</p>
 
-      <!-- WICHTIG: method="post" und KEIN action -->
-      <form id="loginForm" method="post">
+      <!-- KEIN method, KEIN action: vollständig durch JS gesteuert -->
+      <form id="loginForm">
         <div class="form-group">
           <label for="email">E-Mail</label>
           <input type="email" id="email" name="email" required autocomplete="username" />
@@ -138,7 +138,7 @@
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
 
-    // HIER deine Supabase-Daten einsetzen
+    // DEINE Supabase-Daten
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
@@ -148,7 +148,7 @@
     const formMsg = document.getElementById('formMsg');
 
     loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();                 // Verhindert, dass der Browser eine URL mit Query-String baut
+      e.preventDefault(); // absolut zentral: keine Navigation, kein 405
       formMsg.textContent = '';
       formMsg.className = 'msg';
 
