@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Bot Papa Freelancer CRM (lokal)</title>
+  <title>Login – Bot Papa Freelancer CRM</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -103,15 +103,16 @@
   <header>
     <h1>Bot Papa Freelancer CRM – Login</h1>
     <div>
-      <span style="font-size:0.9rem;color:#ddd;">Lokaler Login (ohne Supabase, ohne URL-Quatsch)</span>
+      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth – ohne URL-Parameter</span>
     </div>
   </header>
 
   <main>
     <section class="card">
       <h2>Anmelden</h2>
-      <p>Test-Login nur lokal, damit das CRM nutzbar ist.</p>
+      <p>Mit deiner Supabase-E-Mail und deinem Passwort einloggen.</p>
 
+      <!-- KEIN method, KEIN action -->
       <form id="loginForm">
         <div class="form-group">
           <label for="email">E-Mail</label>
@@ -131,6 +132,9 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
+  <!-- Supabase JS + gemeinsamer Client -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
   <script>
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
@@ -138,12 +142,8 @@
     const loginForm = document.getElementById('loginForm');
     const formMsg = document.getElementById('formMsg');
 
-    // HIER: dein Test-Passwort definieren
-    const VALID_EMAIL = 'bodo@bot-papa.online';
-    const VALID_PASSWORD = '@DavaoCity2026!';
-
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // verhindert jede Navigation
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // kein GET/POST an /login [web:225][web:237]
       formMsg.textContent = '';
       formMsg.className = 'msg';
 
@@ -156,16 +156,40 @@
         return;
       }
 
-      if (email === VALID_EMAIL && password === VALID_PASSWORD) {
-        // Lokalen "Login-Status" setzen
+      formMsg.textContent = 'Anmeldung läuft …';
+      formMsg.className = 'msg msg-success';
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        }); // [web:183][web:186]
+
+        if (error) {
+          console.error('Supabase-Fehler:', error);
+          formMsg.textContent = error.message || 'Login fehlgeschlagen. Zugangsdaten prüfen.';
+          formMsg.className = 'msg msg-error';
+          return;
+        }
+
+        if (!data || !data.user) {
+          formMsg.textContent = 'Login fehlgeschlagen. Keine Benutzerdaten erhalten.';
+          formMsg.className = 'msg msg-error';
+          return;
+        }
+
+        // Lokalen Login-Status setzen, damit das CRM nicht mehr "Gast" zeigt
         localStorage.setItem('bp_crm_logged_in', '1');
+
         formMsg.textContent = 'Login erfolgreich. Weiterleitung …';
         formMsg.className = 'msg msg-success';
+
         setTimeout(() => {
           window.location.href = 'index.html';
-        }, 500);
-      } else {
-        formMsg.textContent = 'Falsche Zugangsdaten.';
+        }, 800);
+      } catch (err) {
+        console.error('Unerwarteter Fehler:', err);
+        formMsg.textContent = 'Unerwarteter Fehler beim Login (siehe Konsole).';
         formMsg.className = 'msg msg-error';
       }
     });
