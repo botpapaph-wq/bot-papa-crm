@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Bot Papa Freelancer CRM</title>
+  <title>Dashboard – Bot Papa Freelancer CRM</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
     header {
       background: #222;
@@ -25,72 +22,51 @@
       gap: 0.5rem;
     }
     header h1 { font-size: 1.3rem; }
-    main {
-      flex: 1;
+    header .status {
+      font-size: 0.9rem;
+      color: #ddd;
+    }
+    nav {
+      background: #333;
+      color: #fff;
+    }
+    nav ul {
+      list-style: none;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem 1rem 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    nav a:hover {
+      background: #444;
+    }
+    main {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem 2rem;
     }
     .card {
       background: #fff;
       padding: 1.5rem;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 420px;
+      margin-bottom: 1.5rem;
     }
     .card h2 {
       margin-bottom: 0.75rem;
       font-size: 1.2rem;
-      text-align: center;
     }
     .card p {
       margin-bottom: 0.5rem;
       line-height: 1.4;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
     }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      margin-top: 1rem;
-    }
-    .form-group label {
-      font-size: 0.85rem;
-      color: #555;
-    }
-    .form-group input {
-      padding: 0.6rem 0.7rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .btn {
-      display: inline-block;
-      width: 100%;
-      padding: 0.7rem 1.2rem;
-      border: none;
-      border-radius: 4px;
-      background: #222;
-      color: #fff;
-      font-size: 0.95rem;
-      cursor: pointer;
-      margin-top: 1.2rem;
-    }
-    .btn:hover { background: #333; }
-    .msg {
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
-      text-align: center;
-    }
-    .msg-success { color: #2e7d32; }
-    .msg-error { color: #c62828; }
     footer {
       text-align: center;
       padding: 1.5rem;
@@ -101,30 +77,26 @@
 </head>
 <body>
   <header>
-    <h1>Bot Papa Freelancer CRM – Login</h1>
-    <div>
-      <span style="font-size:0.9rem;color:#ddd;">Supabase Auth – ohne URL-Parameter</span>
+    <h1>Bot Papa Freelancer CRM – Dashboard</h1>
+    <div class="status">
+      <span id="statusText">Status: Gast – nicht eingeloggt</span>
     </div>
   </header>
 
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+
   <main>
     <section class="card">
-      <h2>Anmelden</h2>
-      <p>Mit deiner Supabase-E-Mail und deinem Passwort einloggen.</p>
-
-      <!-- KEIN method, KEIN action -->
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="email">E-Mail</label>
-          <input type="email" id="email" name="email" required autocomplete="username" />
-        </div>
-        <div class="form-group">
-          <label for="password">Passwort</label>
-          <input type="password" id="password" name="password" required autocomplete="current-password" />
-        </div>
-        <button type="submit" class="btn">Login</button>
-        <div id="formMsg" class="msg"></div>
-      </form>
+      <h2>Übersicht</h2>
+      <p>Hier kommt deine Dashboard-Übersicht hin (offene Projekte, Rechnungen etc.).</p>
     </section>
   </main>
 
@@ -132,67 +104,21 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <!-- Supabase JS + gemeinsamer Client -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
+  <!-- Auth-Guard + Status-Update -->
+  <script src="auth-guard.js"></script>
   <script>
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
 
-    const loginForm = document.getElementById('loginForm');
-    const formMsg = document.getElementById('formMsg');
+    (function () {
+      const statusEl = document.getElementById('statusText');
+      if (!statusEl) return;
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault(); // kein GET/POST an /login [web:225][web:237]
-      formMsg.textContent = '';
-      formMsg.className = 'msg';
-
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-
-      if (!email || !password) {
-        formMsg.textContent = 'Bitte E-Mail und Passwort eingeben.';
-        formMsg.className = 'msg msg-error';
-        return;
-      }
-
-      formMsg.textContent = 'Anmeldung läuft …';
-      formMsg.className = 'msg msg-success';
-
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        }); // [web:183][web:186]
-
-        if (error) {
-          console.error('Supabase-Fehler:', error);
-          formMsg.textContent = error.message || 'Login fehlgeschlagen. Zugangsdaten prüfen.';
-          formMsg.className = 'msg msg-error';
-          return;
-        }
-
-        if (!data || !data.user) {
-          formMsg.textContent = 'Login fehlgeschlagen. Keine Benutzerdaten erhalten.';
-          formMsg.className = 'msg msg-error';
-          return;
-        }
-
-        // Lokalen Login-Status setzen, damit das CRM nicht mehr "Gast" zeigt
-        localStorage.setItem('bp_crm_logged_in', '1');
-
-        formMsg.textContent = 'Login erfolgreich. Weiterleitung …';
-        formMsg.className = 'msg msg-success';
-
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 800);
-      } catch (err) {
-        console.error('Unerwarteter Fehler:', err);
-        formMsg.textContent = 'Unerwarteter Fehler beim Login (siehe Konsole).';
-        formMsg.className = 'msg msg-error';
-      }
-    });
+      const loggedIn = localStorage.getItem('bp_crm_logged_in') === '1';
+      statusEl.textContent = loggedIn
+        ? 'Status: Eingeloggt'
+        : 'Status: Gast – nicht eingeloggt';
+    })();
   </script>
 </body>
 </html>
