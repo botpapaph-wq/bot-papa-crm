@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rechnungen – Bot Papa Freelancer CRM</title>
+  <title>Kunden – Bot Papa Freelancer CRM</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -67,7 +67,7 @@
     }
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
       margin-top: 1rem;
     }
@@ -82,23 +82,18 @@
     }
     .form-row-inline {
       display: flex;
-      flex-wrap: wrap;
       gap: 0.5rem;
     }
     .form-row-inline .form-group {
-      flex: 1 1 180px;
-      min-width: 0;
+      flex: 1;
     }
     .form-group input,
-    .form-group select,
     .form-group textarea {
       padding: 0.6rem 0.7rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.95rem;
       font-family: inherit;
-      width: 100%;
-      box-sizing: border-box;
     }
     .form-group textarea {
       min-height: 80px;
@@ -166,24 +161,13 @@
       color: #777;
       font-size: 0.85rem;
     }
-    .badge-status {
-      display: inline-block;
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      color: #fff;
-    }
-    .status-open { background: #f9a825; }
-    .status-paid { background: #2e7d32; }
-    .status-overdue { background: #c62828; }
-    .status-cancelled { background: #616161; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Bot Papa Freelancer CRM – Rechnungen</h1>
+    <h1>Bot Papa Freelancer CRM – Kunden</h1>
     <div>
-      <span style="font-size:0.9rem;color:#ddd;">Rechnungsverwaltung (Demo, Beträge werden im Browser berechnet)</span>
+      <span style="font-size:0.9rem;color:#ddd;">Kundenverwaltung (Demo, Kundennummer auto-generiert)</span>
     </div>
   </header>
 
@@ -199,101 +183,91 @@
 
   <main>
     <section class="card">
-      <h2>Neue Rechnung anlegen</h2>
-      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Netto, MwSt und Brutto werden automatisch berechnet.</p>
+      <h2>Neuen Kunden anlegen</h2>
+      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Die Kundennummer wird automatisch generiert.</p>
 
-      <form id="invoiceForm">
+      <form id="clientForm">
         <div class="form-grid">
           <div class="form-group">
-            <label for="invoiceNumber">Rechnungsnummer *</label>
-            <input type="text" id="invoiceNumber" name="invoiceNumber" required placeholder="z.B. R-2026-0001" />
+            <label for="clientNumber">Kundennummer (automatisch)</label>
+            <input type="text" id="clientNumber" name="clientNumber" readonly />
           </div>
           <div class="form-group">
-            <label for="clientNumber">Kundennummer *</label>
-            <input type="text" id="clientNumber" name="clientNumber" required placeholder="z.B. C-2026-0001" />
+            <label for="clientName">Name *</label>
+            <input type="text" id="clientName" name="clientName" required />
           </div>
           <div class="form-group">
-            <label for="projectNumber">Projektnummer</label>
-            <input type="text" id="projectNumber" name="projectNumber" placeholder="optional" />
+            <label for="clientCompany">Firma</label>
+            <input type="text" id="clientCompany" name="clientCompany" />
           </div>
 
           <div class="form-row-inline">
             <div class="form-group">
-              <label for="invoiceDate">Rechnungsdatum *</label>
-              <input type="date" id="invoiceDate" name="invoiceDate" required />
+              <label for="phoneCountry">Landesvorwahl</label>
+              <input type="text" id="phoneCountry" name="phoneCountry" placeholder="+49" />
             </div>
             <div class="form-group">
-              <label for="dueDate">Fällig am</label>
-              <input type="date" id="dueDate" name="dueDate" />
-            </div>
-          </div>
-
-          <div class="form-row-inline">
-            <div class="form-group">
-              <label for="netAmount">Betrag netto (EUR) *</label>
-              <input type="number" step="0.01" id="netAmount" name="netAmount" required />
-            </div>
-            <div class="form-group">
-              <label for="vatRate">MwSt.-Satz (%)</label>
-              <input type="number" step="0.1" id="vatRate" name="vatRate" value="19" />
-            </div>
-            <div class="form-group">
-              <label for="grossAmount">Betrag brutto (EUR)</label>
-              <input type="number" step="0.01" id="grossAmount" name="grossAmount" readonly />
+              <label for="clientPhone">Telefon</label>
+              <input type="tel" id="clientPhone" name="clientPhone" placeholder="1512345678" />
             </div>
           </div>
 
           <div class="form-group">
-            <label for="status">Status</label>
-            <select id="status" name="status">
-              <option value="open" selected>Offen</option>
-              <option value="paid">Bezahlt</option>
-              <option value="overdue">Überfällig</option>
-              <option value="cancelled">Storniert</option>
-            </select>
+            <label for="clientEmail">E-Mail</label>
+            <input type="email" id="clientEmail" name="clientEmail" />
           </div>
 
           <div class="form-group">
-            <label for="paymentMethod">Zahlungsart</label>
-            <select id="paymentMethod" name="paymentMethod">
-              <option value="">– nicht angegeben –</option>
-              <option value="bank">Überweisung</option>
-              <option value="card">Kreditkarte</option>
-              <option value="cash">Bar</option>
-              <option value="paypal">PayPal</option>
-              <option value="other">Sonstiges</option>
-            </select>
+            <label for="street">Straße</label>
+            <input type="text" id="street" name="street" />
+          </div>
+          <div class="form-group">
+            <label for="houseNumber">Hausnummer</label>
+            <input type="text" id="houseNumber" name="houseNumber" />
+          </div>
+          <div class="form-group">
+            <label for="postalCode">PLZ</label>
+            <input type="text" id="postalCode" name="postalCode" />
+          </div>
+          <div class="form-group">
+            <label for="city">Ort</label>
+            <input type="text" id="city" name="city" />
+          </div>
+          <div class="form-group">
+            <label for="country">Land</label>
+            <input type="text" id="country" name="country" placeholder="z.B. Deutschland" />
           </div>
 
           <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="invoiceNotes">Notizen</label>
-            <textarea id="invoiceNotes" name="invoiceNotes" placeholder="z.B. Zahlungsziel 14 Tage, Verwendungszweck, besondere Vereinbarungen"></textarea>
+            <label for="clientNotes">Notizen</label>
+            <textarea id="clientNotes" name="clientNotes"></textarea>
           </div>
         </div>
-        <button type="submit" class="btn">Rechnung hinzufügen (Demo)</button>
+        <button type="submit" class="btn">Kunden hinzufügen (Demo)</button>
         <button type="button" id="clearListBtn" class="btn btn-secondary">Liste leeren</button>
         <div id="formMsg" class="msg"></div>
       </form>
     </section>
 
     <section class="card">
-      <h2>Rechnungsliste (Browser-Demo)</h2>
+      <h2>Kundenliste (Browser-Demo)</h2>
       <p>Diese Liste ist nur im Browser-Speicher (Session). Beim Neuladen ist alles weg – später speichern wir das in Supabase.</p>
 
       <table>
         <thead>
           <tr>
-            <th>Rechnung</th>
-            <th>Kunde / Projekt</th>
-            <th>Datum & Status</th>
-            <th>Beträge</th>
-            <th>Zahlung / Notizen</th>
+            <th>Kundennr.</th>
+            <th>Name / Firma</th>
+            <th>Kontakt</th>
+            <th>Adresse</th>
+            <th>Notizen</th>
           </tr>
         </thead>
-        <tbody id="invoicesTableBody">
-          <tr id="invoicesPlaceholderRow">
+        <tbody id="clientsTableBody">
+          <!-- Platzhalterzeile -->
+          <tr id="clientsPlaceholderRow">
             <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
-              Noch keine Rechnungen angelegt (Demo). Bitte Formular oben verwenden.
+              Noch keine Kunden angelegt (Demo). Bitte Formular oben verwenden.
             </td>
           </tr>
         </tbody>
@@ -309,157 +283,111 @@
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
 
-    const invoiceForm = document.getElementById('invoiceForm');
+    const clientForm = document.getElementById('clientForm');
     const formMsg = document.getElementById('formMsg');
-    const invoicesTableBody = document.getElementById('invoicesTableBody');
-    const placeholderRow = document.getElementById('invoicesPlaceholderRow');
+    const clientsTableBody = document.getElementById('clientsTableBody');
+    const placeholderRow = document.getElementById('clientsPlaceholderRow');
     const clearListBtn = document.getElementById('clearListBtn');
+    const clientNumberInput = document.getElementById('clientNumber');
 
-    const netAmountInput = document.getElementById('netAmount');
-    const vatRateInput = document.getElementById('vatRate');
-    const grossAmountInput = document.getElementById('grossAmount');
+    const clients = [];
+    let clientCounter = 1;
 
-    const invoices = [];
-
-    function recalcGross() {
-      const net = parseFloat(String(netAmountInput.value).replace(',', '.')) || 0;
-      const vat = parseFloat(String(vatRateInput.value).replace(',', '.')) || 0;
-      const gross = net * (1 + vat / 100);
-      if (!Number.isNaN(gross)) {
-        grossAmountInput.value = gross.toFixed(2);
-      } else {
-        grossAmountInput.value = '';
-      }
+    function generateCustomerNumber() {
+      const year = new Date().getFullYear();
+      const padded = String(clientCounter).padStart(4, '0');
+      return `C-${year}-${padded}`;
     }
 
-    netAmountInput.addEventListener('input', recalcGross);
-    vatRateInput.addEventListener('input', recalcGross);
+    function setNextCustomerNumber() {
+      clientNumberInput.value = generateCustomerNumber();
+    }
 
-    invoiceForm.addEventListener('submit', (e) => {
+    clientForm.addEventListener('submit', (e) => {
       e.preventDefault();
       formMsg.textContent = '';
       formMsg.className = 'msg';
 
-      const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
-      const clientNumber = document.getElementById('clientNumber').value.trim();
-      const projectNumber = document.getElementById('projectNumber').value.trim();
-      const invoiceDate = document.getElementById('invoiceDate').value;
-      const dueDate = document.getElementById('dueDate').value;
-      const netAmount = document.getElementById('netAmount').value.trim();
-      const vatRate = document.getElementById('vatRate').value.trim();
-      const grossAmount = document.getElementById('grossAmount').value.trim();
-      const status = document.getElementById('status').value;
-      const paymentMethod = document.getElementById('paymentMethod').value;
-      const invoiceNotes = document.getElementById('invoiceNotes').value.trim();
+      const number = clientNumberInput.value.trim();
+      const name = document.getElementById('clientName').value.trim();
+      const company = document.getElementById('clientCompany').value.trim();
+      const phoneCountry = document.getElementById('phoneCountry').value.trim();
+      const phone = document.getElementById('clientPhone').value.trim();
+      const email = document.getElementById('clientEmail').value.trim();
+      const street = document.getElementById('street').value.trim();
+      const houseNumber = document.getElementById('houseNumber').value.trim();
+      const postalCode = document.getElementById('postalCode').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const country = document.getElementById('country').value.trim();
+      const notes = document.getElementById('clientNotes').value.trim();
 
-      if (!invoiceNumber || !clientNumber || !invoiceDate || !netAmount) {
-        formMsg.textContent = 'Bitte mindestens Rechnungsnummer, Kundennummer, Rechnungsdatum und Nettobetrag angeben.';
+      if (!number || !name) {
+        formMsg.textContent = 'Automatische Kundennummer fehlt oder Name ist leer. Bitte Seite neu laden.';
         formMsg.classList.add('msg-error');
         return;
       }
 
-      const inv = {
-        invoiceNumber,
-        clientNumber,
-        projectNumber,
-        invoiceDate,
-        dueDate,
-        netAmount,
-        vatRate,
-        grossAmount,
-        status,
-        paymentMethod,
-        invoiceNotes
+      const fullPhone = (phoneCountry || phone) ? `${phoneCountry || ''} ${phone || ''}`.trim() : '';
+      const fullAddress = [
+        [street, houseNumber].filter(Boolean).join(' '),
+        [postalCode, city].filter(Boolean).join(' '),
+        country
+      ].filter(Boolean).join(', ');
+
+      const client = {
+        number,
+        name,
+        company,
+        email,
+        phone: fullPhone,
+        street,
+        houseNumber,
+        postalCode,
+        city,
+        country,
+        address: fullAddress,
+        notes
       };
 
-      invoices.push(inv);
-      addInvoiceRow(inv);
+      clients.push(client);
+      addClientRow(client);
 
-      invoiceForm.reset();
-      grossAmountInput.value = '';
-      formMsg.textContent = 'Rechnung (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
+      clientCounter++;
+      setNextCustomerNumber();
+
+      clientForm.reset();
+      // Kundennummer nach reset neu setzen
+      setNextCustomerNumber();
+
+      formMsg.textContent = 'Kunde (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
       formMsg.classList.add('msg-success');
     });
 
-    function addInvoiceRow(inv) {
+    function addClientRow(client) {
       if (placeholderRow) {
         placeholderRow.remove();
       }
 
       const tr = document.createElement('tr');
 
-      const invLabel = `${escapeHtml(inv.invoiceNumber)}`;
+      const nameCompany = client.company
+        ? `${escapeHtml(client.name)} (${escapeHtml(client.company)})`
+        : escapeHtml(client.name);
 
-      const clientProj = [
-        `Kunde: ${escapeHtml(inv.clientNumber)}`,
-        inv.projectNumber ? `Projekt: ${escapeHtml(inv.projectNumber)}` : ''
+      const contact = [
+        client.email ? `E-Mail: ${escapeHtml(client.email)}` : '',
+        client.phone ? `Tel: ${escapeHtml(client.phone)}` : ''
       ].filter(Boolean).join('<br>');
-
-      const statusLabel = getStatusLabel(inv.status);
-      const dates = [
-        inv.invoiceDate ? `Rechnungsdatum: ${formatDate(inv.invoiceDate)}` : '',
-        inv.dueDate ? `Fällig: ${formatDate(inv.dueDate)}` : ''
-      ].filter(Boolean).join('<br>');
-
-      const amounts = [
-        inv.netAmount ? `Netto: ${escapeHtml(inv.netAmount)} €` : '',
-        inv.vatRate ? `MwSt: ${escapeHtml(inv.vatRate)} %` : '',
-        inv.grossAmount ? `Brutto: ${escapeHtml(inv.grossAmount)} €` : ''
-      ].filter(Boolean).join('<br>');
-
-      const paymentParts = [];
-      if (inv.paymentMethod) {
-        paymentParts.push(`Zahlungsart: ${formatPaymentMethod(inv.paymentMethod)}`);
-      }
-      if (inv.invoiceNotes) {
-        paymentParts.push(escapeHtml(inv.invoiceNotes));
-      }
-      const paymentInfo = paymentParts.join('<br>');
 
       tr.innerHTML = `
-        <td>${invLabel}</td>
-        <td>${clientProj}</td>
-        <td>${statusLabel}<br>${dates}</td>
-        <td>${amounts}</td>
-        <td>${paymentInfo}</td>
+        <td>${escapeHtml(client.number)}</td>
+        <td>${nameCompany}</td>
+        <td>${contact || ''}</td>
+        <td>${escapeHtml(client.address || '')}</td>
+        <td>${escapeHtml(client.notes || '')}</td>
       `;
 
-      invoicesTableBody.appendChild(tr);
-    }
-
-    function getStatusLabel(status) {
-      let label = 'Offen';
-      let cls = 'status-open';
-
-      if (status === 'open') { label = 'Offen'; cls = 'status-open'; }
-      else if (status === 'paid') { label = 'Bezahlt'; cls = 'status-paid'; }
-      else if (status === 'overdue') { label = 'Überfällig'; cls = 'status-overdue'; }
-      else if (status === 'cancelled') { label = 'Storniert'; cls = 'status-cancelled'; }
-
-      return `<span class="badge-status ${cls}">${label}</span>`;
-    }
-
-    function formatPaymentMethod(method) {
-      if (method === 'bank') return 'Überweisung';
-      if (method === 'card') return 'Kreditkarte';
-      if (method === 'cash') return 'Bar';
-      if (method === 'paypal') return 'PayPal';
-      if (method === 'other') return 'Sonstiges';
-      return method;
-    }
-
-    function formatDate(value) {
-      if (!value) return '';
-      try {
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return value;
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        return `${day}.${month}.${year}`;
-      } catch {
-        return value;
-      }
+      clientsTableBody.appendChild(tr);
     }
 
     function escapeHtml(value) {
@@ -472,21 +400,26 @@
     }
 
     clearListBtn.addEventListener('click', () => {
-      invoices.length = 0;
-      while (invoicesTableBody.firstChild) {
-        invoicesTableBody.removeChild(invoicesTableBody.firstChild);
+      clients.length = 0;
+      while (clientsTableBody.firstChild) {
+        clientsTableBody.removeChild(clientsTableBody.firstChild);
       }
       const row = document.createElement('tr');
-      row.id = 'invoicesPlaceholderRow';
+      row.id = 'clientsPlaceholderRow';
       row.innerHTML = `
         <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
-          Noch keine Rechnungen angelegt (Demo). Bitte Formular oben verwenden.
+          Noch keine Kunden angelegt (Demo). Bitte Formular oben verwenden.
         </td>
       `;
-      invoicesTableBody.appendChild(row);
-      formMsg.textContent = 'Rechnungsliste geleert (nur lokal im Browser).';
+      clientsTableBody.appendChild(row);
+      formMsg.textContent = 'Kundenliste geleert (nur lokal im Browser).';
       formMsg.className = 'msg msg-success';
+      clientCounter = 1;
+      setNextCustomerNumber();
     });
+
+    // Beim Laden direkt erste Kundennummer setzen
+    setNextCustomerNumber();
   </script>
 </body>
 </html>
