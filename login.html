@@ -96,8 +96,6 @@
       font-size: 0.85rem;
     }
   </style>
-
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -129,62 +127,45 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <script>
-    // =========================================================================
-    // HIER DIE SUPABASE CONFIG EINTRAGEN
-    // =========================================================================
-    const SUPABASE_URL = "https://javbfzuekkmewbzowchj.supabase.co"; 
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY";
-    // =========================================================================
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // Variable umbenannt in "supabaseClient", um den Namenskonflikt mit der Library zu lösen
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
-    document.addEventListener("DOMContentLoaded", async function() {
-      // Aktuelles Jahr im Footer setzen
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById('year').textContent = new Date().getFullYear();
-
+      
       const loginForm = document.getElementById('loginForm');
       const errorBox = document.getElementById('errorBox');
 
-      // Falls der User bereits eingeloggt ist, direkt zum Dashboard schicken
-      try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session) {
-          window.location.href = "index.html";
-          return;
-        }
-      } catch (e) {
-        console.error("Session-Check fehlgeschlagen:", e);
+      // Checken, ob bereits eingeloggt
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = "index.html";
+        return;
       }
 
-      // Login abschicken
       if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-          e.preventDefault(); // Verhindert das Neuladen der Seite zuverlässig
-          
-          errorBox.style.display = "none"; // Vorherige Fehler ausblenden
-          
+          e.preventDefault(); // Verhindert das Neuladen der Seite radikal
+          errorBox.style.display = "none";
+
           const email = document.getElementById('email').value.trim();
           const password = document.getElementById('password').value;
 
-          try {
-            // Supabase Login-Anfrage über den umbenannten Client
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-              email: email,
-              password: password,
-            });
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
 
-            if (error) {
-              errorBox.textContent = "Fehler: " + error.message;
-              errorBox.style.display = "block";
-            } else if (data && data.session) {
-              // Erfolg! Weiterleitung zum Dashboard.
-              window.location.href = "index.html";
-            }
-          } catch (err) {
-            errorBox.textContent = "Netzwerkfehler: " + err.message;
+          if (error) {
+            errorBox.textContent = "Fehler: " + error.message;
             errorBox.style.display = "block";
+          } else if (data && data.session) {
+            window.location.href = "index.html";
           }
         });
       }
