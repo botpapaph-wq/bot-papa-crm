@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kunden – Bot Papa Freelancer CRM</title>
+  <title>Bot Papa Freelancer CRM – Kunden</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
@@ -25,19 +21,15 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    header h1 {
-      font-size: 1.3rem;
-    }
-    nav {
-      background: #333;
-      color: #fff;
-    }
+    header h1 { font-size: 1.3rem; }
+    nav { background: #333; color: #fff; }
     nav ul {
       list-style: none;
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
       padding: 0.5rem 1.5rem;
+      align-items: center;
     }
     nav a {
       color: #fff;
@@ -46,9 +38,8 @@
       border-radius: 4px;
       font-size: 0.95rem;
     }
-    nav a:hover {
-      background: #444;
-    }
+    nav a:hover { background: #444; }
+    
     main {
       max-width: 1200px;
       margin: 1.5rem auto;
@@ -61,125 +52,61 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin-bottom: 1.5rem;
     }
-    .card h2 {
-      margin-bottom: 0.75rem;
-      font-size: 1.2rem;
-    }
-    .card p {
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
-    }
-
-    /* Formularlayout: einheitliches Grid wie bei Projekten/Rechnungen */
+    .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+    
+    /* Formular Grid */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
-      margin-top: 1rem;
-      align-items: start;
+      margin-bottom: 1rem;
     }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    .form-group label {
-      font-size: 0.85rem;
-      color: #555;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 0.6rem 0.7rem;
+    .form-group { display: flex; flex-direction: column; }
+    .form-group-full { grid-column: 1 / -1; display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #555; }
+    .form-group input, .form-group textarea {
+      padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.95rem;
-      font-family: inherit;
-      width: 100%;
-      box-sizing: border-box;
     }
-    .form-group textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
+    .form-group textarea { resize: vertical; height: 80px; }
+    
+    /* Buttons */
+    .btn-container { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
     .btn {
-      display: inline-block;
-      padding: 0.7rem 1.2rem;
+      padding: 0.5rem 1rem;
       border: none;
       border-radius: 4px;
-      background: #222;
-      color: #fff;
-      font-size: 0.95rem;
       cursor: pointer;
-      margin-top: 1rem;
-    }
-    .btn:hover {
-      background: #333;
-    }
-    .btn-secondary {
-      background: #555;
-    }
-    .btn-secondary:hover {
-      background: #666;
-    }
-    .msg {
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
-    }
-    .msg-success {
-      color: #2e7d32;
-    }
-    .msg-error {
-      color: #c62828;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
+      font-weight: bold;
       font-size: 0.9rem;
     }
-    th, td {
-      padding: 0.6rem 0.4rem;
-      border-bottom: 1px solid #e0e0e0;
-      text-align: left;
-      vertical-align: top;
+    .btn-primary { background: #222; color: #fff; }
+    .btn-primary:hover { background: #444; }
+    
+    /* Tabelle */
+    .table-container { overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #fafafa; color: #666; font-weight: bold; }
+    
+    .user-info { font-size: 0.9rem; color: #ddd; }
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem;
     }
-    th {
-      background: #fafafa;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #555;
-    }
-    tr:nth-child(even) td {
-      background: #fcfcfc;
-    }
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      color: #777;
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 600px) {
-      main {
-        padding: 0 0.5rem 1.5rem;
-      }
-      .card {
-        padding: 1.0rem;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    .badge-auth { background: #2e7d32; color: #fff; }
+    .badge-guest { background: #616161; color: #fff; }
+    
+    footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Kunden</h1>
-    <div>
-      <span style="font-size:0.9rem;color:#ddd;">Kundenverwaltung (Demo, noch ohne DB)</span>
+    <div class="user-info" id="userInfo">
+      Status: <span>Gast</span>
+      <span class="badge badge-guest">nicht eingeloggt</span>
     </div>
   </header>
 
@@ -189,87 +116,80 @@
       <li><a href="clients.html">Kunden</a></li>
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
-      <li><a href="login.html">Login</a></li>
     </ul>
   </nav>
 
   <main>
     <section class="card">
       <h2>Neuen Kunden anlegen</h2>
-      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Später hängt hier Supabase dran.</p>
-
       <form id="clientForm">
         <div class="form-grid">
           <div class="form-group">
-            <label for="clientNumber">Kundennummer</label>
-            <input type="text" id="clientNumber" name="clientNumber" placeholder="z.B. C-2026-0001" />
+            <label for="customerNumber">Kundennummer</label>
+            <input type="text" id="customerNumber" placeholder="z.B. C-2026-0001" />
           </div>
           <div class="form-group">
-            <label for="companyName">Firma / Name *</label>
-            <input type="text" id="companyName" name="companyName" required />
+            <label for="clientName">Firma / Name *</label>
+            <input type="text" id="clientName" required placeholder="Muster GmbH" />
           </div>
           <div class="form-group">
-            <label for="contactName">Ansprechpartner</label>
-            <input type="text" id="contactName" name="contactName" />
+            <label for="contactPerson">Ansprechpartner</label>
+            <input type="text" id="contactPerson" placeholder="Max Mustermann" />
           </div>
           <div class="form-group">
-            <label for="email">E-Mail *</label>
-            <input type="email" id="email" name="email" required />
+            <label for="clientEmail">E-Mail *</label>
+            <input type="email" id="clientEmail" required placeholder="info@firma.de" />
           </div>
-
           <div class="form-group">
             <label for="phone">Telefon</label>
-            <input type="tel" id="phone" name="phone" placeholder="+49 ..." />
+            <input type="text" id="phone" placeholder="+49 ..." />
           </div>
           <div class="form-group">
             <label for="street">Straße / Nr.</label>
-            <input type="text" id="street" name="street" />
+            <input type="text" id="street" />
           </div>
           <div class="form-group">
-            <label for="zip">PLZ</label>
-            <input type="text" id="zip" name="zip" />
+            <label for="zipCode">PLZ</label>
+            <input type="text" id="zipCode" />
           </div>
           <div class="form-group">
             <label for="city">Ort</label>
-            <input type="text" id="city" name="city" />
+            <input type="text" id="city" />
           </div>
           <div class="form-group">
             <label for="country">Land</label>
-            <input type="text" id="country" name="country" placeholder="z.B. Deutschland" />
+            <input type="text" id="country" value="Deutschland" />
           </div>
-
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="clientNotes">Notizen</label>
-            <textarea id="clientNotes" name="clientNotes" placeholder="z.B. besondere Konditionen, Zahlungsziele, interne Hinweise"></textarea>
+          <div class="form-group-full">
+            <label for="notes">Notizen</label>
+            <textarea id="notes" placeholder="Besondere Konditionen, Zahlungsziele..."></textarea>
           </div>
         </div>
-        <button type="submit" class="btn">Kunde hinzufügen (Demo)</button>
-        <button type="button" id="clearListBtn" class="btn btn-secondary">Liste leeren</button>
-        <div id="formMsg" class="msg"></div>
+        <div class="btn-container">
+          <button type="submit" class="btn btn-primary">Kunde hinzufügen</button>
+        </div>
       </form>
     </section>
 
     <section class="card">
-      <h2>Kundenliste (Browser-Demo)</h2>
-      <p>Diese Liste ist nur im Browser-Speicher (Session). Beim Neuladen ist alles weg – später speichern wir das in Supabase.</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Kunde</th>
-            <th>Kontakt</th>
-            <th>Adresse</th>
-            <th>Sonstiges</th>
-          </tr>
-        </thead>
-        <tbody id="clientsTableBody">
-          <tr id="clientsPlaceholderRow">
-            <td colspan="4" style="text-align:center;color:#999;font-size:0.9rem;">
-              Noch keine Kunden angelegt (Demo). Bitte Formular oben verwenden.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>Kundenliste</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Kunde</th>
+              <th>Kontakt</th>
+              <th>Adresse</th>
+              <th>Sonstiges</th>
+            </tr>
+          </thead>
+          <tbody id="clientTableBody">
+            <tr>
+              <td colspan="4" style="text-align: center; color: #777;">Lade Kunden aus Datenbank...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
@@ -277,121 +197,122 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <script>
-    const yearEl = document.getElementById('year');
-    yearEl.textContent = new Date().getFullYear();
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const clientForm = document.getElementById('clientForm');
-    const formMsg = document.getElementById('formMsg');
-    const clientsTableBody = document.getElementById('clientsTableBody');
-    const placeholderRow = document.getElementById('clientsPlaceholderRow');
-    const clearListBtn = document.getElementById('clearListBtn');
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'HIER_DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
-    const clients = [];
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
 
-    clientForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      formMsg.textContent = '';
-      formMsg.className = 'msg';
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+      checkAuthAndLoad();
+    });
 
-      const clientNumber = document.getElementById('clientNumber').value.trim();
-      const companyName = document.getElementById('companyName').value.trim();
-      const contactName = document.getElementById('contactName').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const street = document.getElementById('street').value.trim();
-      const zip = document.getElementById('zip').value.trim();
-      const city = document.getElementById('city').value.trim();
-      const country = document.getElementById('country').value.trim();
-      const clientNotes = document.getElementById('clientNotes').value.trim();
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
 
-      if (!companyName || !email) {
-        formMsg.textContent = 'Bitte mindestens Firma/Name und E-Mail angeben.';
-        formMsg.classList.add('msg-error');
+      if (error || !data || !data.session) {
+        // Nicht eingeloggt -> Rauswurf zur Login-Seite
+        window.location.href = "login.html";
         return;
       }
 
-      const c = {
-        clientNumber,
-        companyName,
-        contactName,
-        email,
-        phone,
-        street,
-        zip,
-        city,
-        country,
-        clientNotes
-      };
-
-      clients.push(c);
-      addClientRow(c);
-
-      clientForm.reset();
-      formMsg.textContent = 'Kunde (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
-      formMsg.classList.add('msg-success');
-    });
-
-    function addClientRow(c) {
-      if (placeholderRow) {
-        placeholderRow.remove();
-      }
-
-      const tr = document.createElement('tr');
-
-      const clientLabel = c.clientNumber
-        ? `${escapeHtml(c.clientNumber)} – ${escapeHtml(c.companyName)}`
-        : escapeHtml(c.companyName);
-
-      const contactInfo = [
-        c.contactName ? escapeHtml(c.contactName) : '',
-        c.email ? escapeHtml(c.email) : '',
-        c.phone ? escapeHtml(c.phone) : ''
-      ].filter(Boolean).join('<br>');
-
-      const address = [
-        c.street ? escapeHtml(c.street) : '',
-        [c.zip, c.city].filter(Boolean).map(escapeHtml).join(' '),
-        c.country ? escapeHtml(c.country) : ''
-      ].filter(Boolean).join('<br>');
-
-      const other = c.clientNotes ? escapeHtml(c.clientNotes) : '';
-
-      tr.innerHTML = `
-        <td>${clientLabel}</td>
-        <td>${contactInfo}</td>
-        <td>${address}</td>
-        <td>${other}</td>
-      `;
-
-      clientsTableBody.appendChild(tr);
+      currentUserId = data.session.user.id;
+      const email = data.session.user.email || 'Unbekannt';
+      
+      document.getElementById('userInfo').innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
+      
+      // Kunden laden
+      fetchClients();
     }
 
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    // Kunden aus Supabase holen und rendern
+    async function fetchClients() {
+      const tableBody = document.getElementById('clientTableBody');
+      
+      const { data: clients, error } = await supabase
+        .from('clients')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #c62828;">Fehler beim Laden: ' + error.message + '</td></tr>';
+        return;
+      }
+
+      if (!clients || clients.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #777;">Noch keine Kunden in der Datenbank angelegt.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = '';
+      clients.forEach(client => {
+        const tr = document.createElement('tr');
+        
+        // Spalte 1: Kunde & Nr
+        const tdKunde = document.createElement('td');
+        tdKunde.innerHTML = `<strong>${client.name}</strong><br><small style="color:#777">${client.customer_number || '-'}</small>`;
+        
+        // Spalte 2: Kontakt
+        const tdKontakt = document.createElement('td');
+        tdKontakt.innerHTML = `${client.email}<br><small style="color:#777">${client.phone || ''}</small>`;
+        
+        // Spalte 3: Adresse
+        const tdAdresse = document.createElement('td');
+        const strasse = client.street || '';
+        const ortsDaten = `${client.zip_code || ''} ${client.city || ''}`.trim();
+        tdAdresse.innerHTML = `${strasse}<br>${ortsDaten} ${client.country ? '('+client.country+')' : ''}`;
+        
+        // Spalte 4: Sonstiges (Notizen & Ansprechpartner)
+        const tdSonstiges = document.createElement('td');
+        tdSonstiges.innerHTML = `<small>Ansprechp.: ${client.contact_person || '-'}</small><br><small style="color:#555; display:block; max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${client.notes || ''}">${client.notes || '-'}</small>`;
+        
+        tr.appendChild(tdKunde);
+        tr.appendChild(tdKontakt);
+        tr.appendChild(tdAdresse);
+        tr.appendChild(tdSonstiges);
+        tableBody.appendChild(tr);
+      });
     }
 
-    clearListBtn.addEventListener('click', () => {
-      clients.length = 0;
-      while (clientsTableBody.firstChild) {
-        clientsTableBody.removeChild(clientsTableBody.firstChild);
-      }
-      const row = document.createElement('tr');
-      row.id = 'clientsPlaceholderRow';
-      row.innerHTML = `
-        <td colspan="4" style="text-align:center;color:#999;font-size:0.9rem;">
-          Noch keine Kunden angelegt (Demo). Bitte Formular oben verwenden.
-        </td>
-      `;
-      clientsTableBody.appendChild(row);
-      formMsg.textContent = 'Kundenliste geleert (nur lokal im Browser).';
-      formMsg.className = 'msg msg-success';
-    });
+    // Formular abschicken -> In Supabase speichern
+    const clientForm = document.getElementById('clientForm');
+    if (clientForm) {
+      clientForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!currentUserId) return;
+
+        const newClient = {
+          user_id: currentUserId, // Zwingend erforderlich für RLS
+          customer_number: document.getElementById('customerNumber').value.trim(),
+          name: document.getElementById('clientName').value.trim(),
+          contact_person: document.getElementById('contactPerson').value.trim(),
+          email: document.getElementById('clientEmail').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          street: document.getElementById('street').value.trim(),
+          zip_code: document.getElementById('zipCode').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          country: document.getElementById('country').value.trim(),
+          notes: document.getElementById('notes').value.trim()
+        };
+
+        const { error } = await supabase
+          .from('clients')
+          .insert([newClient]);
+
+        if (error) {
+          alert('Fehler beim Speichern: ' + error.message);
+        } else {
+          clientForm.reset();
+          document.getElementById('country').value = "Deutschland"; // Standard zurücksetzen
+          fetchClients(); // Liste aktualisieren
+        }
+      });
+    }
   </script>
 </body>
 </html>
