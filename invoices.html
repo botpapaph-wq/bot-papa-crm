@@ -6,105 +6,51 @@
   <title>Bot Papa Freelancer CRM – Rechnungen</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-    }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
     header {
-      background: #222;
-      color: #fff;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #222; color: #fff; padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
     }
     header h1 { font-size: 1.3rem; }
     nav { 
-      background: #333; 
-      padding: 0.5rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: #333; padding: 0.5rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.95rem;
-    }
+    nav ul { list-style: none; display: flex; gap: 0.5rem; align-items: center; }
+    nav a { color: #fff; text-decoration: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.95rem; }
     nav a:hover { background: #444; }
     
-    main {
-      max-width: 1200px;
-      margin: 1.5rem auto;
-      padding: 0 1rem 2rem;
+    .btn-logout-right {
+      background: #c62828; color: #fff; border: none; padding: 0.35rem 0.75rem;
+      border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;
     }
-    .card {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-    }
+    .btn-logout-right:hover { background: #b71c1c; }
+
+    main { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem 2rem; }
+    .card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
     .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
     
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
+    .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
     @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
 
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #333; }
-    .form-group input, .form-group select {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      background: #fff;
-    }
+    .form-group input, .form-group select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background: #fff; }
     
-    .btn {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 0.9rem;
-    }
-    .btn-primary { background: #222; color: #fff; }
+    .btn-primary { background: #222; color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
     .btn-primary:hover { background: #444; }
-    .btn-logout { background: #c62828; color: #fff; font-size: 0.85rem; padding: 0.35rem 0.75rem; }
-    .btn-logout:hover { background: #b71c1c; }
     
     .table-container { overflow-x: auto; margin-top: 1rem; }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
     th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
     th { background: #fafafa; color: #666; font-weight: bold; }
     
-    .status-badge {
-      display: inline-block;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
+    .status-badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
     .status-open { background: #fff3e0; color: #e65100; }
     .status-paid { background: #e8f5e9; color: #2e7d32; }
     
     .status-text { font-size: 0.9rem; color: #ddd; }
-    .status-text span { font-weight: bold; }
     .badge-auth { background: #2e7d32; color: #fff; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem; }
     footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
   </style>
@@ -122,7 +68,7 @@
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
     </ul>
-    <button id="logoutBtn" class="btn btn-logout" style="display:none;">Logout</button>
+    <button id="logoutBtn" class="btn-logout-right">Logout</button>
   </nav>
 
   <main>
@@ -152,7 +98,7 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Rechnung保存 speichern</button>
+        <button type="submit" class="btn-primary">Rechnung speichern</button>
       </form>
     </section>
 
@@ -163,98 +109,80 @@
           <thead>
             <tr>
               <th>Rechnungsnummer</th>
-              <th>Projekt-ID</th>
+              <th>Projekt / Kunde</th>
               <th>Betrag</th>
               <th>Status</th>
               <th>Erstellt am</th>
             </tr>
           </thead>
           <tbody id="invoiceTableBody">
-            <tr>
-              <td colspan="5" style="text-align: center; color: #777;">Lade Rechnungen...</td>
-            </tr>
+            <tr><td colspan="5" style="text-align: center; color: #777;">Lade Rechnungen...</td></tr>
           </tbody>
         </table>
       </div>
     </section>
   </main>
 
-  <footer>
-    &copy; 2026 Bot Papa – Freelancer CRM
-  </footer>
+  <footer>&copy; 2026 Bot Papa – Freelancer CRM</footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
-
+    const SUPABASE_ANON_KEY = 'HIER_DEIN_ANON_KEY_EINFÜGEN';
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUserId = null;
 
     async function checkAuthAndLoad() {
       const { data, error } = await supabase.auth.getSession();
-      if (error || !data || !data.session) {
-        window.location.href = "login.html";
-        return;
-      }
+      if (error || !data || !data.session) { window.location.href = "login.html"; return; }
       currentUserId = data.session.user.id;
       document.getElementById('userInfo').innerHTML = 'Status: <span>' + data.session.user.email + '</span> <span class="badge badge-auth">eingeloggt</span>';
-      document.getElementById('logoutBtn').style.display = 'block';
 
       await populateProjectDropdown();
       fetchInvoices();
     }
 
     async function populateProjectDropdown() {
-      const projectSelect = document.getElementById('invoiceProject');
-      const { data: projects, error } = await supabase.from('projects').select('id, title').order('title', { ascending: true });
-
-      if (error || !projects || projects.length === 0) {
-        projectSelect.innerHTML = '<option value="" disabled>Keine Projekte vorhanden.</option>';
-        return;
-      }
-      projectSelect.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
+      const select = document.getElementById('invoiceProject');
+      const { data: projects } = await supabase.from('projects').select('id, title').order('title', { ascending: true });
+      if (!projects || projects.length === 0) { select.innerHTML = '<option disabled>Keine Projekte.</option>'; return; }
+      select.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
       projects.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.textContent = p.title;
-        projectSelect.appendChild(opt);
+        const o = document.createElement('option'); o.value = p.id; o.textContent = p.title; select.appendChild(o);
       });
     }
 
     async function fetchInvoices() {
       const tableBody = document.getElementById('invoiceTableBody');
       
-      // Saubere, flache Abfrage ohne riskante Tabellen-Joins
-      const { data: invoices, error } = await supabase
-        .from('invoices')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // 1. Rechnungen flach holen (kein API-Key-Error Risiko)
+      const { data: invoices, error } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
+      if (error) { tableBody.innerHTML = '<tr><td colspan="5">Fehler: ' + error.message + '</td></tr>'; return; }
+      if (!invoices || invoices.length === 0) { tableBody.innerHTML = '<tr><td colspan="5">Keine Rechnungen.</td></tr>'; return; }
 
-      if (error) {
-        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler: ' + error.message + '</td></tr>';
-        return;
-      }
-      if (!invoices || invoices.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #777;">Noch keine Rechnungen hinterlegt.</td></tr>';
-        return;
-      }
+      // 2. Hilfsdaten (Projekte & Kunden) holen, um IDs in echte Namen zu übersetzen
+      const { data: projects } = await supabase.from('projects').select('id, title, client_id');
+      const { data: clients } = await supabase.from('clients').select('id, name');
 
       tableBody.innerHTML = '';
       invoices.forEach(inv => {
         const tr = document.createElement('tr');
         const date = new Date(inv.created_at).toLocaleDateString('de-DE');
-        const formattedAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(inv.amount);
-        
-        const badgeClass = inv.status === 'offen' ? 'status-open' : 'status-paid';
-        const badgeText = inv.status === 'offen' ? 'Offen' : 'Bezahlt';
+        const fmtAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(inv.amount);
+        const bClass = inv.status === 'offen' ? 'status-open' : 'status-paid';
+        const bText = inv.status === 'offen' ? 'Offen' : 'Bezahlt';
+
+        // Projektnamen und Kundennamen zuordnen
+        const proj = projects ? projects.find(p => p.id === inv.project_id) : null;
+        const projTitle = proj ? proj.title : 'Unbekanntes Projekt';
+        const client = proj && clients ? clients.find(c => c.id === proj.client_id) : null;
+        const clientName = client ? client.name : 'Unbekannter Kunde';
 
         tr.innerHTML = `
           <td><strong>${inv.invoice_number}</strong></td>
-          <td><small style="color:#777">ID: ${inv.project_id}</small></td>
-          <td>${formattedAmount}</td>
-          <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+          <td>${projTitle}<br><small style="color:#777">${clientName}</small></td>
+          <td>${fmtAmount}</td>
+          <td><span class="status-badge ${bClass}">${bText}</span></td>
           <td>${date}</td>
         `;
         tableBody.appendChild(tr);
@@ -263,22 +191,16 @@
 
     document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!currentUserId) return;
-
-      const newInvoice = {
+      const newInv = {
         user_id: currentUserId,
         invoice_number: document.getElementById('invoiceNumber').value.trim(),
         project_id: document.getElementById('invoiceProject').value,
         amount: parseFloat(document.getElementById('invoiceAmount').value),
         status: document.getElementById('invoiceStatus').value
       };
-
-      const { error } = await supabase.from('invoices').insert([newInvoice]);
-      if (error) alert('Fehler: ' + error.message);
-      else {
-        document.getElementById('invoiceForm').reset();
-        fetchInvoices();
-      }
+      await supabase.from('invoices').insert([newInv]);
+      document.getElementById('invoiceForm').reset();
+      fetchInvoices();
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
