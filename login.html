@@ -25,6 +25,8 @@
     header .status {
       font-size: 0.9rem;
       color: #ddd;
+      display: flex;
+      align-items: center;
     }
     nav {
       background: #333;
@@ -51,6 +53,7 @@
       max-width: 1200px;
       margin: 1.5rem auto;
       padding: 0 1rem 2rem;
+      display: none; /* Versteckt das Dashboard, bis der Login-Check durch ist */
     }
     .card {
       background: #fff;
@@ -59,28 +62,36 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin-bottom: 1.5rem;
     }
-    .card h2 {
-      margin-bottom: 0.75rem;
-      font-size: 1.2rem;
-    }
-    .card p {
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
-    }
+    .card h2 { margin-bottom: 0.75rem; font-size: 1.2rem; }
+    .card p { margin-bottom: 0.5rem; line-height: 1.4; }
     footer {
       text-align: center;
       padding: 1.5rem;
       color: #777;
       font-size: 0.85rem;
     }
+    .logout-btn {
+      background: #e63946;
+      color: white;
+      border: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .logout-btn:hover {
+      background: #cb2431;
+    }
   </style>
-  <script src="auth-guard.js" defer></script>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Dashboard</h1>
     <div class="status">
-      <span id="statusText">Lade Status...</span>
+      <span id="statusText">Prüfe Login...</span>
+      <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
     </div>
   </header>
 
@@ -90,14 +101,15 @@
       <li><a href="clients.html">Kunden</a></li>
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
-      <li><a href="login.html">Login</a></li>
+      <li><a href="login.html" id="navLogin">Login</a></li>
     </ul>
   </nav>
 
-  <main>
+  <main id="mainContent">
     <section class="card">
       <h2>Übersicht</h2>
       <p>Hier kommt deine Dashboard-Übersicht hin (offene Projekte, Rechnungen etc.).</p>
+      <p>Willkommen zurück, <strong id="userEmail"></strong>!</p>
     </section>
   </main>
 
@@ -106,20 +118,49 @@
   </footer>
 
   <script>
-    // Alles sauber in einem DOMContentLoaded-Event gekapselt
-    document.addEventListener("DOMContentLoaded", function() {
-      // 1. Jahr im Footer setzen
-      const yearEl = document.getElementById('year');
-      if (yearEl) yearEl.textContent = new Date().getFullYear();
+    // =========================================================================
+    // HIER DEINE SUPABASE CONFIG EINTRAGEN
+    // =========================================================================
+    const SUPABASE_URL = "https://javbfzuekkmewbzowchj.supabase.co"; 
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY";
+    // =========================================================================
 
-      // 2. Login-Status prüfen und anzeigen
+    // Supabase Client initialisieren
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", async function() {
+      // Aktuelles Jahr im Footer setzen
+      document.getElementById('year').textContent = new Date().getFullYear();
+
       const statusEl = document.getElementById('statusText');
-      if (statusEl) {
-        const loggedIn = localStorage.getItem('bp_crm_logged_in') === '1';
-        statusEl.textContent = loggedIn 
-          ? 'Status: Eingeloggt' 
-          : 'Status: Gast – nicht eingeloggt';
+      const mainContent = document.getElementById('mainContent');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const userEmailEl = document.getElementById('userEmail');
+      const navLogin = document.getElementById('navLogin');
+
+      // Aktuelle Session von Supabase abfragen
+      const { data: { session }, error } = await supabase.auth.getSession();
+
+      if (error || !session) {
+        // Nicht eingeloggt -> Weiterleitung zur Login-Seite
+        statusEl.textContent = "Status: Nicht eingeloggt";
+        window.location.href = "login.html"; 
+      } else {
+        // Eingeloggt!
+        statusEl.textContent = "Status: Eingeloggt";
+        userEmailEl.textContent = session.user.email;
+        
+        // Dashboard anzeigen, Login-Nav-Link ausblenden, Logout-Button einblenden
+        mainContent.style.display = "block";
+        logoutBtn.style.display = "inline-block";
+        if (navLogin) navLogin.style.display = "none"; 
       }
+
+      // Logout Logik
+      logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = "login.html";
+      });
     });
   </script>
 </body>
