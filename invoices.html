@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rechnungen – Bot Papa Freelancer CRM</title>
+  <title>Bot Papa Freelancer CRM – Rechnungen</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
@@ -25,19 +21,15 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    header h1 {
-      font-size: 1.3rem;
-    }
-    nav {
-      background: #333;
-      color: #fff;
-    }
+    header h1 { font-size: 1.3rem; }
+    nav { background: #333; color: #fff; }
     nav ul {
       list-style: none;
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
       padding: 0.5rem 1.5rem;
+      align-items: center;
     }
     nav a {
       color: #fff;
@@ -46,9 +38,8 @@
       border-radius: 4px;
       font-size: 0.95rem;
     }
-    nav a:hover {
-      background: #444;
-    }
+    nav a:hover { background: #444; }
+    
     main {
       max-width: 1200px;
       margin: 1.5rem auto;
@@ -61,141 +52,69 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin-bottom: 1.5rem;
     }
-    .card h2 {
-      margin-bottom: 0.75rem;
-      font-size: 1.2rem;
-    }
-    .card p {
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
-    }
-
-    /* Formularlayout: nur Grid, keine verschachtelten Flex-Container */
+    .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+    
+    /* Formular Grid */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
-      margin-top: 1rem;
-      align-items: start;
+      margin-bottom: 1rem;
     }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    .form-group label {
-      font-size: 0.85rem;
-      color: #555;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 0.6rem 0.7rem;
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.25rem; color: #555; }
+    .form-group input, .form-group select {
+      padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.95rem;
-      font-family: inherit;
-      width: 100%;
-      box-sizing: border-box;
+      background: #fff;
     }
-    .form-group textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-    .form-group input[readonly] {
-      background: #f0f0f0;
-      color: #555;
-      cursor: not-allowed;
-    }
-
+    
+    /* Buttons */
+    .btn-container { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
     .btn {
-      display: inline-block;
-      padding: 0.7rem 1.2rem;
+      padding: 0.5rem 1rem;
       border: none;
       border-radius: 4px;
-      background: #222;
-      color: #fff;
-      font-size: 0.95rem;
       cursor: pointer;
-      margin-top: 1rem;
-    }
-    .btn:hover {
-      background: #333;
-    }
-    .btn-secondary {
-      background: #555;
-    }
-    .btn-secondary:hover {
-      background: #666;
-    }
-    .msg {
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
-    }
-    .msg-success {
-      color: #2e7d32;
-    }
-    .msg-error {
-      color: #c62828;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
+      font-weight: bold;
       font-size: 0.9rem;
     }
-    th, td {
-      padding: 0.6rem 0.4rem;
-      border-bottom: 1px solid #e0e0e0;
-      text-align: left;
-      vertical-align: top;
-    }
-    th {
-      background: #fafafa;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #555;
-    }
-    tr:nth-child(even) td {
-      background: #fcfcfc;
-    }
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      color: #777;
-      font-size: 0.85rem;
-    }
-    .badge-status {
+    .btn-primary { background: #222; color: #fff; }
+    .btn-primary:hover { background: #444; }
+    
+    /* Tabelle */
+    .table-container { overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #fafafa; color: #666; font-weight: bold; }
+    
+    /* Status Badges für Rechnungen */
+    .status-badge {
       display: inline-block;
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      color: #fff;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
     }
-    .status-open { background: #f9a825; }
-    .status-paid { background: #2e7d32; }
-    .status-overdue { background: #c62828; }
-    .status-cancelled { background: #616161; }
-
-    @media (max-width: 600px) {
-      main {
-        padding: 0 0.5rem 1.5rem;
-      }
-      .card {
-        padding: 1.0rem;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
+    .status-open { background: #fff3e0; color: #e65100; }
+    .status-paid { background: #e8f5e9; color: #2e7d32; }
+    
+    .user-info { font-size: 0.9rem; color: #ddd; }
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem;
     }
+    .badge-auth { background: #2e7d32; color: #fff; }
+    
+    footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <header>
     <h1>Bot Papa Freelancer CRM – Rechnungen</h1>
-    <div>
-      <span style="font-size:0.9rem;color:#ddd;">Rechnungsverwaltung (Demo, Beträge werden im Browser berechnet)</span>
+    <div class="user-info" id="userInfo">
+      Status: <span>Prüfe Login...</span>
     </div>
   </header>
 
@@ -205,107 +124,62 @@
       <li><a href="clients.html">Kunden</a></li>
       <li><a href="projects.html">Projekte</a></li>
       <li><a href="invoices.html">Rechnungen</a></li>
-      <li><a href="login.html">Login</a></li>
     </ul>
   </nav>
 
   <main>
     <section class="card">
-      <h2>Neue Rechnung anlegen</h2>
-      <p>Dieses Formular speichert Daten aktuell nur im Browser (Platzhalter). Netto, MwSt und Brutto werden automatisch berechnet.</p>
-
+      <h2>Neue Rechnung erstellen</h2>
       <form id="invoiceForm">
         <div class="form-grid">
           <div class="form-group">
             <label for="invoiceNumber">Rechnungsnummer *</label>
-            <input type="text" id="invoiceNumber" name="invoiceNumber" required placeholder="z.B. R-2026-0001" />
+            <input type="text" id="invoiceNumber" required placeholder="z.B. RE-2026-001" />
           </div>
           <div class="form-group">
-            <label for="clientNumber">Kundennummer *</label>
-            <input type="text" id="clientNumber" name="clientNumber" required placeholder="z.B. C-2026-0001" />
-          </div>
-          <div class="form-group">
-            <label for="projectNumber">Projektnummer</label>
-            <input type="text" id="projectNumber" name="projectNumber" placeholder="optional" />
-          </div>
-
-          <div class="form-group">
-            <label for="invoiceDate">Rechnungsdatum *</label>
-            <input type="date" id="invoiceDate" name="invoiceDate" required />
-          </div>
-          <div class="form-group">
-            <label for="dueDate">Fällig am</label>
-            <input type="date" id="dueDate" name="dueDate" />
-          </div>
-
-          <div class="form-group">
-            <label for="netAmount">Betrag netto (EUR) *</label>
-            <input type="number" step="0.01" id="netAmount" name="netAmount" required />
-          </div>
-          <div class="form-group">
-            <label for="vatRate">MwSt.-Satz (%)</label>
-            <input type="number" step="0.1" id="vatRate" name="vatRate" value="19" />
-          </div>
-          <div class="form-group">
-            <label for="grossAmount">Betrag brutto (EUR)</label>
-            <input type="number" step="0.01" id="grossAmount" name="grossAmount" readonly />
-          </div>
-
-          <div class="form-group">
-            <label for="status">Status</label>
-            <select id="status" name="status">
-              <option value="open" selected>Offen</option>
-              <option value="paid">Bezahlt</option>
-              <option value="overdue">Überfällig</option>
-              <option value="cancelled">Storniert</option>
+            <label for="invoiceProject">Zugehöriges Projekt *</label>
+            <select id="invoiceProject" required>
+              <option value="" disabled selected>Lade Projekte...</option>
             </select>
           </div>
-
           <div class="form-group">
-            <label for="paymentMethod">Zahlungsart</label>
-            <select id="paymentMethod" name="paymentMethod">
-              <option value="">– nicht angegeben –</option>
-              <option value="bank">Überweisung</option>
-              <option value="card">Kreditkarte</option>
-              <option value="cash">Bar</option>
-              <option value="paypal">PayPal</option>
-              <option value="other">Sonstiges</option>
-            </select>
+            <label for="invoiceAmount">Betrag (in €) *</label>
+            <input type="number" id="invoiceAmount" step="0.01" required placeholder="0.00" />
           </div>
-
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="invoiceNotes">Notizen</label>
-            <textarea id="invoiceNotes" name="invoiceNotes" placeholder="z.B. Zahlungsziel 14 Tage, Verwendungszweck, besondere Vereinbarungen"></textarea>
+          <div class="form-group">
+            <label for="invoiceStatus">Status</label>
+            <select id="invoiceStatus">
+              <option value="offen" selected>Offen</option>
+              <option value="bezahlt">Bezahlt</option>
+            </select>
           </div>
         </div>
-        <button type="submit" class="btn">Rechnung hinzufügen (Demo)</button>
-        <button type="button" id="clearListBtn" class="btn btn-secondary">Liste leeren</button>
-        <div id="formMsg" class="msg"></div>
+        <div class="btn-container">
+          <button type="submit" class="btn btn-primary">Rechnung speichern</button>
+        </div>
       </form>
     </section>
 
     <section class="card">
-      <h2>Rechnungsliste (Browser-Demo)</h2>
-      <p>Diese Liste ist nur im Browser-Speicher (Session). Beim Neuladen ist alles weg – später speichern wir das in Supabase.</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Rechnung</th>
-            <th>Kunde / Projekt</th>
-            <th>Datum & Status</th>
-            <th>Beträge</th>
-            <th>Zahlung / Notizen</th>
-          </tr>
-        </thead>
-        <tbody id="invoicesTableBody">
-          <tr id="invoicesPlaceholderRow">
-            <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
-              Noch keine Rechnungen angelegt (Demo). Bitte Formular oben verwenden.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>Rechnungsübersicht</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Rechnungsnummer</th>
+              <th>Projekt / Kunde</th>
+              <th>Betrag</th>
+              <th>Status</th>
+              <th>Erstellt am</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTableBody">
+            <tr>
+              <td colspan="5" style="text-align: center; color: #777;">Lade Rechnungen...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
@@ -313,188 +187,146 @@
     &copy; <span id="year"></span> Bot Papa – Freelancer CRM
   </footer>
 
-  <script>
-    const yearEl = document.getElementById('year');
-    yearEl.textContent = new Date().getFullYear();
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const invoiceForm = document.getElementById('invoiceForm');
-    const formMsg = document.getElementById('formMsg');
-    const invoicesTableBody = document.getElementById('invoicesTableBody');
-    const placeholderRow = document.getElementById('invoicesPlaceholderRow');
-    const clearListBtn = document.getElementById('clearListBtn');
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
 
-    const netAmountInput = document.getElementById('netAmount');
-    const vatRateInput = document.getElementById('vatRate');
-    const grossAmountInput = document.getElementById('grossAmount');
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
 
-    const invoices = [];
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+      checkAuthAndLoad();
+    });
 
-    function recalcGross() {
-      const net = parseFloat(String(netAmountInput.value).replace(',', '.')) || 0;
-      const vat = parseFloat(String(vatRateInput.value).replace(',', '.')) || 0;
-      const gross = net * (1 + vat / 100);
-      if (!Number.isNaN(gross)) {
-        grossAmountInput.value = gross.toFixed(2);
-      } else {
-        grossAmountInput.value = '';
-      }
-    }
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
 
-    netAmountInput.addEventListener('input', recalcGross);
-    vatRateInput.addEventListener('input', recalcGross);
-
-    invoiceForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      formMsg.textContent = '';
-      formMsg.className = 'msg';
-
-      const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
-      const clientNumber = document.getElementById('clientNumber').value.trim();
-      const projectNumber = document.getElementById('projectNumber').value.trim();
-      const invoiceDate = document.getElementById('invoiceDate').value;
-      const dueDate = document.getElementById('dueDate').value;
-      const netAmount = document.getElementById('netAmount').value.trim();
-      const vatRate = document.getElementById('vatRate').value.trim();
-      const grossAmount = document.getElementById('grossAmount').value.trim();
-      const status = document.getElementById('status').value;
-      const paymentMethod = document.getElementById('paymentMethod').value;
-      const invoiceNotes = document.getElementById('invoiceNotes').value.trim();
-
-      if (!invoiceNumber || !clientNumber || !invoiceDate || !netAmount) {
-        formMsg.textContent = 'Bitte mindestens Rechnungsnummer, Kundennummer, Rechnungsdatum und Nettobetrag angeben.';
-        formMsg.classList.add('msg-error');
+      if (error || !data || !data.session) {
+        window.location.href = "login.html";
         return;
       }
 
-      const inv = {
-        invoiceNumber,
-        clientNumber,
-        projectNumber,
-        invoiceDate,
-        dueDate,
-        netAmount,
-        vatRate,
-        grossAmount,
-        status,
-        paymentMethod,
-        invoiceNotes
-      };
-
-      invoices.push(inv);
-      addInvoiceRow(inv);
-
-      invoiceForm.reset();
-      grossAmountInput.value = '';
-      formMsg.textContent = 'Rechnung (Demo) hinzugefügt. Daten sind nur lokal im Browser.';
-      formMsg.classList.add('msg-success');
-    });
-
-    function addInvoiceRow(inv) {
-      if (placeholderRow) {
-        placeholderRow.remove();
-      }
-
-      const tr = document.createElement('tr');
-
-      const invLabel = `${escapeHtml(inv.invoiceNumber)}`;
-
-      const clientProj = [
-        `Kunde: ${escapeHtml(inv.clientNumber)}`,
-        inv.projectNumber ? `Projekt: ${escapeHtml(inv.projectNumber)}` : ''
-      ].filter(Boolean).join('<br>');
-
-      const statusLabel = getStatusLabel(inv.status);
-      const dates = [
-        inv.invoiceDate ? `Rechnungsdatum: ${formatDate(inv.invoiceDate)}` : '',
-        inv.dueDate ? `Fällig: ${formatDate(inv.dueDate)}` : ''
-      ].filter(Boolean).join('<br>');
-
-      const amounts = [
-        inv.netAmount ? `Netto: ${escapeHtml(inv.netAmount)} €` : '',
-        inv.vatRate ? `MwSt: ${escapeHtml(inv.vatRate)} %` : '',
-        inv.grossAmount ? `Brutto: ${escapeHtml(inv.grossAmount)} €` : ''
-      ].filter(Boolean).join('<br>');
-
-      const paymentParts = [];
-      if (inv.paymentMethod) {
-        paymentParts.push(`Zahlungsart: ${formatPaymentMethod(inv.paymentMethod)}`);
-      }
-      if (inv.invoiceNotes) {
-        paymentParts.push(escapeHtml(inv.invoiceNotes));
-      }
-      const paymentInfo = paymentParts.join('<br>');
-
-      tr.innerHTML = `
-        <td>${invLabel}</td>
-        <td>${clientProj}</td>
-        <td>${statusLabel}<br>${dates}</td>
-        <td>${amounts}</td>
-        <td>${paymentInfo}</td>
-      `;
-
-      invoicesTableBody.appendChild(tr);
+      currentUserId = data.session.user.id;
+      const email = data.session.user.email || 'Unbekannt';
+      document.getElementById('userInfo').innerHTML = 'Status: <span>' + email + '</span> <span class="badge badge-auth">eingeloggt</span>';
+      
+      // 1. Dropdown mit Projekten befüllen
+      await populateProjectDropdown();
+      // 2. Rechnungsliste laden
+      fetchInvoices();
     }
 
-    function getStatusLabel(status) {
-      let label = 'Offen';
-      let cls = 'status-open';
+    // Holt alle Projekte für das Dropdown
+    async function populateProjectDropdown() {
+      const projectSelect = document.getElementById('invoiceProject');
+      
+      const { data: projects, error } = await supabase
+        .from('projects')
+        .select('id, title')
+        .order('title', { ascending: true });
 
-      if (status === 'open') { label = 'Offen'; cls = 'status-open'; }
-      else if (status === 'paid') { label = 'Bezahlt'; cls = 'status-paid'; }
-      else if (status === 'overdue') { label = 'Überfällig'; cls = 'status-overdue'; }
-      else if (status === 'cancelled') { label = 'Storniert'; cls = 'status-cancelled'; }
-
-      return `<span class="badge-status ${cls}">${label}</span>`;
-    }
-
-    function formatPaymentMethod(method) {
-      if (method === 'bank') return 'Überweisung';
-      if (method === 'card') return 'Kreditkarte';
-      if (method === 'cash') return 'Bar';
-      if (method === 'paypal') return 'PayPal';
-      if (method === 'other') return 'Sonstiges';
-      return method;
-    }
-
-    function formatDate(value) {
-      if (!value) return '';
-      try {
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return value;
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        return `${day}.${month}.${year}`;
-      } catch {
-        return value;
+      if (error || !projects || projects.length === 0) {
+        projectSelect.innerHTML = '<option value="" disabled>Keine Projekte gefunden. Bitte zuerst ein Projekt anlegen!</option>';
+        return;
       }
+
+      projectSelect.innerHTML = '<option value="" disabled selected>Bitte wählen...</option>';
+      projects.forEach(project => {
+        const option = document.createElement('option');
+        option.value = project.id;
+        option.textContent = project.title;
+        projectSelect.appendChild(option);
+      });
     }
 
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+    // Holt alle Rechnungen sowie verschachtelt das Projekt und dessen Kunden
+    async function fetchInvoices() {
+      const tableBody = document.getElementById('invoiceTableBody');
+      
+      // Super-Join über 3 Ebenen: Rechnungen -> Projekte -> Clients (Name)
+      const { data: invoices, error } = await supabase
+        .from('invoices')
+        .select(`
+          id,
+          invoice_number,
+          amount,
+          status,
+          created_at,
+          projects (
+            title,
+            clients ( name )
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-    clearListBtn.addEventListener('click', () => {
-      invoices.length = 0;
-      while (invoicesTableBody.firstChild) {
-        invoicesTableBody.removeChild(invoicesTableBody.firstChild);
+      if (error) {
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler beim Laden: ' + error.message + '</td></tr>';
+        return;
       }
-      const row = document.createElement('tr');
-      row.id = 'invoicesPlaceholderRow';
-      row.innerHTML = `
-        <td colspan="5" style="text-align:center;color:#999;font-size:0.9rem;">
-          Noch keine Rechnungen angelegt (Demo). Bitte Formular oben verwenden.
-        </td>
-      `;
-      invoicesTableBody.appendChild(row);
-      formMsg.textContent = 'Rechnungsliste geleert (nur lokal im Browser).';
-      formMsg.className = 'msg msg-success';
-    });
+
+      if (!invoices || invoices.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #777;">Noch keine Rechnungen hinterlegt.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = '';
+      invoices.forEach(invoice => {
+        const tr = document.createElement('tr');
+        
+        const date = new Date(invoice.created_at).toLocaleDateString('de-DE');
+        
+        const statusClass = invoice.status === 'offen' ? 'status-open' : 'status-paid';
+        const statusText = invoice.status === 'offen' ? 'Offen' : 'Bezahlt';
+        
+        // Formatiere Betrag zu Euro (z.B. 1.250,00 €)
+        const formattedAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(invoice.amount);
+
+        // Tief verschachtelte Relationen sicher auslesen
+        const projTitle = invoice.projects ? invoice.projects.title : 'Unbekanntes Projekt';
+        const clientName = (invoice.projects && invoice.projects.clients) ? invoice.projects.clients.name : 'Unbekannter Kunde';
+
+        tr.innerHTML = `
+          <td><strong>${invoice.invoice_number}</strong></td>
+          <td>${projTitle}<br><small style="color:#777">${clientName}</small></td>
+          <td>${formattedAmount}</td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td>${date}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    // Formular abschicken
+    const invoiceForm = document.getElementById('invoiceForm');
+    if (invoiceForm) {
+      invoiceForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!currentUserId) return;
+
+        const newInvoice = {
+          user_id: currentUserId,
+          invoice_number: document.getElementById('invoiceNumber').value.trim(),
+          project_id: document.getElementById('invoiceProject').value,
+          amount: parseFloat(document.getElementById('invoiceAmount').value),
+          status: document.getElementById('invoiceStatus').value
+        };
+
+        const { error } = await supabase
+          .from('invoices')
+          .insert([newInvoice]);
+
+        if (error) {
+          alert('Fehler beim Erstellen der Rechnung: ' + error.message);
+        } else {
+          invoiceForm.reset();
+          fetchInvoices(); // Liste neu laden
+        }
+      });
+    }
   </script>
 </body>
 </html>
