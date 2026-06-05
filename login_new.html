@@ -1,1 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Bot Papa Freelancer CRM</title>
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: rgba(8, 13, 34, 0.95);
+      --header-top: #16161a;
+      --accent: #00e0ff;
+      --text: #f5f7ff;
+      --muted: #a3aac2;
+      --border: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: var(--header-top);
+      border-bottom: var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+    
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+    }
+    
+    .login-card {
+      background: var(--bg-card);
+      padding: 40px 30px;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      border: var(--border);
+      width: 100%;
+      max-width: 420px;
+    }
+    
+    .login-card h2 {
+      margin-bottom: 25px;
+      font-size: 22px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(5, 8, 22, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      color: var(--text);
+      font-size: 15px;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .login-btn {
+      width: 100%;
+      background: #16161a;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    
+    .login-btn:hover {
+      background: #232329;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .error-message {
+      color: #ff4a4a;
+      background: rgba(255, 74, 74, 0.1);
+      border: 1px solid rgba(255, 74, 74, 0.2);
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: none;
+      text-align: center;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bot Papa Freelancer CRM</h1>
+  </header>
+
+  <main>
+    <div class="login-card">
+      <h2>Mitarbeiter Login</h2>
+      
+      <div id="errorBox" class="error-message"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">E-Mail-Adresse</label>
+          <input type="email" id="email" required placeholder="name@beispiel.de" />
+        </div>
+        <div class="form-group">
+          <label for="password">Passwort</label>
+          <input type="password" id="password" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="login-btn">Einloggen</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
+  </footer>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      const loginForm = document.getElementById('loginForm');
+      const errorBox = document.getElementById('errorBox');
+
+      // Checken, ob bereits eingeloggt
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault(); // Verhindert das Neuladen der Seite radikal
+          errorBox.style.display = "none";
+
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+          if (error) {
+            errorBox.textContent = "Fehler: " + error.message;
+            errorBox.style.display = "block";
+          } else if (data && data.session) {
+            window.location.href = "index.html";
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
