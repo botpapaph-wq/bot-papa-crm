@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Bot Papa Freelancer CRM</title>
+  <title>Bot Papa Freelancer CRM – Projekte</title>
   <style>
     :root {
       --bg-main: #050816;
       --bg-card: rgba(8, 13, 34, 0.95);
       --header-top: #16161a;
+      --header-nav: #232329;
       --accent: #00e0ff;
       --text: #f5f7ff;
       --muted: #a3aac2;
@@ -17,190 +18,264 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%); 
+      color: var(--text); 
       min-height: 100vh;
     }
     
     header {
-      background: var(--header-top);
-      border-bottom: var(--border);
+      background: var(--header-top); 
+      border-bottom: var(--border); 
       padding: 14px 20px;
-      display: flex;
-      align-items: center;
+      display: flex; 
+      align-items: center; 
       justify-content: space-between;
     }
     header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
     
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 30px 20px;
-    }
+    .status-text { font-size: 14px; color: var(--text); display: flex; align-items: center; }
+    .status-badge-user { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 6px; display: inline-block; }
     
-    .login-card {
-      background: var(--bg-card);
-      padding: 40px 30px;
-      border-radius: 6px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      border: var(--border);
-      width: 100%;
-      max-width: 420px;
-    }
+    nav { background: var(--header-nav); border-bottom: var(--border); padding: 10px 20px; }
+    nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+    nav a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; display: inline-block; }
+    nav a:hover { color: var(--accent); }
+    nav a.btn-logout { color: #ff4a4a; font-weight: 600; }
+    nav a.btn-logout:hover { color: #ff6b6b; }
     
-    .login-card h2 {
-      margin-bottom: 25px;
-      font-size: 22px;
-      font-weight: 600;
-      text-align: center;
-      color: var(--text);
-    }
+    main { max-width: 1400px; margin: 30px auto; padding: 0 20px 40px; }
     
-    .form-group {
-      margin-bottom: 20px;
+    .card { 
+      background: var(--bg-card); 
+      border: var(--border); 
+      padding: 25px; 
+      border-radius: 6px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+      margin-bottom: 30px; 
     }
+    .card h2 { margin-bottom: 20px; font-size: 22px; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; color: var(--text); }
     
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
+    /* Kompaktes, vertikales Layout für das Formular */
+    .compact-form { display: flex; flex-direction: column; gap: 15px; max-width: 400px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .form-group input, .form-group select { 
+      width: 100%; 
+      background: rgba(5, 8, 22, 0.7); 
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      border-radius: 4px; 
+      color: var(--text); 
+      padding: 8px 12px; 
+      font-size: 14px; 
+      height: 42px; 
     }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
     
-    .form-group input {
-      width: 100%;
-      padding: 10px 12px;
-      background: rgba(5, 8, 22, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      color: var(--text);
-      font-size: 15px;
+    .btn-primary { 
+      background: #16161a; 
+      color: #fff; 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      padding: 10px 20px; 
+      font-size: 14px; 
+      font-weight: 600; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      height: 42px; 
+      align-self: flex-start; 
+      margin-top: 5px; 
+      transition: background 0.2s; 
     }
+    .btn-primary:hover { background: #232329; border-color: rgba(255, 255, 255, 0.4); }
     
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th, td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; }
+    th { background: rgba(255, 255, 255, 0.02); color: var(--muted); font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+    td strong { color: var(--text); }
     
-    .login-btn {
-      width: 100%;
-      background: #16161a;
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 12px;
-      border-radius: 4px;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 10px;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    
-    .login-btn:hover {
-      background: #232329;
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-    
-    .error-message {
-      color: #ff4a4a;
-      background: rgba(255, 74, 74, 0.1);
-      border: 1px solid rgba(255, 74, 74, 0.2);
-      padding: 10px;
-      border-radius: 4px;
-      font-size: 14px;
-      margin-bottom: 20px;
-      display: none;
-      text-align: center;
-    }
-    
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    .status-tag { padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; }
+    .status-active { background: #ccefd0; color: #2ea44f; }
+    .status-ended { background: rgba(255, 255, 255, 0.1); color: var(--muted); }
+
+    footer { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>Bot Papa Freelancer CRM</h1>
+    <h1>Bot Papa Freelancer CRM – Projekte</h1>
+    <div class="status-text" id="userInfo">Status: <span id="userEmail">Prüfe Login...</span></div>
   </header>
 
-  <main>
-    <div class="login-card">
-      <h2>Mitarbeiter Login</h2>
-      
-      <div id="errorBox" class="error-message"></div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+      <li><a href="#" id="logoutBtn" class="btn-logout">Logout</a></li>
+    </ul>
+  </nav>
 
-      <form id="loginForm">
+  <main>
+    <section class="card">
+      <h2>Neues Projekt anlegen</h2>
+      <form id="projectForm" class="compact-form">
         <div class="form-group">
-          <label for="email">E-Mail-Adresse</label>
-          <input type="email" id="email" required placeholder="name@beispiel.de" />
+          <label for="projectTitle">Projektname *</label>
+          <input type="text" id="projectTitle" placeholder="z.B. Website Relaunch" required />
         </div>
         <div class="form-group">
-          <label for="password">Passwort</label>
-          <input type="password" id="password" required placeholder="••••••••" />
+          <label for="projectClient">Zugehöriger Kunde *</label>
+          <select id="projectClient" required>
+            <option value="" disabled selected>Lade Kundendaten...</option>
+          </select>
         </div>
-        <button type="submit" class="login-btn">Einloggen</button>
+        <div class="form-group">
+          <label for="projectStatus">Status</label>
+          <select id="projectStatus">
+            <option value="aktiv" selected>Aktiv</option>
+            <option value="beendet">Beendet</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary">Projekt hinzufügen</button>
       </form>
-    </div>
+    </section>
+
+    <section class="card">
+      <h2>Projektliste</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Projekt</th>
+              <th>Kunde</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="projectTableBody">
+            <tr><td colspan="3" style="text-align: center; color: var(--muted);">Lade Projekte...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
-  </footer>
+  <footer>&copy; 2026 Bot Papa – Freelancer CRM</footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
+    
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
-
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentUserId = null;
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      document.getElementById('year').textContent = new Date().getFullYear();
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data?.session) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUserId = data.session.user.id;
+      document.getElementById('userEmail').innerHTML = `${data.session.user.email} <span class="status-badge-user">eingeloggt</span>`;
       
-      const loginForm = document.getElementById('loginForm');
-      const errorBox = document.getElementById('errorBox');
+      await loadKundenDropdown();
+      await loadProjekte();
+    }
 
-      // Checken, ob bereits eingeloggt
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        window.location.href = "index.html";
+    async function loadKundenDropdown() {
+      const select = document.getElementById('projectClient');
+      const { data: clients, error } = await supabase.from('clients').select('id, name').order('name', { ascending: true });
+      
+      if (error) {
+        select.innerHTML = '<option value="" disabled selected>❌ Fehler beim Laden</option>';
+        return;
+      }
+      
+      if (!clients || clients.length === 0) {
+        select.innerHTML = '<option value="" disabled selected>⚠️ Erst Kunden im Menü "Kunden" anlegen!</option>';
+        return;
+      }
+      
+      select.innerHTML = '<option value="" disabled selected>Bitte Kunden auswählen...</option>';
+      clients.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.id;
+        o.textContent = c.name;
+        select.appendChild(o);
+      });
+    }
+
+    async function loadProjekte() {
+      const tbody = document.getElementById('projectTableBody');
+      
+      const { data: projects, error: pError } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+      const { data: clients, error: cError } = await supabase.from('clients').select('id, name');
+      
+      if (pError) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #c62828;">Fehler beim Laden der Projekte</td></tr>';
         return;
       }
 
-      if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-          e.preventDefault(); // Verhindert das Neuladen der Seite radikal
-          errorBox.style.display = "none";
+      if (!projects || projects.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--muted);">Noch keine Projekte angelegt.</td></tr>';
+        return;
+      }
 
-          const email = document.getElementById('email').value.trim();
-          const password = document.getElementById('password').value;
+      tbody.innerHTML = '';
+      projects.forEach(p => {
+        const tr = document.createElement('tr');
+        const client = clients ? clients.find(c => c.id === p.client_id) : null;
+        const clientName = client ? client.name : 'Unbekannter Kunde';
+        const bClass = p.status === 'aktiv' ? 'status-active' : 'status-ended';
+        const bText = p.status === 'aktiv' ? 'Aktiv' : 'Beendet';
 
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
+        tr.innerHTML = `
+          <td><strong>${p.title || 'Ohne Titel'}</strong></td>
+          <td>${clientName}</td>
+          <td><span class="status-tag ${bClass}">${bText}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
 
-          if (error) {
-            errorBox.textContent = "Fehler: " + error.message;
-            errorBox.style.display = "block";
-          } else if (data && data.session) {
-            window.location.href = "index.html";
-          }
-        });
+    document.getElementById('projectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('projectTitle').value.trim();
+      const clientId = document.getElementById('projectClient').value;
+      const status = document.getElementById('projectStatus').value;
+
+      if (!clientId) {
+        alert('Bitte wähle einen Kunden aus.');
+        return;
+      }
+
+      const { error } = await supabase.from('projects').insert([{
+        user_id: currentUserId,
+        title: title,
+        client_id: clientId,
+        status: status
+      }]);
+
+      if (error) {
+        alert('Fehler beim Speichern: ' + error.message);
+      } else {
+        document.getElementById('projectForm').reset();
+        loadKundenDropdown();
+        loadProjekte();
       }
     });
+
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    checkAuthAndLoad();
   </script>
 </body>
 </html>
