@@ -1,172 +1,167 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bot Papa Freelancer CRM – Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – BOT PAPA CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-main: #050816;
-      --bg-card: rgba(8, 13, 34, 0.95);
-      --header-top: #16161a;
-      --header-nav: #232329;
-      --accent: #00e0ff;
-      --text: #f5f7ff;
-      --muted: #a3aac2;
-      --border: 1px solid rgba(255, 255, 255, 0.08);
-      --success: #28a745;
-      --success-bg: #218838;
+      --bg: #050816; --bg-soft: #0b1020; --bg-card: #0d1428; --bg-input: #0a1230;
+      --accent: #00e0ff; --accent-soft: rgba(0,224,255,0.08); --accent2: #7b3fff;
+      --text: #f5f7ff; --muted: #a3aac2; --danger: #ff4757; --success: #00c896; --warning: #ffb300;
+      --border: rgba(255,255,255,0.07); --border-accent: rgba(0,224,255,0.2);
+      --radius: 12px; --radius-sm: 8px;
+      --font-head: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(5,8,22,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-brand-icon { width: 32px; height: 32px; background: var(--accent-soft); border: 1px solid var(--border-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .nav-brand-text { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--text); }
+    .nav-brand-text span { color: var(--accent); }
+    .nav-links { display: flex; gap: 4px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: all 0.2s; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-links a.active { color: var(--accent); background: var(--accent-soft); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .user-badge { font-size: 12px; color: var(--muted); background: var(--accent-soft); border: 1px solid var(--border-accent); padding: 4px 10px; border-radius: 999px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .user-badge span { color: var(--accent); font-weight: 600; }
+    .btn-logout { background: rgba(255,71,87,0.12); border: 1px solid rgba(255,71,87,0.25); color: var(--danger); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { background: rgba(255,71,87,0.2); }
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    main { max-width: 1200px; margin: 0 auto; padding: 32px 5vw 60px; }
 
-    /* Top Header Bar */
-    .header-top-bar {
-      background: var(--header-top);
-      border-bottom: var(--border);
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-family: var(--font-head); font-size: 24px; font-weight: 800; }
+    .page-header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 
-    .crm-brand {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; transition: border-color 0.25s, transform 0.25s; }
+    .stat-card:hover { border-color: var(--border-accent); transform: translateY(-2px); }
+    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .stat-value { font-family: var(--font-head); font-size: 30px; font-weight: 800; }
+    .stat-value.success { color: var(--success); }
+    .stat-value.danger { color: var(--danger); }
+    .stat-value.accent { color: var(--accent); }
 
-    .status-area {
-      font-size: 14px;
-      color: var(--text);
-    }
+    .quick-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .quick-link { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 14px; transition: all 0.2s; }
+    .quick-link:hover { border-color: var(--border-accent); transform: translateY(-2px); }
+    .quick-link-icon { width: 40px; height: 40px; background: var(--accent-soft); border: 1px solid var(--border-accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .quick-link-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; }
+    .quick-link-sub { font-size: 12px; color: var(--muted); }
 
-    .status-badge {
-      background: #2ea44f;
-      color: #fff;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      margin-left: 6px;
-      display: inline-block;
-    }
+    .section-title { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; margin-top: 32px; display: flex; align-items: center; gap: 10px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* Nav Bar */
-    .header-nav-bar {
-      background: var(--header-nav);
-      border-bottom: var(--border);
-      padding: 10px 20px;
-      display: flex;
-      gap: 20px;
-    }
+    footer { border-top: 1px solid var(--border); padding: 20px 5vw; text-align: center; color: var(--muted); font-size: 12px; }
 
-    .header-nav-bar a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    .header-nav-bar a.logout-btn {
-      color: #ff4a4a;
-    }
-
-    /* Main Content Grid */
-    .main-container {
-      max-width: 1400px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 40px 20px;
-      flex: 1;
-    }
-
-    .dashboard-grid {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .dashboard-box {
-      flex: 1;
-      min-width: 240px;
-      background: var(--bg-card);
-      border: var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .box-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .box-value {
-      font-size: 32px;
-      font-weight: 700;
-    }
-
-    .dashboard-box:nth-child(1) .box-value { color: var(--text); }
-    .dashboard-box:nth-child(2) .box-value { color: #ff9f43; } /* Offener Betrag */
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    @media (max-width: 768px) { .nav-links { display: none; } .stats-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
 
-  <div class="header-top-bar">
-    <div class="crm-brand">Bot Papa Freelancer CRM – Dashboard</div>
-    <div class="status-area">Status: bodo@bot-papa.online <span class="status-badge">eingeloggt</span></div>
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🤖</div>
+    <span class="nav-brand-text">BOT <span>PAPA</span> CRM</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Dashboard</a></li>
+    <li><a href="clients.html">Kunden</a></li>
+    <li><a href="projects.html">Projekte</a></li>
+    <li><a href="invoices.html">Rechnungen</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="user-badge" id="userInfo">Prüfe Login…</div>
+    <button id="logoutBtn" class="btn-logout">Logout</button>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <p>Dein Überblick — Umsatz, Projekte und Kunden auf einen Blick.</p>
   </div>
 
-  <div class="header-nav-bar">
-    <a href="index.html">Dashboard</a>
-    <a href="clients.html">Kunden</a>
-    <a href="projects.html">Projekte</a>
-    <a href="invoices.html">Rechnungen</a>
-    <a href="logout.html" class="logout-btn">Logout</a>
-  </div>
-
-  <div class="main-container">
-    <div class="dashboard-grid">
-      <div class="dashboard-box">
-        <div class="box-label">Umsatz (Bezahlt)</div>
-        <div class="box-value">3.978,63 €</div>
-      </div>
-      <div class="dashboard-box">
-        <div class="box-label">Offene Beträge</div>
-        <div class="box-value">1.032,85 €</div>
-      </div>
-      <div class="dashboard-box">
-        <div class="box-label">Aktive Projekte</div>
-        <div class="box-value">3</div>
-      </div>
-      <div class="dashboard-box">
-        <div class="box-label">Kunden</div>
-        <div class="box-value">3</div>
-      </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Umsatz bezahlt</div>
+      <div class="stat-value success" id="statPaid">…</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Offene Beträge</div>
+      <div class="stat-value danger" id="statOpen">…</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Aktive Projekte</div>
+      <div class="stat-value accent" id="statProjects">…</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Kunden</div>
+      <div class="stat-value" id="statClients">…</div>
     </div>
   </div>
 
-  <footer>© 2026 Bot Papa – Freelancer CRM</footer>
+  <div class="section-title">Schnellzugriff</div>
+  <div class="quick-links">
+    <a href="clients.html" class="quick-link">
+      <div class="quick-link-icon">👥</div>
+      <div><div class="quick-link-title">Kunden</div><div class="quick-link-sub">Anlegen & verwalten</div></div>
+    </a>
+    <a href="projects.html" class="quick-link">
+      <div class="quick-link-icon">📁</div>
+      <div><div class="quick-link-title">Projekte</div><div class="quick-link-sub">Status & Zuordnung</div></div>
+    </a>
+    <a href="invoices.html" class="quick-link">
+      <div class="quick-link-icon">🧾</div>
+      <div><div class="quick-link-title">Rechnungen</div><div class="quick-link-sub">Offen & bezahlt</div></div>
+    </a>
+  </div>
+</main>
 
+<footer>© 2026 BOT PAPA – crm.bot-papa.online</footer>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function checkAuthAndLoad() {
+    const { data, error } = await supabase.auth.getSession();
+    if (error || !data?.session) { window.location.href = 'login.html'; return; }
+    document.getElementById('userInfo').innerHTML = '<span>' + data.session.user.email + '</span>';
+    loadLiveStats();
+  }
+
+  async function loadLiveStats() {
+    const { data: clients } = await supabase.from('clients').select('id');
+    document.getElementById('statClients').textContent = clients ? clients.length : 0;
+    const { data: projects } = await supabase.from('projects').select('id');
+    document.getElementById('statProjects').textContent = projects ? projects.length : 0;
+    const { data: invoices } = await supabase.from('invoices').select('amount, status');
+    let paidSum = 0, openSum = 0;
+    if (invoices) invoices.forEach(inv => {
+      if (inv.status === 'bezahlt') paidSum += Number(inv.amount);
+      else openSum += Number(inv.amount);
+    });
+    const fmt = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
+    document.getElementById('statPaid').textContent = fmt.format(paidSum);
+    document.getElementById('statOpen').textContent = fmt.format(openSum);
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+  });
+
+  checkAuthAndLoad();
+</script>
 </body>
 </html>
