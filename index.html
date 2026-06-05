@@ -6,7 +6,7 @@
   <title>Dashboard – BOT PAPA CRM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #050816; --bg-soft: #0b1020; --bg-card: #0d1428; --bg-input: #0a1230;
@@ -16,67 +16,320 @@
       --radius: 12px; --radius-sm: 8px;
       --font-head: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    nav { position: sticky; top: 0; z-index: 100; background: rgba(5,8,22,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-brand-icon { width: 32px; height: 32px; background: var(--accent-soft); border: 1px solid var(--border-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-    .nav-brand-text { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--text); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5,8,22,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .nav-brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      flex-shrink: 0;
+    }
+
+    .nav-brand-logo {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-brand-text {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--text);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
     .nav-brand-text span { color: var(--accent); }
-    .nav-links { display: flex; gap: 4px; list-style: none; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: all 0.2s; }
-    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
-    .nav-links a.active { color: var(--accent); background: var(--accent-soft); }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
-    .user-badge { font-size: 12px; color: var(--muted); background: var(--accent-soft); border: 1px solid var(--border-accent); padding: 4px 10px; border-radius: 999px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .user-badge span { color: var(--accent); font-weight: 600; }
-    .btn-logout { background: rgba(255,71,87,0.12); border: 1px solid rgba(255,71,87,0.25); color: var(--danger); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-    .btn-logout:hover { background: rgba(255,71,87,0.2); }
 
-    main { max-width: 1200px; margin: 0 auto; padding: 32px 5vw 60px; }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav-links a.active {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-badge {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--accent-soft);
+      border: 1px solid var(--border-accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-badge span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .btn-logout {
+      background: rgba(255,71,87,0.12);
+      border: 1px solid rgba(255,71,87,0.25);
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255,71,87,0.2);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 5vw 60px;
+    }
 
     .page-header { margin-bottom: 28px; }
-    .page-header h1 { font-family: var(--font-head); font-size: 24px; font-weight: 800; }
-    .page-header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
-    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; transition: border-color 0.25s, transform 0.25s; }
-    .stat-card:hover { border-color: var(--border-accent); transform: translateY(-2px); }
-    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .stat-value { font-family: var(--font-head); font-size: 30px; font-weight: 800; }
+    .page-header h1 {
+      font-family: var(--font-head);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-family: var(--font-head);
+      font-size: clamp(28px, 2.2vw, 30px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    /* Nur für Geldbeträge */
+    .stat-card--money .stat-value {
+      font-family: var(--font-body);
+      font-size: clamp(22px, 1.8vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-variant-numeric: tabular-nums lining-nums;
+      font-feature-settings: "tnum" 1, "lnum" 1;
+    }
+
     .stat-value.success { color: var(--success); }
     .stat-value.danger { color: var(--danger); }
     .stat-value.accent { color: var(--accent); }
 
-    .quick-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
-    .quick-link { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 14px; transition: all 0.2s; }
-    .quick-link:hover { border-color: var(--border-accent); transform: translateY(-2px); }
-    .quick-link-icon { width: 40px; height: 40px; background: var(--accent-soft); border: 1px solid var(--border-accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-    .quick-link-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; }
-    .quick-link-sub { font-size: 12px; color: var(--muted); }
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
 
-    .section-title { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; margin-top: 32px; display: flex; align-items: center; gap: 10px; }
-    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .quick-link {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s;
+    }
 
-    footer { border-top: 1px solid var(--border); padding: 20px 5vw; text-align: center; color: var(--muted); font-size: 12px; }
+    .quick-link:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+    }
 
-    @media (max-width: 768px) { .nav-links { display: none; } .stats-grid { grid-template-columns: 1fr 1fr; } }
+    .quick-link-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-soft);
+      border: 1px solid var(--border-accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .quick-link-title {
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .quick-link-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 5vw;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .nav-brand-text { display: none; }
+      .nav-brand-logo { height: 24px; }
+    }
+
+    @media (max-width: 560px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .user-badge { display: none; }
+    }
   </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="nav-brand">
-    <div class="nav-brand-icon">🤖</div>
-    <span class="nav-brand-text">BOT <span>PAPA</span> CRM</span>
+    <div class="nav-brand-logo-wrap">
+      <img
+        src="https://www.genspark.ai/api/files/s/iosAIsCv"
+        alt="BOT PAPA Logo"
+        class="nav-brand-logo"
+      />
+    </div>
+    <span class="nav-brand-text">CRM</span>
   </a>
+
   <ul class="nav-links">
     <li><a href="index.html" class="active">Dashboard</a></li>
     <li><a href="clients.html">Kunden</a></li>
     <li><a href="projects.html">Projekte</a></li>
     <li><a href="invoices.html">Rechnungen</a></li>
   </ul>
+
   <div class="nav-right">
     <div class="user-badge" id="userInfo">Prüfe Login…</div>
     <button id="logoutBtn" class="btn-logout">Logout</button>
@@ -90,18 +343,21 @@
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card">
+    <div class="stat-card stat-card--money">
       <div class="stat-label">Umsatz bezahlt</div>
       <div class="stat-value success" id="statPaid">…</div>
     </div>
-    <div class="stat-card">
+
+    <div class="stat-card stat-card--money">
       <div class="stat-label">Offene Beträge</div>
       <div class="stat-value danger" id="statOpen">…</div>
     </div>
+
     <div class="stat-card">
       <div class="stat-label">Aktive Projekte</div>
       <div class="stat-value accent" id="statProjects">…</div>
     </div>
+
     <div class="stat-card">
       <div class="stat-label">Kunden</div>
       <div class="stat-value" id="statClients">…</div>
@@ -130,28 +386,48 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
   const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+  const SUPABASE_ANON_KEY = 'DEIN_KEY_BLEIBT_HIER_UNVERÄNDERT';
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   async function checkAuthAndLoad() {
     const { data, error } = await supabase.auth.getSession();
-    if (error || !data?.session) { window.location.href = 'login.html'; return; }
-    document.getElementById('userInfo').innerHTML = '<span>' + data.session.user.email + '</span>';
+    if (error || !data?.session) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    document.getElementById('userInfo').innerHTML =
+      '<span>' + data.session.user.email + '</span>';
+
     loadLiveStats();
   }
 
   async function loadLiveStats() {
     const { data: clients } = await supabase.from('clients').select('id');
     document.getElementById('statClients').textContent = clients ? clients.length : 0;
+
     const { data: projects } = await supabase.from('projects').select('id');
     document.getElementById('statProjects').textContent = projects ? projects.length : 0;
+
     const { data: invoices } = await supabase.from('invoices').select('amount, status');
+
     let paidSum = 0, openSum = 0;
-    if (invoices) invoices.forEach(inv => {
-      if (inv.status === 'bezahlt') paidSum += Number(inv.amount);
-      else openSum += Number(inv.amount);
+
+    if (invoices) {
+      invoices.forEach(inv => {
+        const amount = Number(inv.amount) || 0;
+        if (inv.status === 'bezahlt') paidSum += amount;
+        else openSum += amount;
+      });
+    }
+
+    const fmt = new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
-    const fmt = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
+
     document.getElementById('statPaid').textContent = fmt.format(paidSum);
     document.getElementById('statOpen').textContent = fmt.format(openSum);
   }
