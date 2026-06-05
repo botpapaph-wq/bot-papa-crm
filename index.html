@@ -6,7 +6,7 @@
   <title>Dashboard – BOT PAPA CRM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #050816; --bg-soft: #0b1020; --bg-card: #0d1428; --bg-input: #0a1230;
@@ -40,32 +40,23 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
+      height: 60px;
     }
 
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
       min-width: 0;
     }
 
-    .nav-brand-logo-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 10px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-      flex-shrink: 0;
-    }
-
     .nav-brand-logo {
-      height: 28px;
+      height: 32px;
       width: auto;
       display: block;
+      flex-shrink: 0;
+      object-fit: contain;
     }
 
     .nav-brand-text {
@@ -73,7 +64,6 @@
       font-weight: 800;
       font-size: 15px;
       color: var(--text);
-      letter-spacing: 0.03em;
       white-space: nowrap;
     }
 
@@ -141,9 +131,7 @@
       transition: all 0.2s;
     }
 
-    .btn-logout:hover {
-      background: rgba(255,71,87,0.2);
-    }
+    .btn-logout:hover { background: rgba(255,71,87,0.2); }
 
     main {
       max-width: 1200px;
@@ -167,7 +155,7 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 28px;
     }
@@ -196,21 +184,18 @@
 
     .stat-value {
       font-family: var(--font-head);
-      font-size: clamp(28px, 2.2vw, 30px);
+      font-size: 30px;
       font-weight: 800;
       line-height: 1.05;
-      letter-spacing: -0.02em;
     }
 
-    /* Nur für Geldbeträge */
     .stat-card--money .stat-value {
       font-family: var(--font-body);
-      font-size: clamp(22px, 1.8vw, 28px);
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: -0.01em;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       font-variant-numeric: tabular-nums lining-nums;
       font-feature-settings: "tnum" 1, "lnum" 1;
     }
@@ -299,13 +284,7 @@
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
-      .nav-brand-text { display: none; }
-      .nav-brand-logo { height: 24px; }
-    }
-
-    @media (max-width: 560px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .user-badge { display: none; }
+      .nav-brand-logo { height: 28px; }
     }
   </style>
 </head>
@@ -313,23 +292,15 @@
 
 <nav>
   <a href="index.html" class="nav-brand">
-    <div class="nav-brand-logo-wrap">
-      <img
-        src="https://www.genspark.ai/api/files/s/iosAIsCv"
-        alt="BOT PAPA Logo"
-        class="nav-brand-logo"
-      />
-    </div>
-    <span class="nav-brand-text">CRM</span>
+    <img src="https://www.genspark.ai/api/files/s/iosAIsCv" alt="BOT PAPA Logo" class="nav-brand-logo" />
+    <span class="nav-brand-text">BOT <span>PAPA</span> CRM</span>
   </a>
-
   <ul class="nav-links">
     <li><a href="index.html" class="active">Dashboard</a></li>
     <li><a href="clients.html">Kunden</a></li>
     <li><a href="projects.html">Projekte</a></li>
     <li><a href="invoices.html">Rechnungen</a></li>
   </ul>
-
   <div class="nav-right">
     <div class="user-badge" id="userInfo">Prüfe Login…</div>
     <button id="logoutBtn" class="btn-logout">Logout</button>
@@ -347,17 +318,14 @@
       <div class="stat-label">Umsatz bezahlt</div>
       <div class="stat-value success" id="statPaid">…</div>
     </div>
-
     <div class="stat-card stat-card--money">
       <div class="stat-label">Offene Beträge</div>
       <div class="stat-value danger" id="statOpen">…</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Aktive Projekte</div>
       <div class="stat-value accent" id="statProjects">…</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Kunden</div>
       <div class="stat-value" id="statClients">…</div>
@@ -386,19 +354,13 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
   const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-  const SUPABASE_ANON_KEY = 'DEIN_KEY_BLEIBT_HIER_UNVERÄNDERT';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   async function checkAuthAndLoad() {
     const { data, error } = await supabase.auth.getSession();
-    if (error || !data?.session) {
-      window.location.href = 'login.html';
-      return;
-    }
-
-    document.getElementById('userInfo').innerHTML =
-      '<span>' + data.session.user.email + '</span>';
-
+    if (error || !data?.session) { window.location.href = 'login.html'; return; }
+    document.getElementById('userInfo').innerHTML = '<span>' + data.session.user.email + '</span>';
     loadLiveStats();
   }
 
@@ -410,24 +372,14 @@
     document.getElementById('statProjects').textContent = projects ? projects.length : 0;
 
     const { data: invoices } = await supabase.from('invoices').select('amount, status');
-
     let paidSum = 0, openSum = 0;
 
-    if (invoices) {
-      invoices.forEach(inv => {
-        const amount = Number(inv.amount) || 0;
-        if (inv.status === 'bezahlt') paidSum += amount;
-        else openSum += amount;
-      });
-    }
-
-    const fmt = new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+    if (invoices) invoices.forEach(inv => {
+      if (inv.status === 'bezahlt') paidSum += Number(inv.amount);
+      else openSum += Number(inv.amount);
     });
 
+    const fmt = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
     document.getElementById('statPaid').textContent = fmt.format(paidSum);
     document.getElementById('statOpen').textContent = fmt.format(openSum);
   }
