@@ -5,47 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bot Papa Freelancer CRM – Projekte</title>
   <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: rgba(8, 13, 34, 0.95);
+      --header-top: #16161a;
+      --header-nav: #232329;
+      --accent: #00e0ff;
+      --text: #f5f7ff;
+      --muted: #a3aac2;
+      --border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+    
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%); 
+      color: var(--text); 
+      min-height: 100vh;
+    }
     
     header {
-      background: #222; color: #fff; padding: 0.5rem 2rem;
-      display: flex; align-items: center; justify-content: space-between;
+      background: var(--header-top); 
+      border-bottom: var(--border); 
+      padding: 14px 20px;
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
     }
-    header h1 { font-size: 1.1rem; }
-    .status-badge-user { background: #2e7d32; color: #fff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem; }
-    .status-text { font-size: 0.85rem; color: #ddd; display: flex; align-items: center; }
+    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
     
-    nav { background: #333; padding: 0.5rem 1.5rem; }
-    nav ul { list-style: none; display: flex; gap: 0.5rem; align-items: center; }
-    nav a { color: #fff; text-decoration: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.95rem; display: inline-block; }
-    nav a:hover { background: #444; }
-    nav a.btn-logout { background: #c62828; }
-    nav a.btn-logout:hover { background: #b71c1c; }
+    .status-text { font-size: 14px; color: var(--text); display: flex; align-items: center; }
+    .status-badge-user { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 6px; display: inline-block; }
     
-    main { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem 2rem; }
-    .card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
-    .card h2 { margin-bottom: 1.2rem; font-size: 1.2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+    nav { background: var(--header-nav); border-bottom: var(--border); padding: 10px 20px; }
+    nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+    nav a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; display: inline-block; }
+    nav a:hover { color: var(--accent); }
+    nav a.btn-logout { color: #ff4a4a; font-weight: 600; }
+    nav a.btn-logout:hover { color: #ff6b6b; }
     
-    /* Kompaktes, vertikales Studio-Layout für das Formular */
-    .compact-form { display: flex; flex-direction: column; gap: 1.2rem; max-width: 450px; }
-    .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
-    .form-group label { font-size: 0.85rem; font-weight: bold; color: #444; }
-    .form-group input, .form-group select { padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background: #fff; width: 100%; height: 42px; }
+    main { max-width: 1400px; margin: 30px auto; padding: 0 20px 40px; }
     
-    .btn-primary { background: #222; color: #fff; padding: 0.5rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.95rem; height: 42px; align-self: flex-start; margin-top: 0.5rem; transition: background 0.2s; }
-    .btn-primary:hover { background: #444; }
+    .card { 
+      background: var(--bg-card); 
+      border: var(--border); 
+      padding: 25px; 
+      border-radius: 6px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+      margin-bottom: 30px; 
+    }
+    .card h2 { margin-bottom: 20px; font-size: 22px; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; color: var(--text); }
     
-    .table-container { overflow-x: auto; margin-top: 1rem; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-    th, td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
-    th { background: #fafafa; color: #666; font-weight: bold; }
+    /* Kompaktes, vertikales Layout für das Formular */
+    .compact-form { display: flex; flex-direction: column; gap: 15px; max-width: 400px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .form-group input, .form-group select { 
+      width: 100%; 
+      background: rgba(5, 8, 22, 0.7); 
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      border-radius: 4px; 
+      color: var(--text); 
+      padding: 8px 12px; 
+      font-size: 14px; 
+      height: 42px; 
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
     
-    .status-tag { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-    .status-active { background: #e8f5e9; color: #2e7d32; }
-    .status-ended { background: #eceff1; color: #455a64; }
+    .btn-primary { 
+      background: #16161a; 
+      color: #fff; 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      padding: 10px 20px; 
+      font-size: 14px; 
+      font-weight: 600; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      height: 42px; 
+      align-self: flex-start; 
+      margin-top: 5px; 
+      transition: background 0.2s; 
+    }
+    .btn-primary:hover { background: #232329; border-color: rgba(255, 255, 255, 0.4); }
+    
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th, td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; }
+    th { background: rgba(255, 255, 255, 0.02); color: var(--muted); font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+    td strong { color: var(--text); }
+    
+    .status-tag { padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; }
+    .status-active { background: #ccefd0; color: #2ea44f; }
+    .status-ended { background: rgba(255, 255, 255, 0.1); color: var(--muted); }
 
-    footer { text-align: center; padding: 1.5rem; color: #777; font-size: 0.85rem; }
+    footer { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
@@ -101,7 +155,7 @@
             </tr>
           </thead>
           <tbody id="projectTableBody">
-            <tr><td colspan="3" style="text-align: center; color: #777;">Lade Projekte...</td></tr>
+            <tr><td colspan="3" style="text-align: center; color: var(--muted);">Lade Projekte...</td></tr>
           </tbody>
         </table>
       </div>
@@ -167,7 +221,7 @@
       }
 
       if (!projects || projects.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #777;">Noch keine Projekte angelegt.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--muted);">Noch keine Projekte angelegt.</td></tr>';
         return;
       }
 
