@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bot Papa Freelancer CRM – Rechnungen</title>
   <style>
     :root {
@@ -14,165 +14,284 @@
       --text: #f5f7ff;
       --muted: #a3aac2;
       --border: 1px solid rgba(255, 255, 255, 0.08);
-      --success-badge: #2ea44f;
-      --warning-badge: #ff9f43;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
-      color: var(--text);
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%); 
+      color: var(--text); 
       min-height: 100vh;
     }
-
-    .header-top-bar { background: var(--header-top); border-bottom: var(--border); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .crm-brand { font-size: 20px; font-weight: 700; }
-    .status-area { font-size: 14px; color: var(--text); }
-    .status-badge { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-left: 6px; display: inline-block; }
     
-    .header-nav-bar { background: var(--header-nav); border-bottom: var(--border); padding: 10px 20px; display: flex; gap: 20px; }
-    .header-nav-bar a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; }
-    .header-nav-bar a.logout-btn { color: #ff4a4a; }
-
-    .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
-
-    .section-block {
-      background: var(--bg-card);
-      border: var(--border);
-      border-radius: 6px;
-      padding: 25px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    header {
+      background: var(--header-top); 
+      border-bottom: var(--border); 
+      padding: 14px 20px;
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
     }
-
-    .section-title { font-size: 22px; font-weight: 600; margin-bottom: 20px; }
-
-    .form-group-stack {
-      margin-bottom: 15px;
-      max-width: 400px; /* Behält die kompakte Breite des Original-Formulars bei */
+    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+    
+    .status-text { font-size: 14px; color: var(--text); display: flex; align-items: center; }
+    .status-badge-user { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 6px; display: inline-block; }
+    
+    nav { background: var(--header-nav); border-bottom: var(--border); padding: 10px 20px; }
+    nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+    nav a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; display: inline-block; }
+    nav a:hover { color: var(--accent); }
+    nav a.btn-logout { color: #ff4a4a; font-weight: 600; }
+    nav a.btn-logout:hover { color: #ff6b6b; }
+    
+    main { max-width: 1400px; margin: 30px auto; padding: 0 20px 40px; }
+    
+    .card { 
+      background: var(--bg-card); 
+      border: var(--border); 
+      padding: 25px; 
+      border-radius: 6px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+      margin-bottom: 30px; 
     }
-
-    label { display: block; font-size: 14px; margin-bottom: 6px; color: var(--text); }
-
-    input[type="text"], select {
-      width: 100%;
-      background: rgba(5, 8, 22, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      color: var(--text);
-      padding: 8px 12px;
-      font-size: 14px;
+    .card h2 { margin-bottom: 20px; font-size: 22px; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; color: var(--text); }
+    
+    /* Kompaktes, vertikales Layout für das Formular */
+    .compact-form { display: flex; flex-direction: column; gap: 15px; max-width: 400px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .form-group input, .form-group select { 
+      width: 100%; 
+      background: rgba(5, 8, 22, 0.7); 
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      border-radius: 4px; 
+      color: var(--text); 
+      padding: 8px 12px; 
+      font-size: 14px; 
+      height: 42px; 
     }
-
-    input:focus, select:focus { outline: none; border-color: var(--accent); }
-
-    .submit-btn {
-      background: #16161a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 5px;
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
+    
+    .btn-primary { 
+      background: #16161a; 
+      color: #fff; 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      padding: 10px 20px; 
+      font-size: 14px; 
+      font-weight: 600; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      height: 42px; 
+      align-self: flex-start; 
+      margin-top: 5px; 
+      transition: background 0.2s; 
     }
-
-    table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 15px; }
-    th { padding: 12px; color: var(--muted); font-size: 14px; border-bottom: 2px solid rgba(255, 255, 255, 0.1); font-weight: 600; }
-    td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; vertical-align: middle; }
-
-    .sub-company { color: var(--muted); font-size: 12px; margin-top: 2px; }
-
-    /* Flache Status-Badges wie im Original */
-    .status-badge-flat {
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 600;
-      display: inline-block;
-    }
-    .status-badge-flat.offen { background: #ffeacc; color: #ff9f43; }
-    .status-badge-flat.bezahlt { background: #ccefd0; color: #2ea44f; }
+    .btn-primary:hover { background: #232329; border-color: rgba(255, 255, 255, 0.4); }
+    
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th, td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; }
+    th { background: rgba(255, 255, 255, 0.02); color: var(--muted); font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+    td strong { color: var(--text); }
+    
+    .status-tag { padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; }
+    .status-open { background: #ffeacc; color: #ff9f43; }
+    .status-paid { background: #ccefd0; color: #2ea44f; }
 
     footer { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Bot Papa Freelancer CRM – Rechnungen</h1>
+    <div class="status-text" id="userInfo">Status: <span id="userEmail">Prüfe Login...</span></div>
+  </header>
 
-  <div class="header-top-bar">
-    <div class="crm-brand">Bot Papa Freelancer CRM – Rechnungen</div>
-    <div class="status-area">Status: bodo@bot-papa.online <span class="status-badge">eingeloggt</span></div>
-  </div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+      <li><a href="#" id="logoutBtn" class="btn-logout">Logout</a></li>
+    </ul>
+  </nav>
 
-  <div class="header-nav-bar">
-    <a href="index.html">Dashboard</a>
-    <a href="clients.html">Kunden</a>
-    <a href="projects.html">Projekte</a>
-    <a href="invoices.html">Rechnungen</a>
-    <a href="logout.html" class="logout-btn">Logout</a>
-  </div>
-
-  <div class="main-container">
-
-    <!-- Rechnung erstellen Maske -->
-    <div class="section-block">
-      <form action="#" method="POST">
-        <div class="form-group-stack">
-          <label>Bitte Projekt auswählen...</label>
-          <select><option>Bitte Projekt auswählen...</option></select>
+  <main>
+    <section class="card">
+      <h2>Neue Rechnung erstellen</h2>
+      <form id="invoiceForm" class="compact-form">
+        <div class="form-group">
+          <label for="invoiceNumber">Rechnungsnummer *</label>
+          <input type="text" id="invoiceNumber" placeholder="z.B. RE-2026-001" required />
         </div>
-        <div class="form-group-stack">
-          <label>Betrag (in €) *</label>
-          <input type="text" value="0.00" required>
-        </div>
-        <div class="form-group-stack">
-          <label>Status</label>
-          <select>
-            <option selected>Offen</option>
-            <option>Bezahlt</option>
+        <div class="form-group">
+          <label for="invoiceProject">Zugehöriges Projekt *</label>
+          <select id="invoiceProject" required>
+            <option value="" disabled selected>Lade Projektdaten...</option>
           </select>
         </div>
-        <button type="submit" class="submit-btn">Rechnung speichern</button>
+        <div class="form-group">
+          <label for="invoiceAmount">Betrag (in €) *</label>
+          <input type="number" step="0.01" id="invoiceAmount" placeholder="0.00" required />
+        </div>
+        <div class="form-group">
+          <label for="invoiceStatus">Status</label>
+          <select id="invoiceStatus">
+            <option value="offen" selected>Offen</option>
+            <option value="bezahlt">Bezahlt</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary">Rechnung speichern</button>
       </form>
-    </div>
+    </section>
 
-    <!-- Rechnungsübersicht -->
-    <div class="section-block">
-      <h2 class="section-title">Rechnungsübersicht</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Rechnungsnummer</th>
-            <th>Projekt / Kunde</th>
-            <th>Betrag</th>
-            <th>Status</th>
-            <th>Erstellt am</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>RE-2026-005</strong></td>
-            <td>Freie Mitarbeit als technischer Support und Placetel AI Entwickler<div class="sub-company">Mentor GmbH</div></td>
-            <td><strong>1.032,85 €</strong></td>
-            <td><span class="status-badge-flat offen">Offen</span></td>
-            <td>30.5.2026</td>
-          </tr>
-          <tr>
-            <td><strong>RE-2026-004</strong></td>
-            <td>Freie Mitarbeit als technischer Support und Placetel AI Entwickler<div class="sub-company">Mentor GmbH</div></td>
-            <td><strong>813,63 €</strong></td>
-            <td><span class="status-badge-flat bezahlt">Bezahlt</span></td>
-            <td>1.5.2026</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <section class="card">
+      <h2>Rechnungsübersicht</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Rechnungsnummer</th>
+              <th>Projekt / Kunde</th>
+              <th>Betrag</th>
+              <th>Status</th>
+              <th>Erstellt am</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTableBody">
+            <tr><td colspan="5" style="text-align: center; color: var(--muted);">Lade Rechnungen...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
-  </div>
+  <footer>&copy; 2026 Bot Papa – Freelancer CRM</footer>
 
-  <footer>© 2026 Bot Papa – Freelancer CRM</footer>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentUserId = null;
+
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data?.session) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUserId = data.session.user.id;
+      document.getElementById('userEmail').innerHTML = `${data.session.user.email} <span class="status-badge-user">eingeloggt</span>`;
+      
+      await loadProjekteDropdown();
+      await loadRechnungen();
+    }
+
+    async function loadProjekteDropdown() {
+      const select = document.getElementById('invoiceProject');
+      const { data: projects, error } = await supabase.from('projects').select('id, title').order('title', { ascending: true });
+      
+      if (error) {
+        select.innerHTML = '<option value="" disabled selected>❌ Fehler beim Laden</option>';
+        return;
+      }
+      
+      if (!projects || projects.length === 0) {
+        select.innerHTML = '<option value="" disabled selected>⚠️ Erst Projekte im Menü "Projekte" anlegen!</option>';
+        return;
+      }
+      
+      select.innerHTML = '<option value="" disabled selected>Bitte Projekt auswählen...</option>';
+      projects.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.id;
+        o.textContent = p.title;
+        select.appendChild(o);
+      });
+    }
+
+    async function loadRechnungen() {
+      const tbody = document.getElementById('invoiceTableBody');
+      
+      const { data: invoices, error: iError } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
+      const { data: projects, error: pError } = await supabase.from('projects').select('id, title, client_id');
+      const { data: clients, error: cError } = await supabase.from('clients').select('id, name');
+      
+      if (iError) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c62828;">Fehler beim Laden der Rechnungen</td></tr>';
+        return;
+      }
+
+      if (!invoices || invoices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--muted);">Noch keine Rechnungen hinterlegt.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      invoices.forEach(i => {
+        const tr = document.createElement('tr');
+        const project = projects ? projects.find(p => p.id === i.project_id) : null;
+        const client = (project && clients) ? clients.find(c => c.id === project.client_id) : null;
+        
+        const projectTitle = project ? project.title : 'Unbekanntes Projekt';
+        const clientName = client ? client.name : 'Unbekannter Kunde';
+        
+        const bClass = i.status === 'bezahlt' ? 'status-paid' : 'status-open';
+        const bText = i.status === 'bezahlt' ? 'Bezahlt' : 'Offen';
+        const dateStr = i.created_at ? new Date(i.created_at).toLocaleDateString('de-DE') : '-';
+
+        tr.innerHTML = `
+          <td><strong>${i.invoice_number || 'Ohne Nummer'}</strong></td>
+          <td>${projectTitle} <br><small style="color: var(--muted);">${clientName}</small></td>
+          <td>${parseFloat(i.amount || 0).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</td>
+          <td><span class="status-tag ${bClass}">${bText}</span></td>
+          <td>${dateStr}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const invNum = document.getElementById('invoiceNumber').value.trim();
+      const projectId = document.getElementById('invoiceProject').value;
+      const amount = parseFloat(document.getElementById('invoiceAmount').value);
+      const status = document.getElementById('invoiceStatus').value;
+
+      if (!projectId) {
+        alert('Bitte wähle ein Projekt aus.');
+        return;
+      }
+
+      const { error } = await supabase.from('invoices').insert([{
+        user_id: currentUserId,
+        invoice_number: invNum,
+        project_id: projectId,
+        amount: amount,
+        status: status
+      }]);
+
+      if (error) {
+        alert('Fehler beim Speichern: ' + error.message);
+      } else {
+        document.getElementById('invoiceForm').reset();
+        loadProjekteDropdown();
+        loadRechnungen();
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    checkAuthAndLoad();
+  </script>
 </body>
 </html>
