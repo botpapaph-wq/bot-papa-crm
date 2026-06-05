@@ -3,318 +3,231 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bot Papa Freelancer CRM – Kunden</title>
+  <title>Kunden – BOT PAPA CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-main: #050816;
-      --bg-card: rgba(8, 13, 34, 0.95);
-      --header-top: #16161a;
-      --header-nav: #232329;
-      --accent: #00e0ff;
-      --text: #f5f7ff;
-      --muted: #a3aac2;
-      --border: 1px solid rgba(255, 255, 255, 0.08);
+      --bg: #050816; --bg-card: #0d1428; --bg-input: #0a1230;
+      --accent: #00e0ff; --accent-soft: rgba(0,224,255,0.08);
+      --text: #f5f7ff; --muted: #a3aac2; --danger: #ff4757; --success: #00c896;
+      --border: rgba(255,255,255,0.07); --border-accent: rgba(0,224,255,0.2);
+      --radius: 12px; --radius-sm: 8px;
+      --font-head: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(5,8,22,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-brand-icon { width: 32px; height: 32px; background: var(--accent-soft); border: 1px solid var(--border-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .nav-brand-text { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--text); }
+    .nav-brand-text span { color: var(--accent); }
+    .nav-links { display: flex; gap: 4px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: all 0.2s; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-links a.active { color: var(--accent); background: var(--accent-soft); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .user-badge { font-size: 12px; color: var(--muted); background: var(--accent-soft); border: 1px solid var(--border-accent); padding: 4px 10px; border-radius: 999px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .user-badge span { color: var(--accent); font-weight: 600; }
+    .btn-logout { background: rgba(255,71,87,0.12); border: 1px solid rgba(255,71,87,0.25); color: var(--danger); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { background: rgba(255,71,87,0.2); }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
-      color: var(--text);
-      min-height: 100vh;
-    }
-    
-    header {
-      background: var(--header-top);
-      border-bottom: var(--border);
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
-    
-    nav { 
-      background: var(--header-nav); 
-      border-bottom: var(--border); 
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-    }
-    nav a:hover { color: var(--accent); }
-    
-    main {
-      max-width: 1400px;
-      margin: 30px auto;
-      padding: 0 20px 40px;
-    }
-    
-    .card {
-      background: var(--bg-card);
-      padding: 25px;
-      border-radius: 6px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      border: var(--border);
-      margin-bottom: 30px;
-    }
-    .card h2 { margin-bottom: 6px; font-size: 22px; font-weight: 600; color: var(--text); }
-    .card .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
-    
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 15px;
-    }
+    main { max-width: 1200px; margin: 0 auto; padding: 32px 5vw 60px; }
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-family: var(--font-head); font-size: 24px; font-weight: 800; }
+    .page-header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+    .card-title { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .form-full { grid-column: 1 / -1; }
     @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .form-group input, .form-group textarea { background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: var(--font-body); font-size: 14px; padding: 10px 14px; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--border-accent); }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(163,170,194,0.4); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
 
-    .form-group { display: flex; flex-direction: column; }
-    .form-group-full { grid-column: 1 / -1; display: flex; flex-direction: column; }
-    .form-group label { font-size: 14px; margin-bottom: 6px; color: var(--text); font-weight: 600; }
-    
-    .form-group input, .form-group textarea {
-      padding: 8px 12px;
-      background: rgba(5, 8, 22, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      color: var(--text);
-      font-size: 14px;
-    }
-    .form-group input:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .form-group textarea { resize: vertical; height: 80px; }
-    
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .btn-primary { 
-      background: #16161a; 
-      color: #fff; 
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      align-self: flex-start;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: #232329; border-color: rgba(255, 255, 255, 0.4); }
-    
-    .btn-logout { 
-      background: transparent; 
-      color: #ff4a4a; 
-      font-size: 15px; 
-      padding: 0;
-    }
-    .btn-logout:hover { color: #ff6b6b; background: transparent; }
-    
-    .table-container { overflow-x: auto; margin-top: 15px; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-    th, td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: top; line-height: 1.4; }
-    th { background: rgba(255, 255, 255, 0.02); color: var(--muted); font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
-    td strong { color: var(--text); }
-    
-    /* Überschreibt das hartcodierte Inline-Grau aus dem JS-Skript für den Darkmode */
-    td small { color: var(--muted) !important; font-size: 12px; display: inline-block; margin-top: 2px; }
-    
-    .status-text { font-size: 14px; color: var(--text); }
-    .status-text span { font-weight: normal; }
-    .badge-auth { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 6px; display: inline-block; }
-    
-    footer { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-family: var(--font-head); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #00b8d4); color: #050816; }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+    tbody td { padding: 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    td small { color: var(--muted); font-size: 12px; display: block; }
+    .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+
+    .alert-error { background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.2); color: var(--danger); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 16px; display: none; }
+
+    footer { border-top: 1px solid var(--border); padding: 20px 5vw; text-align: center; color: var(--muted); font-size: 12px; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Bot Papa Freelancer CRM – Kunden</h1>
-    <div class="status-text" id="userInfo">Status: <span>Prüfe Login...</span></div>
-  </header>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Dashboard</a></li>
-      <li><a href="clients.html">Kunden</a></li>
-      <li><a href="projects.html">Projekte</a></li>
-      <li><a href="invoices.html">Rechnungen</a></li>
-    </ul>
-    <button id="logoutBtn" class="btn btn-logout" style="display:none;">Logout</button>
-  </nav>
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-icon">🤖</div>
+    <span class="nav-brand-text">BOT <span>PAPA</span> CRM</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Dashboard</a></li>
+    <li><a href="clients.html" class="active">Kunden</a></li>
+    <li><a href="projects.html">Projekte</a></li>
+    <li><a href="invoices.html">Rechnungen</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="user-badge" id="userInfo">Prüfe Login…</div>
+    <button id="logoutBtn" class="btn-logout">Logout</button>
+  </div>
+</nav>
 
-  <main>
-    <section class="card">
-      <h2>Neuen Kunden anlegen</h2>
-      <p class="subtitle">Dieses Formular speichert Daten live in deiner Supabase Datenbank.</p>
-      <form id="clientForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="customerNumber">Kundennummer</label>
-            <input type="text" id="customerNumber" placeholder="z.B. C-2026-0001" />
-          </div>
-          <div class="form-group">
-            <label for="clientName">Firma / Name *</label>
-            <input type="text" id="clientName" required />
-          </div>
-          <div class="form-group">
-            <label for="contactPerson">Ansprechpartner</label>
-            <input type="text" id="contactPerson" />
-          </div>
-          <div class="form-group">
-            <label for="clientEmail">E-Mail *</label>
-            <input type="email" id="clientEmail" required />
-          </div>
-          <div class="form-group">
-            <label for="phone">Telefon</label>
-            <input type="text" id="phone" placeholder="+49 ..." />
-          </div>
-          <div class="form-group">
-            <label for="street">Straße / Nr.</label>
-            <input type="text" id="street" />
-          </div>
-          <div class="form-group">
-            <label interpreter="pure-css">PLZ</label>
-            <input type="text" id="zipCode" />
-          </div>
-          <div class="form-group">
-            <label for="city">Ort</label>
-            <input type="text" id="city" />
-          </div>
-          <div class="form-group">
-            <label for="country">Land</label>
-            <input type="text" id="country" value="Deutschland" />
-          </div>
-          <div class="form-group-full">
-            <label for="notes">Notizen</label>
-            <textarea id="notes" placeholder="z.B. besondere Konditionen, Zahlungsziele, interne Hinweise"></textarea>
-          </div>
+<main>
+  <div class="page-header">
+    <h1>Kunden</h1>
+    <p>Kundenstamm anlegen und verwalten.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Neuen Kunden anlegen</div>
+    <div id="errorBox" class="alert-error"></div>
+    <form id="clientForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="customerNumber">Kundennummer</label>
+          <input type="text" id="customerNumber" placeholder="C-2026-0001" />
         </div>
-        <button type="submit" class="btn btn-primary">Kunde hinzufügen</button>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2>Kundenliste</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Kunde</th>
-              <th>Kontakt</th>
-              <th>Adresse</th>
-              <th>Sonstiges</th>
-            </tr>
-          </thead>
-          <tbody id="clientTableBody">
-            <tr>
-              <td colspan="4" style="text-align: center; color: var(--muted);">Lade Kunden...</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="form-group">
+          <label for="clientName">Firma / Name *</label>
+          <input type="text" id="clientName" required />
+        </div>
+        <div class="form-group">
+          <label for="contactPerson">Ansprechpartner</label>
+          <input type="text" id="contactPerson" />
+        </div>
+        <div class="form-group">
+          <label for="clientEmail">E-Mail *</label>
+          <input type="email" id="clientEmail" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input type="text" id="phone" placeholder="+49 …" />
+        </div>
+        <div class="form-group">
+          <label for="street">Straße / Nr.</label>
+          <input type="text" id="street" />
+        </div>
+        <div class="form-group">
+          <label for="zipCode">PLZ</label>
+          <input type="text" id="zipCode" />
+        </div>
+        <div class="form-group">
+          <label for="city">Ort</label>
+          <input type="text" id="city" />
+        </div>
+        <div class="form-group">
+          <label for="country">Land</label>
+          <input type="text" id="country" value="Deutschland" />
+        </div>
+        <div class="form-group form-full">
+          <label for="notes">Notizen</label>
+          <textarea id="notes" placeholder="Besondere Konditionen, Zahlungsziele, interne Hinweise…"></textarea>
+        </div>
       </div>
-    </section>
-  </main>
+      <button type="submit" class="btn btn-primary">Kunde hinzufügen →</button>
+    </form>
+  </div>
 
-  <footer>
-    &copy; 2026 Bot Papa – Freelancer CRM
-  </footer>
+  <div class="card">
+    <div class="card-title">Kundenliste</div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Kunde</th>
+            <th>Kontakt</th>
+            <th>Adresse</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody id="clientTableBody">
+          <tr><td colspan="4" class="empty-state">Lade Kunden…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+<footer>© 2026 BOT PAPA – crm.bot-papa.online</footer>
 
-    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let currentUserId = null;
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    let currentUserId = null;
+  async function checkAuthAndLoad() {
+    const { data, error } = await supabase.auth.getSession();
+    if (error || !data?.session) { window.location.href = 'login.html'; return; }
+    currentUserId = data.session.user.id;
+    document.getElementById('userInfo').innerHTML = '<span>' + data.session.user.email + '</span>';
+    fetchClients();
+  }
 
-    async function checkAuthAndLoad() {
-      const { data, error } = await supabase.auth.getSession();
-      if (error || !data || !data.session) {
-        window.location.href = "login.html";
-        return;
-      }
-      currentUserId = data.session.user.id;
-      document.getElementById('userInfo').innerHTML = 'Status: <span>' + data.session.user.email + '</span> <span class="badge-auth">eingeloggt</span>';
-      document.getElementById('logoutBtn').style.display = 'block';
-      fetchClients();
-    }
-
-    async function fetchClients() {
-      const tableBody = document.getElementById('clientTableBody');
-      const { data: clients, error } = await supabase.from('clients').select('*').order('created_at', { ascending: false });
-
-      if (error) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #c62828;">Fehler: ' + error.message + '</td></tr>';
-        return;
-      }
-      if (!clients || clients.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--muted);">Noch keine Kunden angelegt.</td></tr>';
-        return;
-      }
-
-      tableBody.innerHTML = '';
-      clients.forEach(client => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${client.name}</strong><br><small style="color:#777">${client.customer_number || '-'}</small></td>
-          <td>${client.email}<br><small style="color:#777">${client.phone || ''}</small></td>
-          <td>${client.street || ''}<br>${client.zip_code || ''} ${client.city || ''} ${client.country ? '('+client.country+')' : ''}</td>
-          <td><small>Ansprechp.: ${client.contact_person || '-'}</small><br><small style="color:#777">${client.notes || '-'}</small></td>
-        `;
-        tableBody.appendChild(tr);
-      });
-    }
-
-    document.getElementById('clientForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!currentUserId) return;
-
-      const newClient = {
-        user_id: currentUserId,
-        customer_number: document.getElementById('customerNumber').value.trim(),
-        name: document.getElementById('clientName').value.trim(),
-        contact_person: document.getElementById('contactPerson').value.trim(),
-        email: document.getElementById('clientEmail').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        street: document.getElementById('street').value.trim(),
-        zip_code: document.getElementById('zipCode').value.trim(),
-        city: document.getElementById('city').value.trim(),
-        country: document.getElementById('country').value.trim(),
-        notes: document.getElementById('notes').value.trim()
-      };
-
-      const { error } = await supabase.from('clients').insert([newClient]);
-      if (error) alert('Fehler: ' + error.message);
-      else {
-        document.getElementById('clientForm').reset();
-        document.getElementById('country').value = "Deutschland";
-        fetchClients();
-      }
+  async function fetchClients() {
+    const tbody = document.getElementById('clientTableBody');
+    const { data: clients, error } = await supabase.from('clients').select('*').order('created_at', { ascending: false });
+    if (error) { tbody.innerHTML = '<tr><td colspan="4" class="empty-state" style="color:var(--danger)">Fehler: ' + error.message + '</td></tr>'; return; }
+    if (!clients?.length) { tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Noch keine Kunden angelegt.</td></tr>'; return; }
+    tbody.innerHTML = '';
+    clients.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${c.name}</strong><small>${c.customer_number || '—'}</small></td>
+        <td>${c.email}<small>${c.phone || '—'}</small></td>
+        <td>${c.street || '—'}<small>${[c.zip_code, c.city, c.country].filter(Boolean).join(' ')}</small></td>
+        <td><small>${c.notes || '—'}</small></td>`;
+      tbody.appendChild(tr);
     });
+  }
 
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      window.location.href = "login.html";
-    });
+  document.getElementById('clientForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!currentUserId) return;
+    const errorBox = document.getElementById('errorBox');
+    errorBox.style.display = 'none';
+    const { error } = await supabase.from('clients').insert([{
+      user_id: currentUserId,
+      customer_number: document.getElementById('customerNumber').value.trim(),
+      name: document.getElementById('clientName').value.trim(),
+      contact_person: document.getElementById('contactPerson').value.trim(),
+      email: document.getElementById('clientEmail').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      street: document.getElementById('street').value.trim(),
+      zip_code: document.getElementById('zipCode').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      country: document.getElementById('country').value.trim(),
+      notes: document.getElementById('notes').value.trim()
+    }]);
+    if (error) { errorBox.textContent = 'Fehler: ' + error.message; errorBox.style.display = 'block'; }
+    else { document.getElementById('clientForm').reset(); document.getElementById('country').value = 'Deutschland'; fetchClients(); }
+  });
 
-    checkAuthAndLoad();
-  </script>
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut(); window.location.href = 'login.html';
+  });
+
+  checkAuthAndLoad();
+</script>
 </body>
 </html>
