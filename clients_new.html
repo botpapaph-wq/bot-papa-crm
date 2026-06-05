@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bot Papa Freelancer CRM – Kunden</title>
   <style>
     :root {
@@ -16,228 +16,305 @@
       --border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: system-ui, -apple-system, sans-serif;
       background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
       color: var(--text);
       min-height: 100vh;
     }
-
-    .header-top-bar { background: var(--header-top); border-bottom: var(--border); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .crm-brand { font-size: 20px; font-weight: 700; }
-    .status-area { font-size: 14px; color: var(--text); }
-    .status-badge { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-left: 6px; display: inline-block; }
     
-    .header-nav-bar { background: var(--header-nav); border-bottom: var(--border); padding: 10px 20px; display: flex; gap: 20px; }
-    .header-nav-bar a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; }
-    .header-nav-bar a.logout-btn { color: #ff4a4a; }
-
-    .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
-
-    /* Formular-Block-Wrapper */
-    .section-block {
-      background: var(--bg-card);
-      border: var(--border);
-      border-radius: 6px;
-      padding: 25px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .section-title {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    /* Starre Zeilen-Struktur für exakte Positionierung */
-    .form-row {
+    header {
+      background: var(--header-top);
+      border-bottom: var(--border);
+      padding: 14px 20px;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+    
+    nav { 
+      background: var(--header-nav); 
+      border-bottom: var(--border); 
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    nav a:hover { color: var(--accent); }
+    
+    main {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px 40px;
+    }
+    
+    .card {
+      background: var(--bg-card);
+      padding: 25px;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: var(--border);
+      margin-bottom: 30px;
+    }
+    .card h2 { margin-bottom: 6px; font-size: 22px; font-weight: 600; color: var(--text); }
+    .card .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       margin-bottom: 15px;
     }
+    @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
 
-    .form-col-4 { flex: 1; } /* Nimmt exakt ein Viertel ein */
-    .form-col-full { width: 100%; }
-
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    input[type="text"], textarea, select {
-      width: 100%;
+    .form-group { display: flex; flex-direction: column; }
+    .form-group-full { grid-column: 1 / -1; display: flex; flex-direction: column; }
+    .form-group label { font-size: 14px; margin-bottom: 6px; color: var(--text); font-weight: 600; }
+    
+    .form-group input, .form-group textarea {
+      padding: 8px 12px;
       background: rgba(5, 8, 22, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 4px;
       color: var(--text);
-      padding: 8px 12px;
       font-size: 14px;
     }
-
-    input:focus, textarea:focus, select:focus {
+    .form-group input:focus, .form-group textarea:focus {
       outline: none;
       border-color: var(--accent);
     }
-
-    textarea { height: 70px; resize: vertical; }
-
-    .submit-btn {
-      background: #16161a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    .form-group textarea { resize: vertical; height: 80px; }
+    
+    .btn {
       padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
+      border: none;
       border-radius: 4px;
       cursor: pointer;
-    }
-
-    /* Tabellen-Struktur */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      margin-top: 15px;
-    }
-
-    th {
-      padding: 12px;
-      color: var(--muted);
-      font-size: 14px;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
       font-weight: 600;
-    }
-
-    td {
-      padding: 16px 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       font-size: 14px;
-      vertical-align: top;
-      line-height: 1.4;
     }
-
-    .sub-id { color: var(--muted); font-size: 12px; margin-top: 2px; }
-    .notes-highlight { color: var(--muted); font-size: 13px; }
-
+    .btn-primary { 
+      background: #16161a; 
+      color: #fff; 
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      align-self: flex-start;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #232329; border-color: rgba(255, 255, 255, 0.4); }
+    
+    .btn-logout { 
+      background: transparent; 
+      color: #ff4a4a; 
+      font-size: 15px; 
+      padding: 0;
+    }
+    .btn-logout:hover { color: #ff6b6b; background: transparent; }
+    
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th, td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: top; line-height: 1.4; }
+    th { background: rgba(255, 255, 255, 0.02); color: var(--muted); font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+    td strong { color: var(--text); }
+    
+    /* Überschreibt das hartcodierte Inline-Grau aus dem JS-Skript für den Darkmode */
+    td small { color: var(--muted) !important; font-size: 12px; display: inline-block; margin-top: 2px; }
+    
+    .status-text { font-size: 14px; color: var(--text); }
+    .status-text span { font-weight: normal; }
+    .badge-auth { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 6px; display: inline-block; }
+    
     footer { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Bot Papa Freelancer CRM – Kunden</h1>
+    <div class="status-text" id="userInfo">Status: <span>Prüfe Login...</span></div>
+  </header>
 
-  <div class="header-top-bar">
-    <div class="crm-brand">Bot Papa Freelancer CRM – Kunden</div>
-    <div class="status-area">Status: bodo@bot-papa.online <span class="status-badge">eingeloggt</span></div>
-  </div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="clients.html">Kunden</a></li>
+      <li><a href="projects.html">Projekte</a></li>
+      <li><a href="invoices.html">Rechnungen</a></li>
+    </ul>
+    <button id="logoutBtn" class="btn btn-logout" style="display:none;">Logout</button>
+  </nav>
 
-  <div class="header-nav-bar">
-    <a href="index.html">Dashboard</a>
-    <a href="clients.html">Kunden</a>
-    <a href="projects.html">Projekte</a>
-    <a href="invoices.html">Rechnungen</a>
-    <a href="logout.html" class="logout-btn">Logout</a>
-  </div>
-
-  <div class="main-container">
-    
-    <!-- Kunden hinzufügen Maske -->
-    <div class="section-block">
-      <form action="#" method="POST">
-        <!-- Reihe 1 (Exakt 4 Spalten) -->
-        <div class="form-row">
-          <div class="form-col-4">
-            <label>Kundennummer</label>
-            <input type="text" placeholder="z.B. C-2026-0001">
+  <main>
+    <section class="card">
+      <h2>Neuen Kunden anlegen</h2>
+      <p class="subtitle">Dieses Formular speichert Daten live in deiner Supabase Datenbank.</p>
+      <form id="clientForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="customerNumber">Kundennummer</label>
+            <input type="text" id="customerNumber" placeholder="z.B. C-2026-0001" />
           </div>
-          <div class="form-col-4">
-            <label>Firma / Name *</label>
-            <input type="text" required>
+          <div class="form-group">
+            <label for="clientName">Firma / Name *</label>
+            <input type="text" id="clientName" required />
           </div>
-          <div class="form-col-4">
-            <label>Ansprechpartner</label>
-            <input type="text">
+          <div class="form-group">
+            <label for="contactPerson">Ansprechpartner</label>
+            <input type="text" id="contactPerson" />
           </div>
-          <div class="form-col-4">
-            <label>E-Mail *</label>
-            <input type="text" required>
+          <div class="form-group">
+            <label for="clientEmail">E-Mail *</label>
+            <input type="email" id="clientEmail" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <input type="text" id="phone" placeholder="+49 ..." />
+          </div>
+          <div class="form-group">
+            <label for="street">Straße / Nr.</label>
+            <input type="text" id="street" />
+          </div>
+          <div class="form-group">
+            <label interpreter="pure-css">PLZ</label>
+            <input type="text" id="zipCode" />
+          </div>
+          <div class="form-group">
+            <label for="city">Ort</label>
+            <input type="text" id="city" />
+          </div>
+          <div class="form-group">
+            <label for="country">Land</label>
+            <input type="text" id="country" value="Deutschland" />
+          </div>
+          <div class="form-group-full">
+            <label for="notes">Notizen</label>
+            <textarea id="notes" placeholder="z.B. besondere Konditionen, Zahlungsziele, interne Hinweise"></textarea>
           </div>
         </div>
-
-        <!-- Reihe 2 (Exakt 4 Spalten) -->
-        <div class="form-row">
-          <div class="form-col-4">
-            <label>Telefon</label>
-            <input type="text" placeholder="+49 ...">
-          </div>
-          <div class="form-col-4">
-            <label>Straße / Nr.</label>
-            <input type="text">
-          </div>
-          <div class="form-col-4">
-            <label>PLZ</label>
-            <input type="text">
-          </div>
-          <div class="form-col-4">
-            <label>Ort</label>
-            <input type="text">
-          </div>
-        </div>
-
-        <!-- Reihe 3 (Einzelfeld linksbündig) -->
-        <div class="form-row">
-          <div class="form-col-4">
-            <label>Land</label>
-            <input type="text" value="Deutschland">
-          </div>
-        </div>
-
-        <!-- Reihe 4 (Vollflächig) -->
-        <div class="form-row">
-          <div class="form-col-full">
-            <label>Notizen</label>
-            <textarea placeholder="z.B. besondere Konditionen, Zahlungsziele, interne Hinweise"></textarea>
-          </div>
-        </div>
-
-        <button type="submit" class="submit-btn">Kunde hinzufügen</button>
+        <button type="submit" class="btn btn-primary">Kunde hinzufügen</button>
       </form>
-    </div>
+    </section>
 
-    <!-- Kundenliste Tabelle -->
-    <div class="section-block">
-      <h2 class="section-title">Kundenliste</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Kunde</th>
-            <th>Kontakt</th>
-            <th>Adresse</th>
-            <th>Sonstiges</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Mastering Studio GigMixSound</strong><div class="sub-id">CH2026-001</div></td>
-            <td>makla@mail.ch<br>+41763168091</td>
-            <td>Karl-Stamm-Weg 6<br>CH- 8820 Wädenswil ZH (Schweiz)</td>
-            <td class="notes-highlight">Ansprechp.: Marco Klamt<br>https://gigmixstudio.yolasite.com/ Webseite verpfuscht, keine Zugangsdaten mehr</td>
-          </tr>
-          <tr>
-            <td><strong>Mentor GmbH</strong><div class="sub-id">DE2026-001</div></td>
-            <td>wumertens@mentor-group.de<br>+4952512020505</td>
-            <td>Am Hoppenhof 30a<br>33104 Paderborn (Deutschland)</td>
-            <td class="notes-highlight">Ansprechp.: Wolfgang-Udo Mertens<br>Aktuell noch Sonderkonditionen, aber 100% Remote Freiheit</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <section class="card">
+      <h2>Kundenliste</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Kunde</th>
+              <th>Kontakt</th>
+              <th>Adresse</th>
+              <th>Sonstiges</th>
+            </tr>
+          </thead>
+          <tbody id="clientTableBody">
+            <tr>
+              <td colspan="4" style="text-align: center; color: var(--muted);">Lade Kunden...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
-  </div>
+  <footer>
+    &copy; 2026 Bot Papa – Freelancer CRM
+  </footer>
 
-  <footer>© 2026 Bot Papa – Freelancer CRM</footer>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
+
+    async function checkAuthAndLoad() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data || !data.session) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUserId = data.session.user.id;
+      document.getElementById('userInfo').innerHTML = 'Status: <span>' + data.session.user.email + '</span> <span class="badge-auth">eingeloggt</span>';
+      document.getElementById('logoutBtn').style.display = 'block';
+      fetchClients();
+    }
+
+    async function fetchClients() {
+      const tableBody = document.getElementById('clientTableBody');
+      const { data: clients, error } = await supabase.from('clients').select('*').order('created_at', { ascending: false });
+
+      if (error) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #c62828;">Fehler: ' + error.message + '</td></tr>';
+        return;
+      }
+      if (!clients || clients.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--muted);">Noch keine Kunden angelegt.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = '';
+      clients.forEach(client => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${client.name}</strong><br><small style="color:#777">${client.customer_number || '-'}</small></td>
+          <td>${client.email}<br><small style="color:#777">${client.phone || ''}</small></td>
+          <td>${client.street || ''}<br>${client.zip_code || ''} ${client.city || ''} ${client.country ? '('+client.country+')' : ''}</td>
+          <td><small>Ansprechp.: ${client.contact_person || '-'}</small><br><small style="color:#777">${client.notes || '-'}</small></td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentUserId) return;
+
+      const newClient = {
+        user_id: currentUserId,
+        customer_number: document.getElementById('customerNumber').value.trim(),
+        name: document.getElementById('clientName').value.trim(),
+        contact_person: document.getElementById('contactPerson').value.trim(),
+        email: document.getElementById('clientEmail').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        street: document.getElementById('street').value.trim(),
+        zip_code: document.getElementById('zipCode').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        country: document.getElementById('country').value.trim(),
+        notes: document.getElementById('notes').value.trim()
+      };
+
+      const { error } = await supabase.from('clients').insert([newClient]);
+      if (error) alert('Fehler: ' + error.message);
+      else {
+        document.getElementById('clientForm').reset();
+        document.getElementById('country').value = "Deutschland";
+        fetchClients();
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    checkAuthAndLoad();
+  </script>
 </body>
 </html>
