@@ -3,143 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Bot Papa Freelancer CRM</title>
+  <title>Login – BOT PAPA CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-main: #050816;
-      --bg-card: rgba(8, 13, 34, 0.95);
-      --header-top: #16161a;
-      --accent: #00e0ff;
-      --text: #f5f7ff;
-      --muted: #a3aac2;
-      --border: 1px solid rgba(255, 255, 255, 0.08);
+      --bg: #050816; --bg-card: #0d1428; --bg-input: #0a1230;
+      --accent: #00e0ff; --accent-soft: rgba(0,224,255,0.08);
+      --border: rgba(255,255,255,0.07); --border-accent: rgba(0,224,255,0.2);
+      --text: #f5f7ff; --muted: #a3aac2; --danger: #ff4757;
+      --font-head: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; -webkit-font-smoothing: antialiased; }
+    body::before { content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(ellipse, rgba(0,224,255,0.06) 0%, transparent 70%); pointer-events: none; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    
-    header {
-      background: var(--header-top);
-      border-bottom: var(--border);
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
-    
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 30px 20px;
-    }
-    
-    .login-card {
-      background: var(--bg-card);
-      padding: 40px 30px;
-      border-radius: 6px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      border: var(--border);
-      width: 100%;
-      max-width: 420px;
-    }
-    
-    .login-card h2 {
-      margin-bottom: 25px;
-      font-size: 22px;
-      font-weight: 600;
-      text-align: center;
-      color: var(--text);
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
-    
-    .form-group input {
-      width: 100%;
-      padding: 10px 12px;
-      background: rgba(5, 8, 22, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      color: var(--text);
-      font-size: 15px;
-    }
-    
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    
-    .login-btn {
-      width: 100%;
-      background: #16161a;
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 12px;
-      border-radius: 4px;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 10px;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    
-    .login-btn:hover {
-      background: #232329;
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-    
-    .error-message {
-      color: #ff4a4a;
-      background: rgba(255, 74, 74, 0.1);
-      border: 1px solid rgba(255, 74, 74, 0.2);
-      padding: 10px;
-      border-radius: 4px;
-      font-size: 14px;
-      margin-bottom: 20px;
-      display: none;
-      text-align: center;
-    }
-    
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    .login-wrap { width: 100%; max-width: 400px; }
+    .login-logo { text-align: center; margin-bottom: 32px; }
+    .login-logo-icon { width: 56px; height: 56px; background: var(--accent-soft); border: 1px solid var(--border-accent); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 14px; }
+    .login-logo h1 { font-family: var(--font-head); font-size: 22px; font-weight: 800; }
+    .login-logo h1 span { color: var(--accent); }
+    .login-logo p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+    .login-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+    .login-card h2 { font-family: var(--font-head); font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-group label { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .form-group input { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 14px; padding: 11px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
+    .form-group input:focus { border-color: var(--border-accent); }
+    .form-group input::placeholder { color: rgba(163,170,194,0.4); }
+
+    .btn-login { width: 100%; background: linear-gradient(135deg, var(--accent), #00b8d4); color: #050816; font-family: var(--font-head); font-size: 14px; font-weight: 700; padding: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 8px; transition: opacity 0.2s, transform 0.2s; }
+    .btn-login:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .alert-error { background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.2); color: var(--danger); padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+    .crm-footer { margin-top: 24px; text-align: center; color: var(--muted); font-size: 12px; }
   </style>
 </head>
 <body>
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="login-logo-icon">🤖</div>
+      <h1>BOT <span>PAPA</span> CRM</h1>
+      <p>Freelancer Dashboard</p>
+    </div>
 
-  <header>
-    <h1>Bot Papa Freelancer CRM</h1>
-  </header>
-
-  <main>
     <div class="login-card">
       <h2>Mitarbeiter Login</h2>
-      
-      <div id="errorBox" class="error-message"></div>
-
+      <div id="errorBox" class="alert-error"></div>
       <form id="loginForm">
         <div class="form-group">
           <label for="email">E-Mail-Adresse</label>
@@ -149,57 +63,37 @@
           <label for="password">Passwort</label>
           <input type="password" id="password" required placeholder="••••••••" />
         </div>
-        <button type="submit" class="login-btn">Einloggen</button>
+        <button type="submit" class="btn-login">Einloggen →</button>
       </form>
     </div>
-  </main>
 
-  <footer>
-    &copy; <span id="year"></span> Bot Papa – Freelancer CRM
-  </footer>
+    <div class="crm-footer">© 2026 BOT PAPA – crm.bot-papa.online</div>
+  </div>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
     const SUPABASE_URL = 'https://javbfzuekkmewbzowchj.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphdmJmenVla2ttZXdiem93Y2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzc4MzcsImV4cCI6MjA5NjExMzgzN30.p3O49RvkmsullvMZ1atfDKWMuu8XyBSgE3q86pyDAxY';
-
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      document.getElementById('year').textContent = new Date().getFullYear();
-      
-      const loginForm = document.getElementById('loginForm');
-      const errorBox = document.getElementById('errorBox');
-
-      // Checken, ob bereits eingeloggt
+    document.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        window.location.href = "index.html";
-        return;
-      }
+      if (session) { window.location.href = 'index.html'; return; }
 
-      if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-          e.preventDefault(); // Verhindert das Neuladen der Seite radikal
-          errorBox.style.display = "none";
-
-          const email = document.getElementById('email').value.trim();
-          const password = document.getElementById('password').value;
-
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-
-          if (error) {
-            errorBox.textContent = "Fehler: " + error.message;
-            errorBox.style.display = "block";
-          } else if (data && data.session) {
-            window.location.href = "index.html";
-          }
-        });
-      }
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorBox = document.getElementById('errorBox');
+        errorBox.style.display = 'none';
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          errorBox.textContent = 'Fehler: ' + error.message;
+          errorBox.style.display = 'block';
+        } else if (data?.session) {
+          window.location.href = 'index.html';
+        }
+      });
     });
   </script>
 </body>
