@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bot Papa Freelancer CRM – Rechnungen</title>
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: rgba(8, 13, 34, 0.95);
+      --header-top: #16161a;
+      --header-nav: #232329;
+      --accent: #00e0ff;
+      --text: #f5f7ff;
+      --muted: #a3aac2;
+      --border: 1px solid rgba(255, 255, 255, 0.08);
+      --success-badge: #2ea44f;
+      --warning-badge: #ff9f43;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #101735 0, var(--bg-main) 60%, #02030a 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .header-top-bar { background: var(--header-top); border-bottom: var(--border); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .crm-brand { font-size: 20px; font-weight: 700; }
+    .status-area { font-size: 14px; color: var(--text); }
+    .status-badge { background: #2ea44f; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-left: 6px; display: inline-block; }
+    
+    .header-nav-bar { background: var(--header-nav); border-bottom: var(--border); padding: 10px 20px; display: flex; gap: 20px; }
+    .header-nav-bar a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; }
+    .header-nav-bar a.logout-btn { color: #ff4a4a; }
+
+    .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+
+    .section-block {
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: 6px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .section-title { font-size: 22px; font-weight: 600; margin-bottom: 20px; }
+
+    .form-group-stack {
+      margin-bottom: 15px;
+      max-width: 400px; /* Behält die kompakte Breite des Original-Formulars bei */
+    }
+
+    label { display: block; font-size: 14px; margin-bottom: 6px; color: var(--text); }
+
+    input[type="text"], select {
+      width: 100%;
+      background: rgba(5, 8, 22, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
+
+    .submit-btn {
+      background: #16161a;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 15px; }
+    th { padding: 12px; color: var(--muted); font-size: 14px; border-bottom: 2px solid rgba(255, 255, 255, 0.1); font-weight: 600; }
+    td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; vertical-align: middle; }
+
+    .sub-company { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+    /* Flache Status-Badges wie im Original */
+    .status-badge-flat {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .status-badge-flat.offen { background: #ffeacc; color: #ff9f43; }
+    .status-badge-flat.bezahlt { background: #ccefd0; color: #2ea44f; }
+
+    footer { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <div class="header-top-bar">
+    <div class="crm-brand">Bot Papa Freelancer CRM – Rechnungen</div>
+    <div class="status-area">Status: bodo@bot-papa.online <span class="status-badge">eingeloggt</span></div>
+  </div>
+
+  <div class="header-nav-bar">
+    <a href="index.html">Dashboard</a>
+    <a href="clients.html">Kunden</a>
+    <a href="projects.html">Projekte</a>
+    <a href="invoices.html">Rechnungen</a>
+    <a href="logout.html" class="logout-btn">Logout</a>
+  </div>
+
+  <div class="main-container">
+
+    <!-- Rechnung erstellen Maske -->
+    <div class="section-block">
+      <form action="#" method="POST">
+        <div class="form-group-stack">
+          <label>Bitte Projekt auswählen...</label>
+          <select><option>Bitte Projekt auswählen...</option></select>
+        </div>
+        <div class="form-group-stack">
+          <label>Betrag (in €) *</label>
+          <input type="text" value="0.00" required>
+        </div>
+        <div class="form-group-stack">
+          <label>Status</label>
+          <select>
+            <option selected>Offen</option>
+            <option>Bezahlt</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Rechnung speichern</button>
+      </form>
+    </div>
+
+    <!-- Rechnungsübersicht -->
+    <div class="section-block">
+      <h2 class="section-title">Rechnungsübersicht</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Rechnungsnummer</th>
+            <th>Projekt / Kunde</th>
+            <th>Betrag</th>
+            <th>Status</th>
+            <th>Erstellt am</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>RE-2026-005</strong></td>
+            <td>Freie Mitarbeit als technischer Support und Placetel AI Entwickler<div class="sub-company">Mentor GmbH</div></td>
+            <td><strong>1.032,85 €</strong></td>
+            <td><span class="status-badge-flat offen">Offen</span></td>
+            <td>30.5.2026</td>
+          </tr>
+          <tr>
+            <td><strong>RE-2026-004</strong></td>
+            <td>Freie Mitarbeit als technischer Support und Placetel AI Entwickler<div class="sub-company">Mentor GmbH</div></td>
+            <td><strong>813,63 €</strong></td>
+            <td><span class="status-badge-flat bezahlt">Bezahlt</span></td>
+            <td>1.5.2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <footer>© 2026 Bot Papa – Freelancer CRM</footer>
+</body>
+</html>
